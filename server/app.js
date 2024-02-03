@@ -1,12 +1,16 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const helmet = require("helmet");
+const authRoutes = require("./routes/auth");
+const dashboardRoutes = require("./routes/dashboard");
 require("dotenv").config();
 
 const app = express();
 const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.vs0ffby.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}`;
 
 app.use(bodyParser.json());
+app.use(helmet());
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -16,6 +20,9 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 });
+
+app.use("/auth", authRoutes);
+app.use("/dashboard", dashboardRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);

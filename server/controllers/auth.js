@@ -26,6 +26,7 @@ exports.login = (req, res, next) => {
       const token = jwt.sign(
         {
           email: loadedOwner.email,
+          companyName: loadedOwner.companyName,
           ownerId: loadedOwner._id.toString(),
         },
         process.env.JWT_SECRET,

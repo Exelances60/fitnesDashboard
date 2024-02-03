@@ -1,11 +1,11 @@
-import axiosClient from "@/utils/AxiosClient";
 import React from "react";
+import DndCard from "./components/DndCard";
 
 const Dashboard = () => {
   return (
-    <div>
-      <button>Fetch Data</button>
-    </div>
+    <>
+      <DndCard />
+    </>
   );
 };
 

@@ -5,6 +5,13 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 exports.login = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error("Validation failed.");
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
   const { email, password } = req.body;
   let loadedOwner;
   Owner.findOne({ email })
@@ -28,6 +35,7 @@ exports.login = (req, res, next) => {
           email: loadedOwner.email,
           companyName: loadedOwner.companyName,
           ownerId: loadedOwner._id.toString(),
+          _id: loadedOwner._id.toString(),
         },
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
@@ -47,6 +55,14 @@ exports.login = (req, res, next) => {
 };
 
 exports.signup = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error("Validation failed.");
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
+
   const { email, password } = req.body;
 
   bcrypt

@@ -1,11 +1,15 @@
+import DashboardCharts from "@/components/Dashboard/DashboardCharts";
+import DashboardOrdersList from "@/components/Dashboard/DashboardOrdersList";
+import DndCard from "@/components/Dashboard/DndCard";
 import React from "react";
-import DndCard from "./components/DndCard";
 
 const Dashboard = () => {
   return (
-    <>
+    <div className="gap-2 flex flex-col">
       <DndCard />
-    </>
+      <DashboardCharts />
+      <DashboardOrdersList />
+    </div>
   );
 };
 

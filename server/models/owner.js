@@ -35,6 +35,10 @@ const ownerSchema = new Schema({
       ref: "Member",
     },
   ],
+  role: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("Owner", ownerSchema);

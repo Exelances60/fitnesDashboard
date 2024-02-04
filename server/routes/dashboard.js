@@ -5,6 +5,4 @@ const isAuth = require("../middleware/isAuth");
 
 const router = express.Router();
 
-router.get("/deneme", isAuth, dashboardController.deneme);
-
 module.exports = router;

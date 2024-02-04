@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { jwtUserDecode } from "@/types/dataTypes";
+import { jwtUserDecode } from "@/models/dataTypes";
 
 interface UserState {
   user: jwtUserDecode | null;

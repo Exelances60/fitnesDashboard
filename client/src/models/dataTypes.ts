@@ -4,10 +4,5 @@ export type jwtUserDecode = {
   companyName: string;
   iat: number;
   exp: number;
-};
-
-export type gridDataType = {
-  id: number;
-  kpi: string;
-  title: string;
+  _id: string;
 };

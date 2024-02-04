@@ -21,7 +21,7 @@ export const navMenu = [
         }}
       />
     ),
-    path: "/products",
+    path: "dashboard/product",
     key: "products",
   },
   {

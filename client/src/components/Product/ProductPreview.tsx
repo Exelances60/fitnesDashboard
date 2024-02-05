@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import {
-  Badge,
   Card,
   Table,
   TableBody,
@@ -10,14 +9,27 @@ import {
   TableHeaderCell,
   TableRow,
 } from "@tremor/react";
-import { Pagination, Image, Input } from "antd";
+import {
+  Pagination,
+  Image,
+  Input,
+  Empty,
+  Button,
+  Popconfirm,
+  message,
+} from "antd";
 import { productsType } from "@/models/dataTypes";
+import useSelectUserInfo from "@/hooks/useSelectUserInfo";
+import axiosClient from "@/utils/AxiosClient";
+import { useRouter } from "next/navigation";
 
 type ProductPreviewProps = {
   products: productsType[];
 };
 
 const ProductPreview = ({ products }: ProductPreviewProps) => {
+  const router = useRouter();
+  const userInfo = useSelectUserInfo();
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 10;
@@ -37,6 +49,29 @@ const ProductPreview = ({ products }: ProductPreviewProps) => {
     setCurrentPage(page);
   };
 
+  const handleDeleteProduct = async (value: string) => {
+    message.loading({ content: "Loading...", key: "deleteProduct" });
+    try {
+      const response = await axiosClient.delete(
+        `/products/delete-product/${value}`
+      );
+      if (response.status === 200) {
+        message.success({
+          content: "Product deleted successfully",
+          key: "deleteProduct",
+          duration: 2,
+        });
+      }
+      router.refresh();
+    } catch (error) {
+      message.error({
+        content: "An error occurred while deleting the product",
+        key: "deleteProduct",
+        duration: 2,
+      });
+    }
+  };
+
   return (
     <Card>
       <div className="flex justify-between items-center p-5">
@@ -50,7 +85,7 @@ const ProductPreview = ({ products }: ProductPreviewProps) => {
       </div>
       <div className="flex flex-col gap-2 p-5">
         <Table>
-          <TableHead className="">
+          <TableHead>
             <TableRow className="rounded-md bg-[#F1F4F9]">
               <TableHeaderCell>Image</TableHeaderCell>
               <TableHeaderCell>Product Name</TableHeaderCell>
@@ -60,30 +95,43 @@ const ProductPreview = ({ products }: ProductPreviewProps) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {currentProducts.map((product) => (
-              <TableRow key={product._id} className="text-black font-semibold">
-                <TableCell>
-                  <Image
-                    src={`http://localhost:8080/${product.imageUrl}`}
-                    width={90}
-                    height={90}
-                    alt={product.name}
-                    className="rounded-md"
-                  />
-                </TableCell>
-                <TableCell>{product.name}</TableCell>
-                <TableCell>{product.price}</TableCell>
-                <TableCell>{product.amount}</TableCell>
-                <TableCell className="flex gap-2 items-center justify-center ">
-                  <Badge color="blue" className="cursor-pointer">
-                    Edit
-                  </Badge>
-                  <Badge color="red" className="cursor-pointer">
-                    Delete
-                  </Badge>
-                </TableCell>
-              </TableRow>
-            ))}
+            {currentProducts.length > 0 ? (
+              currentProducts.map((product) => (
+                <TableRow
+                  key={product._id}
+                  className="text-black font-semibold"
+                >
+                  <TableCell>
+                    <Image
+                      src={`http://localhost:8080/${product.imageUrl}`}
+                      width={90}
+                      height={90}
+                      alt={product.name}
+                      className="rounded-md"
+                    />
+                  </TableCell>
+                  <TableCell>{product.name}</TableCell>
+                  <TableCell>{product.price} &#8378;</TableCell>
+                  <TableCell>{product.amount} pcs</TableCell>
+                  <TableCell className="flex gap-2 items-center justify-center ">
+                    <Button type="primary">Edit</Button>
+                    <Popconfirm
+                      title="Are you sure to delete this product?"
+                      onConfirm={() => handleDeleteProduct(product._id)}
+                      okText="Yes"
+                      cancelText="No"
+                    >
+                      <Button danger>Delete</Button>
+                    </Popconfirm>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <Empty
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                className="w-full flex justify-center items-center"
+              />
+            )}
           </TableBody>
         </Table>
       </div>

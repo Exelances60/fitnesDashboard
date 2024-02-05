@@ -68,3 +68,45 @@ exports.getProducts = (req, res, next) => {
       next(err);
     });
 };
+
+exports.deleteProduct = (req, res, next) => {
+  const productId = req.params.productId;
+  let ownerId;
+  Product.findById(productId)
+    .then((product) => {
+      if (!product) {
+        const error = new Error("Could not find product.");
+        error.statusCode = 404;
+        throw error;
+      }
+      ownerId = product.ownerId;
+
+      return Product.findByIdAndDelete(productId);
+    })
+    .then((result) => {
+      return Owner.findById(ownerId);
+    })
+    .then((owner) => {
+      if (!owner) {
+        const error = new Error("Could not find owner.");
+        error.statusCode = 404;
+        throw error;
+      }
+      if (!owner.product.includes(productId)) {
+        const error = new Error("Product not found in owner.");
+        error.statusCode = 404;
+        throw error;
+      }
+      owner.product.pull(productId);
+      return owner.save();
+    })
+    .then((result) => {
+      res.status(200).json({ message: "Deleted product.", status: 200 });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};

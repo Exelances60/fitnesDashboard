@@ -35,4 +35,10 @@ router.post(
 
 router.get("/get-products/:ownerId", isAuth, productController.getProducts);
 
+router.delete(
+  "/delete-product/:productId",
+  isAuth,
+  productController.deleteProduct
+);
+
 module.exports = router;

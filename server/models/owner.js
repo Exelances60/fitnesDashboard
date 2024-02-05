@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const product = require("./product");
 
 const Schema = mongoose.Schema;
 
@@ -39,6 +40,12 @@ const ownerSchema = new Schema({
     type: String,
     required: true,
   },
+  product: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Product",
+    },
+  ],
 });
 
 module.exports = mongoose.model("Owner", ownerSchema);

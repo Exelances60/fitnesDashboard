@@ -12,7 +12,6 @@ import {
 import Image from "next/image";
 import React from "react";
 import denemeImage from "@/../public/dashboard/order.svg";
-import { ProductOutlined } from "@ant-design/icons";
 
 const DashboardOrdersList = () => {
   return (

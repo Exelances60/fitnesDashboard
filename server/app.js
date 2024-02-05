@@ -5,15 +5,24 @@ const helmet = require("helmet");
 const authRoutes = require("./routes/auth");
 const dashboardRoutes = require("./routes/dashboard");
 const productRoutes = require("./routes/product");
+const path = require("path");
+const multer = require("multer");
+const cors = require("cors");
+
 require("dotenv").config();
 
 const app = express();
+
 const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.vs0ffby.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}`;
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); // x-www-form-urlencoded <form>
-app.use(helmet());
-app.use((req, res, next) => {
+
+app.use("/images", express.static(path.join(__dirname, "images")));
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(cors());
+
+/* app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Methods",
@@ -21,7 +30,9 @@ app.use((req, res, next) => {
   );
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
-});
+}); */
+
+app.use(helmet());
 
 app.use("/auth", authRoutes);
 app.use("/dashboard", dashboardRoutes);

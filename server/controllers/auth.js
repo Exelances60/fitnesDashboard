@@ -3,32 +3,28 @@ require("dotenv").config();
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const throwNotFoundError = require("../utils/throwNotFoundError");
+const throwValidationError = require("../utils/throwValidationError");
+const throwBadRequestError = require("../utils/throwBadRequestError");
 
 exports.login = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    const error = new Error("Validation failed.");
-    error.statusCode = 422;
-    error.data = errors.array();
-    throw error;
+    throwValidationError("Validation failed, entered data is incorrect.");
   }
   const { email, password } = req.body;
   let loadedOwner;
   Owner.findOne({ email })
     .then((owner) => {
       if (!owner) {
-        const error = new Error("A user with this email could not be found.");
-        error.statusCode = 401;
-        throw error;
+        throwNotFoundError("A owner with this email could not be found.");
       }
       loadedOwner = owner;
       return bcrypt.compare(password, owner.password);
     })
     .then((isEqual) => {
       if (!isEqual) {
-        const error = new Error("Wrong password!");
-        error.statusCode = 401;
-        throw error;
+        throwBadRequestError("Wrong password!");
       }
       const token = jwt.sign(
         {
@@ -57,10 +53,7 @@ exports.login = (req, res, next) => {
 exports.signup = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    const error = new Error("Validation failed.");
-    error.statusCode = 422;
-    error.data = errors.array();
-    throw error;
+    throwValidationError("Validation failed, entered data is incorrect.");
   }
 
   const { email, password } = req.body;

@@ -5,8 +5,8 @@ const helmet = require("helmet");
 const authRoutes = require("./routes/auth");
 const dashboardRoutes = require("./routes/dashboard");
 const productRoutes = require("./routes/product");
+const orderRoutes = require("./routes/order");
 const path = require("path");
-const multer = require("multer");
 const cors = require("cors");
 
 require("dotenv").config();
@@ -37,6 +37,7 @@ app.use(helmet());
 app.use("/auth", authRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/products", productRoutes);
+app.use("/orders", orderRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);

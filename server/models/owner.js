@@ -46,6 +46,12 @@ const ownerSchema = new Schema({
       ref: "Product",
     },
   ],
+  orders: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Order",
+    },
+  ],
 });
 
 module.exports = mongoose.model("Owner", ownerSchema);

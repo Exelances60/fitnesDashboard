@@ -41,4 +41,12 @@ router.delete(
   productController.deleteProduct
 );
 
+router.put(
+  "/update-product/:productId",
+  isAuth,
+
+  multer({ storage: fileStorage, fileFilter: fileFilter }).single("image"),
+  productController.updateProduct
+);
+
 module.exports = router;

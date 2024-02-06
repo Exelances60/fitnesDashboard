@@ -45,7 +45,7 @@ export const navMenu = [
         }}
       />
     ),
-    path: "/orders",
+    path: "dashboard/order",
     key: "orders",
   },
   {

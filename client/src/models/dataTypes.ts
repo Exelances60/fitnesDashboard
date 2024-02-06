@@ -16,3 +16,16 @@ export type productsType = {
   imageUrl: string;
   ownerId: string;
 };
+
+export type ordersType = {
+  _id: string;
+  products: string[];
+  address: string;
+  totalPrice: number;
+  status: string;
+  orderOwner: string;
+  phone: number;
+  createdAt: string;
+  updatedAt: string;
+  creator: string;
+};

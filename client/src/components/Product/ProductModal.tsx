@@ -103,7 +103,7 @@ const ProductModal = () => {
               },
             ]}
           >
-            <Input placeholder="Description" />
+            <Input.TextArea placeholder="Description" />
           </Form.Item>
           <Form.Item
             label="Price"

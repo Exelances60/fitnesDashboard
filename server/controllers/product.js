@@ -1,21 +1,19 @@
 const Product = require("../models/product");
 const Owner = require("../models/owner");
-const mongoose = require("mongoose");
 const { validationResult } = require("express-validator");
+const clearImage = require("../utils/clearImage");
+const throwValidationError = require("../utils/throwValidationError");
+const throwBadRequestError = require("../utils/throwBadRequestError");
+const throwNotFoundError = require("../utils/throwNotFoundError");
 
 exports.addProduct = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    const error = new Error("Validation failed, entered data is incorrect.");
-    error.statusCode = 422;
-    error.data = errors.array();
-    throw error;
+    throwValidationError("Validation failed, entered data is incorrect.");
   }
   const { productName, price, description, amount, ownerId } = req.body;
   if (!req.file) {
-    const error = new Error("No image provided.");
-    error.statusCode = 422;
-    throw error;
+    throwBadRequestError("No image provided.");
   }
   const imageUrl = req.file.path.replace(/\\/g, "/");
 
@@ -75,33 +73,68 @@ exports.deleteProduct = (req, res, next) => {
   Product.findById(productId)
     .then((product) => {
       if (!product) {
-        const error = new Error("Could not find product.");
-        error.statusCode = 404;
-        throw error;
+        throwNotFoundError("Product not found.");
       }
       ownerId = product.ownerId;
 
       return Product.findByIdAndDelete(productId);
     })
     .then((result) => {
+      clearImage(result.imageUrl);
       return Owner.findById(ownerId);
     })
     .then((owner) => {
       if (!owner) {
-        const error = new Error("Could not find owner.");
-        error.statusCode = 404;
-        throw error;
+        throwNotFoundError("Owner not found.");
       }
       if (!owner.product.includes(productId)) {
-        const error = new Error("Product not found in owner.");
-        error.statusCode = 404;
-        throw error;
+        throwNotFoundError("Product not found in owner.");
       }
       owner.product.pull(productId);
       return owner.save();
     })
     .then((result) => {
       res.status(200).json({ message: "Deleted product.", status: 200 });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+exports.updateProduct = (req, res, next) => {
+  const productId = req.params.productId;
+  const { name, price, description, amount } = req.body;
+  const imageUrl = req.file ? req.file.path.replace(/\\/g, "/") : null;
+
+  if (!name || !price || !description || !amount) {
+    throwValidationError("All fields must be filled.");
+  }
+
+  if (Number.isNaN(+price) || Number.isNaN(+amount)) {
+    throwValidationError("Price and amount must be a number.");
+  }
+
+  Product.findById(productId)
+    .then((product) => {
+      if (!product) {
+        throwNotFoundError("Product not found.");
+      }
+
+      if (imageUrl !== product.imageUrl && imageUrl) {
+        clearImage(product.imageUrl);
+      }
+      product.imageUrl = imageUrl ? imageUrl : product.imageUrl;
+      product.name = name;
+      product.price = +price;
+      product.description = description;
+      product.amount = +amount;
+      return product.save();
+    })
+    .then((result) => {
+      res.status(200).json({ message: "Product updated!", status: 200 });
     })
     .catch((err) => {
       if (!err.statusCode) {

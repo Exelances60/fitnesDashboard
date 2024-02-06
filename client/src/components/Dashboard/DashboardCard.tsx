@@ -8,7 +8,7 @@ import salesIcon from "@/../public/dashboard/sales.svg";
 import employeeIcon from "@/../public/dashboard/employees.svg";
 import { motion } from "framer-motion";
 
-const DndCard = () => {
+const DashboardCard = () => {
   return (
     <Grid numItems={1} numItemsSm={2} numItemsLg={4} className="gap-2">
       <Card>
@@ -99,4 +99,4 @@ const DndCard = () => {
   );
 };
 
-export default DndCard;
+export default DashboardCard;

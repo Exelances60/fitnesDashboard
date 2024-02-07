@@ -85,7 +85,10 @@ const ProductModal = () => {
             rules={[
               {
                 required: true,
-                min: 2,
+                message: "Product Name is required or too short",
+              },
+              {
+                min: 5,
                 message: "Product Name is required or too short",
               },
             ]}
@@ -98,8 +101,11 @@ const ProductModal = () => {
             rules={[
               {
                 required: true,
-                min: 5,
-                message: "Description is required or too short",
+                message: "Description is required ",
+              },
+              {
+                min: 10,
+                message: "Description or too short",
               },
             ]}
           >

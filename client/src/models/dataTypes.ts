@@ -19,8 +19,9 @@ export type productsType = {
 
 export type ordersType = {
   _id: string;
-  products: string[];
-  address: string;
+  amount: number;
+  products: productsType[];
+  adress: string;
   totalPrice: number;
   status: string;
   orderOwner: string;

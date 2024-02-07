@@ -20,8 +20,8 @@ const fetchOrder = async (): Promise<ordersType[]> => {
         },
       }
     );
-    const data = await response.json();
-    return data;
+    const { orders } = await response.json();
+    return orders;
   } catch (error) {
     console.error(error);
     return [];

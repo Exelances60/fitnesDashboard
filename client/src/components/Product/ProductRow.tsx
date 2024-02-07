@@ -29,16 +29,20 @@ const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
 
   return (
     <TableRow key={product._id} className="text-black ">
-      <ProductEditModal
-        editModalVisible={editModalVisible}
-        setEditModalVisible={setEditModalVisible}
-        product={product}
-      />
-      <ProductOrderModal
-        orderModalVisible={orderModalVisible}
-        setOrderModalVisible={setOrderModalVisible}
-        product={product}
-      />
+      {editModalVisible ? (
+        <ProductEditModal
+          editModalVisible={editModalVisible}
+          setEditModalVisible={setEditModalVisible}
+          product={product}
+        />
+      ) : null}
+      {orderModalVisible ? (
+        <ProductOrderModal
+          orderModalVisible={orderModalVisible}
+          setOrderModalVisible={setOrderModalVisible}
+          product={product}
+        />
+      ) : null}
       <TableCell>
         <Image
           src={`http://localhost:8080/${product.imageUrl}`}

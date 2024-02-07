@@ -40,6 +40,10 @@ const orderSchema = new Schema(
       ref: "User",
       required: true,
     },
+    amount: {
+      type: Number,
+      required: true,
+    },
   },
   { timestamps: true }
 );

@@ -1,4 +1,4 @@
-const Product = require("../models/product");
+const Product = require("../models/Product");
 const Owner = require("../models/owner");
 const { validationResult } = require("express-validator");
 const clearImage = require("../utils/clearImage");

@@ -1,5 +1,5 @@
 const { validationResult } = require("express-validator");
-const Product = require("../models/product");
+const Product = require("../models/Product");
 const Order = require("../models/Order");
 const Owner = require("../models/owner");
 const throwValidationError = require("../utils/throwValidationError");

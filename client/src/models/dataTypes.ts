@@ -4,6 +4,7 @@ export type jwtUserDecode = {
   companyName: string;
   iat: number;
   exp: number;
+  productCategory: string[];
   _id: string;
 };
 
@@ -15,6 +16,7 @@ export type productsType = {
   description: string;
   imageUrl: string;
   ownerId: string;
+  category: string;
 };
 
 export type ordersType = {
@@ -23,10 +25,11 @@ export type ordersType = {
   products: productsType[];
   adress: string;
   totalPrice: number;
-  status: string;
+  status: "Pending" | "Completed" | "Cancelled" | "Preparing";
   orderOwner: string;
   phone: number;
   createdAt: string;
   updatedAt: string;
   creator: string;
+  orderOwnerEmail: string;
 };

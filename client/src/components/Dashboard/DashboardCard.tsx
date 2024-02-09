@@ -31,7 +31,7 @@ const DashboardCard = () => {
         <div className="w-full flex justify-between">
           <p className="text-lg font-semibold text-[#606060]">Total Orders</p>
           <motion.div
-            animate={{ y: [0, 10, 0] }}
+            animate={{ y: [0, 6, 0] }}
             transition={{
               repeat: Infinity,
               duration: 3,
@@ -53,7 +53,7 @@ const DashboardCard = () => {
         <div className="w-full flex justify-between">
           <p className="text-lg font-semibold text-[#606060]">Total Sales</p>
           <motion.div
-            animate={{ y: [0, 9, 0] }}
+            animate={{ y: [0, 7, 0] }}
             transition={{
               repeat: Infinity,
               duration: 2,
@@ -80,7 +80,7 @@ const DashboardCard = () => {
             animate={{ y: [0, 8, 0] }}
             transition={{
               repeat: Infinity,
-              duration: 1,
+              duration: 3,
               repeatType: "reverse",
             }}
           >

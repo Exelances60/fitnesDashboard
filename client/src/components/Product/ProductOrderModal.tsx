@@ -1,9 +1,9 @@
 import React from "react";
-import { Modal, Button, Form, Input, message } from "antd";
+import { Modal, Button, Form, Input } from "antd";
 import { productsType } from "@/models/dataTypes";
 import Image from "next/image";
 import axiosClient from "@/utils/AxiosClient";
-import { useRouter } from "next/navigation";
+import useMessage from "@/hooks/useMessage";
 
 type ProductOrderModalType = {
   orderModalVisible: boolean;
@@ -26,9 +26,9 @@ const ProductOrderModal = ({
   setOrderModalVisible,
   product,
 }: ProductOrderModalType) => {
-  const router = useRouter();
+  const showMessage = useMessage();
   const formOnFinish = async (values: formValuesType) => {
-    message.loading({ content: "Ordering...", key: "order" });
+    showMessage("Loading..", "loading");
     try {
       const response = await axiosClient.post("/orders/create-order", {
         ...values,
@@ -38,15 +38,11 @@ const ProductOrderModal = ({
         creator: product.ownerId,
       });
       if (response.status === 201) {
-        message.success({
-          content: "Order is created successfully!",
-          key: "order",
-        });
+        showMessage("Order is created!", "success");
         setOrderModalVisible(false);
-        router.refresh();
       }
     } catch (error) {
-      message.error({ content: "Order is failed!", key: "order" });
+      showMessage("An error occurred!", "error");
     }
   };
   return (

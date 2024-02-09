@@ -21,4 +21,6 @@ router.post(
 
 router.get("/get-orders/:ownerId", isAuth, orderController.getOrders);
 
+router.put("/update-order", isAuth, orderController.updateOrder);
+
 module.exports = router;

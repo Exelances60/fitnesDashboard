@@ -11,7 +11,8 @@ exports.addProduct = (req, res, next) => {
   if (!errors.isEmpty()) {
     throwValidationError("Validation failed, entered data is incorrect.");
   }
-  const { productName, price, description, amount, ownerId } = req.body;
+  const { productName, price, description, amount, ownerId, category } =
+    req.body;
   if (!req.file) {
     throwBadRequestError("No image provided.");
   }
@@ -24,6 +25,7 @@ exports.addProduct = (req, res, next) => {
     imageUrl: imageUrl,
     amount: +amount,
     ownerId: ownerId,
+    category: category,
   });
   product
     .save()
@@ -106,7 +108,7 @@ exports.deleteProduct = (req, res, next) => {
 
 exports.updateProduct = (req, res, next) => {
   const productId = req.params.productId;
-  const { name, price, description, amount } = req.body;
+  const { name, price, description, amount, category } = req.body;
   const imageUrl = req.file ? req.file.path.replace(/\\/g, "/") : null;
 
   if (!name || !price || !description || !amount) {
@@ -131,10 +133,38 @@ exports.updateProduct = (req, res, next) => {
       product.price = +price;
       product.description = description;
       product.amount = +amount;
+      product.category = category;
       return product.save();
     })
     .then((result) => {
       res.status(200).json({ message: "Product updated!", status: 200 });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+exports.addProductCategory = (req, res, next) => {
+  const { category, ownerId } = req.body;
+  if (!category) {
+    throwValidationError("Category must be filled.");
+  }
+  Owner.findById(ownerId)
+    .then((owner) => {
+      if (!owner) {
+        throwNotFoundError("Owner not found.");
+      }
+      owner.productCategory.push(category);
+      return owner.save();
+    })
+    .then((result) => {
+      res.status(201).json({
+        message: "Category added successfully!",
+        status: 201,
+      });
     })
     .catch((err) => {
       if (!err.statusCode) {

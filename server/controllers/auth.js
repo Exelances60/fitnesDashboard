@@ -31,6 +31,7 @@ exports.login = (req, res, next) => {
           email: loadedOwner.email,
           companyName: loadedOwner.companyName,
           ownerId: loadedOwner._id.toString(),
+          productCategory: loadedOwner.productCategory,
           _id: loadedOwner._id.toString(),
         },
         process.env.JWT_SECRET,

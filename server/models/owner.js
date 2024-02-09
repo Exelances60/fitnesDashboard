@@ -52,6 +52,11 @@ const ownerSchema = new Schema({
       ref: "Order",
     },
   ],
+  productCategory: [
+    {
+      type: String,
+    },
+  ],
 });
 
 module.exports = mongoose.model("Owner", ownerSchema);

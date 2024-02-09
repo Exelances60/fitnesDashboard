@@ -57,7 +57,7 @@ exports.createOrder = (req, res, next) => {
         phone,
         productsId: productId,
         orderOwner: orderOwner,
-        status: "pending",
+        status: "Preparing",
         creator,
       });
       return order.save();
@@ -120,4 +120,18 @@ exports.getOrders = (req, res, next) => {
     .catch((err) => {
       throwNotFoundError("Fetching orders failed.");
     });
+};
+
+exports.updateOrder = (req, res, next) => {
+  const updatedOrder = req.body.data;
+  const orderId = req.body.params.orderId;
+  console.log(updatedOrder);
+  Order.findByIdAndUpdate(orderId, updatedOrder).then((result) => {
+    if (!result) {
+      throwNotFoundError("Order not found.");
+    }
+    res
+      .status(200)
+      .json({ message: "Order updated successfully!", status: 200 });
+  });
 };

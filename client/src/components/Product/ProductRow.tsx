@@ -55,6 +55,7 @@ const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
       <TableCell>{product.name}</TableCell>
       <TableCell>{product.price} &#8378;</TableCell>
       <TableCell>{product.amount} pcs</TableCell>
+      <TableCell>{product.category}</TableCell>
       <TableCell className="md:w-[200px] ">
         <Button
           type="primary"
@@ -74,7 +75,15 @@ const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
         >
           Edit
         </Button>
-
+        <Button
+          className="ml-2"
+          type="primary"
+          ghost
+          icon={<ShoppingCartOutlined />}
+          onClick={handleClickOrderButton}
+        >
+          Order Now
+        </Button>
         <Popconfirm
           title="Are you sure to delete this product?"
           onConfirm={() => handleDeleteProduct(product._id)}
@@ -100,15 +109,6 @@ const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
             Delete
           </Button>
         </Popconfirm>
-        <Button
-          className="ml-2"
-          type="primary"
-          ghost
-          icon={<ShoppingCartOutlined />}
-          onClick={handleClickOrderButton}
-        >
-          Order Now
-        </Button>
       </TableCell>
     </TableRow>
   );

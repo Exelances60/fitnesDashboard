@@ -1,29 +1,73 @@
 "use client";
 import React, { useState } from "react";
-import { Button, Modal, Input, Form, Upload, message } from "antd";
+import {
+  Button,
+  Modal,
+  Input,
+  Form,
+  Upload,
+  Select,
+  Divider,
+  Space,
+} from "antd";
 import { getCookie } from "cookies-next";
 import useSelectUserInfo from "@/hooks/useSelectUserInfo";
-import { useRouter } from "next/navigation";
+import useMessage from "@/hooks/useMessage";
+import { PlusOutlined } from "@ant-design/icons";
+import axiosClient from "@/utils/AxiosClient";
 
 const ProductModal = () => {
-  const router = useRouter();
+  const showMessage = useMessage();
+  const userInfo = useSelectUserInfo();
   const [addProductModal, setAddProductModal] = useState(false);
   const [file, setFile] = useState<any>();
-  const userInfo = useSelectUserInfo();
+  const [categoryName, setCategoryName] = useState<string>();
+  const [categoryList, setCategoryList] = useState<string[]>(
+    userInfo?.productCategory || []
+  );
 
   const openAddProductModal = () => {
     setAddProductModal(true);
   };
 
+  const onCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCategoryName(event.target.value);
+  };
+
+  const addItem = async (
+    e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>
+  ) => {
+    e.preventDefault();
+    if (categoryName === undefined) return;
+    setCategoryList([...categoryList, categoryName]);
+    setCategoryName("");
+
+    try {
+      const resposne = await axiosClient.post(
+        "/products/add-product-category",
+        {
+          category: categoryName,
+          ownerId: userInfo?._id,
+        }
+      );
+      if (resposne.status === 201) {
+        showMessage("Category Added", "success");
+      }
+    } catch (error) {
+      showMessage("Some error pls try again", "error");
+    }
+  };
+
   const handleFinish = async (values: any) => {
     if (userInfo === null) return;
-    message.loading("Adding product", 1);
+    showMessage("Product Creating", "loading");
     const token = getCookie("token");
     const formData = new FormData();
     formData.append("productName", values.productName);
     formData.append("description", values.description);
     formData.append("price", values.price);
     formData.append("amount", values.amount);
+    formData.append("category", values.category);
     formData.append("ownerId", userInfo?._id);
     formData.append("image", file);
 
@@ -41,10 +85,11 @@ const ProductModal = () => {
 
       if (response.ok) {
         setAddProductModal(false);
-        message.success("Product added successfully");
-        router.refresh();
+        showMessage("Product Created", "success");
       }
-    } catch (error) {}
+    } catch (error) {
+      showMessage("Some error pls try again", "error");
+    }
   };
 
   return (
@@ -125,6 +170,50 @@ const ProductModal = () => {
           >
             <Input placeholder="Amount" type="number" />
           </Form.Item>
+          <Form.Item
+            label="Category"
+            name="category"
+            rules={[{ required: true, message: "Category is required" }]}
+          >
+            <Select
+              placeholder="Select a category"
+              dropdownRender={(menu) => {
+                return (
+                  <div>
+                    {menu}
+                    <Divider style={{ margin: "8px 0" }} />
+                    <Space style={{ padding: "0 8px 4px" }}>
+                      <Input
+                        placeholder="Please enter item"
+                        onKeyDown={(e) => e.stopPropagation()}
+                        onChange={onCategoryChange}
+                      />
+                      <Button
+                        type="text"
+                        icon={<PlusOutlined />}
+                        onClick={addItem}
+                      >
+                        Add item
+                      </Button>
+                    </Space>
+                  </div>
+                );
+              }}
+            >
+              <Select.Option value="ProteinPowder">
+                Protein Powder
+              </Select.Option>
+              <Select.Option value="Vitamins">Vitamins</Select.Option>
+              <Select.Option value="Supplements">Supplements</Select.Option>
+              <Select.Option value="Others">Others</Select.Option>
+              {categoryList.map((item) => (
+                <Select.Option key={item} value={item}>
+                  {item}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+
           <Form.Item
             label="Image"
             name="image"

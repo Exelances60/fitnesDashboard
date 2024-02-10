@@ -4,11 +4,12 @@ import OrderContainer from "@/components/Orders/OrderContainer";
 import React from "react";
 
 const Order = async () => {
-  const orders = await fetchOrder();
+  const { orders, chartsData } = await fetchOrder();
+
   return (
     <div className="flex flex-col gap-2">
       <OrderContainer orders={orders} />
-      <OrderChats />
+      <OrderChats chartsDonutData={chartsData} />
     </div>
   );
 };

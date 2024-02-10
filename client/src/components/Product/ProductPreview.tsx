@@ -7,6 +7,8 @@ import axiosClient from "@/utils/AxiosClient";
 import { useRouter } from "next/navigation";
 import ProductTable from "./ProductTable";
 import ProductSeacrh from "./ProductSearch";
+import ProductEditModal from "./ProductEditModal";
+import ProductOrderModal from "./ProductOrderModal";
 
 type ProductPreviewProps = {
   products: productsType[];
@@ -14,6 +16,7 @@ type ProductPreviewProps = {
 
 const ProductPreview = ({ products }: ProductPreviewProps) => {
   const router = useRouter();
+
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 10;
@@ -74,6 +77,8 @@ const ProductPreview = ({ products }: ProductPreviewProps) => {
       <p>
         {productsPerPage} - of {filteredProducts.length}
       </p>
+      <ProductEditModal />
+      <ProductOrderModal />
     </Card>
   );
 };

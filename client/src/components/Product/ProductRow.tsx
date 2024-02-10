@@ -10,26 +10,36 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import ProductEditModal from "./ProductEditModal";
 import ProductOrderModal from "./ProductOrderModal";
+import { useAppDispatch } from "@/store/store";
+import {
+  setEditModalVisible,
+  setOrderModalVisible,
+  setProduct,
+} from "@/store/slices/productPageSlice";
 
 type productsRowType = {
   product: productsType;
   handleDeleteProduct: (productId: string) => void;
 };
 const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
-  const [editModalVisible, setEditModalVisible] = useState(false);
-  const [orderModalVisible, setOrderModalVisible] = useState(false);
+  const dispatch = useAppDispatch();
+  /*  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [orderModalVisible, setOrderModalVisible] = useState(false); */
 
   const handleClickEditButton = () => {
-    setEditModalVisible(true);
+    dispatch(setProduct(product));
+    dispatch(setEditModalVisible(true));
   };
 
   const handleClickOrderButton = () => {
-    setOrderModalVisible(true);
+    dispatch(setProduct(product));
+    dispatch(setOrderModalVisible(true));
+    /*     setOrderModalVisible(true); */
   };
 
   return (
     <TableRow key={product._id} className="text-black ">
-      {editModalVisible ? (
+      {/*    {editModalVisible ? (
         <ProductEditModal
           editModalVisible={editModalVisible}
           setEditModalVisible={setEditModalVisible}
@@ -42,7 +52,7 @@ const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
           setOrderModalVisible={setOrderModalVisible}
           product={product}
         />
-      ) : null}
+      ) : null} */}
       <TableCell>
         <Image
           src={`http://localhost:8080/${product.imageUrl}`}

@@ -1,26 +1,14 @@
 import React from "react";
-import { Modal } from "antd";
 import { ordersType } from "@/models/dataTypes";
 import Image from "next/image";
 
 type OrderDetailModalProps = {
-  orderDetailModalVisible: boolean;
-  setOrderDetailModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  selectedOrder: ordersType | null;
+  selectedOrder: ordersType;
 };
 
-const OrderDetailModal = ({
-  orderDetailModalVisible,
-  setOrderDetailModalVisible,
-  selectedOrder,
-}: OrderDetailModalProps) => {
+const OrderDetailModal = ({ selectedOrder }: OrderDetailModalProps) => {
   return (
-    <Modal
-      title="Order Detail"
-      open={orderDetailModalVisible}
-      onCancel={() => setOrderDetailModalVisible(false)}
-      onOk={() => setOrderDetailModalVisible(false)}
-    >
+    <>
       <div className="w-full ">
         <div className="w-full ">
           {selectedOrder?.products.map((product) => (
@@ -72,7 +60,7 @@ const OrderDetailModal = ({
           </p>
         </div>
       </div>
-    </Modal>
+    </>
   );
 };
 

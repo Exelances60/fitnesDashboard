@@ -1,13 +1,16 @@
 "use server";
-import { ordersType } from "@/models/dataTypes";
+import { getOrdersType } from "@/models/dataTypes";
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 
-const fetchOrder = async (): Promise<ordersType[]> => {
+const fetchOrder = async (): Promise<getOrdersType> => {
   const cookiesStore = cookies();
   const token = cookiesStore.get("token")?.value;
   if (!token) {
-    return [];
+    return {
+      orders: [],
+      chartsData: [],
+    };
   }
   const decodedToken = jwtDecode(token) as { _id: string };
 
@@ -20,11 +23,14 @@ const fetchOrder = async (): Promise<ordersType[]> => {
         },
       }
     );
-    const { orders } = await response.json();
-    return orders;
+    const data = await response.json();
+    return data;
   } catch (error) {
     console.error(error);
-    return [];
+    return {
+      orders: [],
+      chartsData: [],
+    };
   }
 };
 

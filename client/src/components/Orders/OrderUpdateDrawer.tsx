@@ -7,10 +7,12 @@ import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import Image from "next/image";
 import axiosClient from "@/utils/AxiosClient";
 import useMessage from "@/hooks/useMessage";
+import { useAppDispatch } from "@/store/store";
+import { setHideDrawer } from "@/store/slices/drawerSlice";
 
 type OrderUpdateDrawerProps = {
-  updateOrderDrawerVisible: boolean;
-  setUpdateOrderDrawerVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  /*   updateOrderDrawerVisible: boolean;
+  setUpdateOrderDrawerVisible: React.Dispatch<React.SetStateAction<boolean>>; */
   selectedOrder: ordersType | null;
 };
 
@@ -24,11 +26,12 @@ type updateFormType = {
 };
 
 const OrderUpdateDrawer = ({
-  updateOrderDrawerVisible,
-  setUpdateOrderDrawerVisible,
+  /*   updateOrderDrawerVisible,
+  setUpdateOrderDrawerVisible, */
   selectedOrder,
 }: OrderUpdateDrawerProps) => {
   const showMessage = useMessage();
+  const dispath = useAppDispatch();
   const optionRender = (item: any) => {
     return (
       <div className="flex gap-2 items-center">
@@ -63,7 +66,8 @@ const OrderUpdateDrawer = ({
       });
       if (response.status === 200) {
         showMessage("Order updated successfully", "success");
-        setUpdateOrderDrawerVisible(false);
+        /*        setUpdateOrderDrawerVisible(false); */
+        dispath(setHideDrawer());
       }
     } catch (error: any) {
       showMessage(error.message || "An error occurred", "error");
@@ -71,15 +75,39 @@ const OrderUpdateDrawer = ({
   };
 
   return (
-    <Drawer
-      open={updateOrderDrawerVisible}
-      onClose={() => setUpdateOrderDrawerVisible(false)}
-      size="large"
-    >
+    <>
+      {/*       <Drawer
+        open={updateOrderDrawerVisible}
+        onClose={() => setUpdateOrderDrawerVisible(false)}
+        size="large"
+        title="Update Order"
+        footer={
+          <div className="flex justify-end gap-4">
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="p-5 box-border"
+              size="middle"
+              form="updateOrderForm"
+            >
+              Update Order
+            </Button>
+            <Button
+              type="default"
+              className="p-5 box-border"
+              size="middle"
+              onClick={() => setUpdateOrderDrawerVisible(false)}
+            >
+              Cancel
+            </Button>
+          </div>
+        }
+      > */}
       <Form
         layout="vertical"
         initialValues={selectedOrder || []}
         onFinish={onFinish}
+        id="updateOrderForm"
       >
         <Form.Item label="Order Owner" name="orderOwner">
           <Input />
@@ -115,17 +143,9 @@ const OrderUpdateDrawer = ({
         <Form.Item label="Total Price" name="totalPrice">
           <Input />
         </Form.Item>
-
-        <Button
-          type="primary"
-          htmlType="submit"
-          className="w-full"
-          size="large"
-        >
-          Update Order
-        </Button>
       </Form>
-    </Drawer>
+      {/*       </Drawer>{" "} */}
+    </>
   );
 };
 

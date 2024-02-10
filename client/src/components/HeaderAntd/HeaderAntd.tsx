@@ -10,6 +10,8 @@ import { navMenu } from "@/mock/navMenu";
 import useSetMenuKeys from "@/hooks/useSetMenuKeys";
 import Loading from "@/app/loading";
 import Link from "next/link";
+import GlobalModal from "../GlobalModal/GlobalModal";
+import GlobalDrawer from "../GlobalDrawer/GlobalDrawer";
 
 const { Content, Header } = Layout;
 
@@ -75,6 +77,8 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
         >
           <div className="w-full p-4 box-border min-h-[92vh] overflow-y-auto mt-[10px] ">
             {children}
+            <GlobalModal />
+            <GlobalDrawer />
           </div>
         </Content>
       </Layout>

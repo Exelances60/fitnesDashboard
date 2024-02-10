@@ -6,6 +6,9 @@ import React, { useState } from "react";
 import OrderDetailModal from "./OrderDetailModal";
 import OrderUpdateDrawer from "./OrderUpdateDrawer";
 import useSelectUserInfo from "@/hooks/useSelectUserInfo";
+import { useAppDispatch } from "@/store/store";
+import { showModal } from "@/store/slices/modalSlice";
+import { setHideDrawer, setShowDrawer } from "@/store/slices/drawerSlice";
 
 const { RangePicker } = DatePicker;
 
@@ -13,42 +16,25 @@ type OrderContainerProps = {
   orders: ordersType[];
 };
 const OrderContainer = ({ orders }: OrderContainerProps) => {
-  const [orderDetailModalVisible, setOrderDetailModalVisible] = useState(false);
   const [updateOrderDrawerVisible, setUpdateOrderDrawerVisible] =
     useState(false);
   const [selectedOrder, setSelectedOrder] = useState<ordersType | null>(null);
   const [rangePickerValue, setRangePickerValue] = useState([null, null]);
+  const dispatch = useAppDispatch();
   const userInfo = useSelectUserInfo();
 
-  const categoryFilter =
-    userInfo && userInfo.productCategory
-      ? [
-          {
-            text: "ProteinPowder",
-            value: "ProteinPowder",
-          },
-          {
-            text: "Vitamins",
-            value: "Vitamins",
-          },
-          {
-            text: "Supplements",
-            value: "Supplements",
-          },
-          {
-            text: "Others",
-            value: "Others",
-          },
-          {
-            text: "Vitamin",
-            value: "Vitamin",
-          },
-          ...userInfo.productCategory.map((category) => ({
-            text: category,
-            value: category,
-          })),
-        ]
-      : [];
+  const categoryFilter = userInfo?.productCategory
+    ? [
+        { text: "ProteinPowder", value: "ProteinPowder" },
+        { text: "Vitamins", value: "Vitamins" },
+        { text: "Supplements", value: "Supplements" },
+        { text: "Others", value: "Others" },
+        ...userInfo.productCategory.map((category) => ({
+          text: category,
+          value: category,
+        })),
+      ]
+    : [];
 
   const filteredOrders = orders.filter((order) => {
     if (rangePickerValue[0] && rangePickerValue[1]) {
@@ -62,31 +48,69 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
     return order;
   });
 
+  const openDetailModal = (selectedOrderFuc: ordersType) => {
+    if (selectedOrderFuc) {
+      dispatch(
+        showModal({
+          children: <OrderDetailModal selectedOrder={selectedOrderFuc} />,
+          title: "Order Details",
+        })
+      );
+    }
+  };
+
+  const openUpdateDrawer = (selectedOrderFuc: ordersType) => {
+    if (selectedOrderFuc) {
+      dispatch(
+        setShowDrawer({
+          children: <OrderUpdateDrawer selectedOrder={selectedOrderFuc} />,
+          title: "Update Order",
+          footer: (
+            <div className="flex justify-end gap-4">
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="p-5 box-border"
+                size="middle"
+                form="updateOrderForm"
+              >
+                Update Order
+              </Button>
+              <Button
+                type="default"
+                className="p-5 box-border"
+                size="middle"
+                onClick={() => dispatch(setHideDrawer())}
+              >
+                Cancel
+              </Button>
+            </div>
+          ),
+        })
+      );
+    }
+  };
+
   return (
     <Card className="flex flex-col gap-5" title="Orders">
-      {orderDetailModalVisible ? (
-        <OrderDetailModal
-          orderDetailModalVisible={orderDetailModalVisible}
-          setOrderDetailModalVisible={setOrderDetailModalVisible}
-          selectedOrder={selectedOrder}
-        />
-      ) : null}
-      {updateOrderDrawerVisible ? (
+      {/*      {updateOrderDrawerVisible ? (
         <OrderUpdateDrawer
           updateOrderDrawerVisible={updateOrderDrawerVisible}
           setUpdateOrderDrawerVisible={setUpdateOrderDrawerVisible}
           selectedOrder={selectedOrder}
         />
-      ) : null}
+      ) : null} */}
 
-      <h1 className="text-2xl font-bold">Orders</h1>
-      <RangePicker
-        className="w-[25%]"
-        format={"YYYY-MM-DD"}
-        onChange={(dates, dateStrings: any) => {
-          setRangePickerValue(dateStrings);
-        }}
-      />
+      <div className="w-full flex flex-col items-end gap-2 justify-end">
+        <h1 className="text-2xl font-bold">Orders</h1>
+        <RangePicker
+          className="w-[25%]"
+          format={"YYYY-MM-DD"}
+          onChange={(dates, dateStrings: any) => {
+            setRangePickerValue(dateStrings);
+          }}
+        />
+      </div>
 
       <Table
         dataSource={filteredOrders}
@@ -100,6 +124,7 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
           key="_id"
           render={(text) => <p className="text-blue-500">{text}</p>}
         />
+
         <Table.Column
           title="Order Owner"
           dataIndex="orderOwner"
@@ -198,10 +223,7 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
                 <Button
                   type="primary"
                   onClick={() => {
-                    if (record !== selectedOrder) {
-                      setSelectedOrder(record);
-                    }
-                    setOrderDetailModalVisible(true);
+                    openDetailModal(record);
                   }}
                 >
                   Details
@@ -210,10 +232,7 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
                   type="primary"
                   ghost
                   onClick={() => {
-                    if (record !== selectedOrder) {
-                      setSelectedOrder(record);
-                    }
-                    setUpdateOrderDrawerVisible(true);
+                    openUpdateDrawer(record);
                   }}
                 >
                   Update

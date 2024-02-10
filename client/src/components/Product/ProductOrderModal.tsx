@@ -4,6 +4,12 @@ import { productsType } from "@/models/dataTypes";
 import Image from "next/image";
 import axiosClient from "@/utils/AxiosClient";
 import useMessage from "@/hooks/useMessage";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import {
+  selectOrderModalVisible,
+  selectProduct,
+  setOrderModalVisible,
+} from "@/store/slices/productPageSlice";
 
 type ProductOrderModalType = {
   orderModalVisible: boolean;
@@ -21,25 +27,31 @@ type formValuesType = {
   orderOwner: string;
 };
 
-const ProductOrderModal = ({
-  orderModalVisible,
+const ProductOrderModal = (
+  {
+    /*   orderModalVisible,
   setOrderModalVisible,
-  product,
-}: ProductOrderModalType) => {
+  product, */
+  }
+) => {
   const showMessage = useMessage();
+  const dispatch = useAppDispatch();
+  const product = useAppSelector(selectProduct);
+  const orderModalVisible = useAppSelector(selectOrderModalVisible);
   const formOnFinish = async (values: formValuesType) => {
     showMessage("Loading..", "loading");
     try {
       const response = await axiosClient.post("/orders/create-order", {
         ...values,
         amount: parseInt(values.amount.toString()),
+        price: parseInt(values.price.toString()),
         phone: `+90${values.phone}`,
         productId: product._id,
         creator: product.ownerId,
       });
       if (response.status === 201) {
         showMessage("Order is created!", "success");
-        setOrderModalVisible(false);
+        dispatch(setOrderModalVisible(false));
       }
     } catch (error) {
       showMessage("An error occurred!", "error");
@@ -49,9 +61,12 @@ const ProductOrderModal = ({
     <Modal
       title="Order Product"
       open={orderModalVisible}
-      onCancel={() => setOrderModalVisible(false)}
+      onCancel={() => dispatch(setOrderModalVisible(false))}
       footer={[
-        <Button key="cancel" onClick={() => setOrderModalVisible(false)}>
+        <Button
+          key="cancel"
+          onClick={() => dispatch(setOrderModalVisible(false))}
+        >
           Cancel
         </Button>,
         <Button

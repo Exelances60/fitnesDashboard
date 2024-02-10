@@ -112,9 +112,23 @@ exports.getOrders = (req, res, next) => {
         return { ...order.toObject(), products: orderProducts };
       });
 
+      const chartsData = ordersWithProducts.map((order) => {
+        return {
+          name: order.products.map((product) => product.name).join(", "),
+          category: order.products
+            .map((product) => product.category)
+            .join(", "),
+          price: +order.products.map((product) => product.price).join(", "),
+          amount: +order.products.map((product) => product.amount).join(", "),
+          totalPrice: order.totalPrice,
+          amountOrder: order.amount,
+        };
+      });
+
       res.status(200).json({
         message: "Fetched orders successfully.",
         orders: ordersWithProducts,
+        chartsData,
       });
     })
     .catch((err) => {

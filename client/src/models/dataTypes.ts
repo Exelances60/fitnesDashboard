@@ -33,3 +33,17 @@ export type ordersType = {
   creator: string;
   orderOwnerEmail: string;
 };
+
+export type orderDonutChartType = {
+  name: string;
+  category: string;
+  price: number;
+  amount: number;
+  totalPrice: number;
+  amountOrder: number;
+};
+
+export type getOrdersType = {
+  orders: ordersType[];
+  chartsData: orderDonutChartType[];
+};

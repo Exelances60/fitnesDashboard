@@ -3,6 +3,12 @@ import { Modal, Form, Input, Button, Upload, message } from "antd";
 import { productsType } from "@/models/dataTypes";
 import { useRouter } from "next/navigation";
 import axiosClient from "@/utils/AxiosClient";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import {
+  selectEditModalVisible,
+  selectProduct,
+  setEditModalVisible,
+} from "@/store/slices/productPageSlice";
 
 type ProductEditModalType = {
   editModalVisible: boolean;
@@ -10,13 +16,22 @@ type ProductEditModalType = {
   product: productsType;
 };
 
-const ProductEditModal = ({
-  editModalVisible,
+const ProductEditModal = (
+  {
+    /*editModalVisible,
   setEditModalVisible,
-  product,
-}: ProductEditModalType) => {
+  product, */
+  }
+) => {
   const router = useRouter();
+  const product = useAppSelector(selectProduct);
+  const editModalVisible = useAppSelector(selectEditModalVisible);
+  const dispatch = useAppDispatch();
   const [file, setFile] = useState<any>();
+
+  const closeModal = () => {
+    dispatch(setEditModalVisible(false));
+  };
 
   const handleFinish = async (values: any) => {
     const formData = new FormData();
@@ -39,7 +54,7 @@ const ProductEditModal = ({
       );
       if (response.status === 200) {
         message.success("Product updated successfully");
-        setEditModalVisible(false);
+        closeModal();
         router.refresh();
       }
     } catch (error) {
@@ -51,9 +66,9 @@ const ProductEditModal = ({
     <Modal
       title="Edit Product"
       open={editModalVisible}
-      onCancel={() => setEditModalVisible(false)}
+      onCancel={closeModal}
       footer={[
-        <Button key="cancel" onClick={() => setEditModalVisible(false)}>
+        <Button key="cancel" onClick={closeModal}>
           Cancel
         </Button>,
         <Button

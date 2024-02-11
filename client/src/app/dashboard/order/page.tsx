@@ -1,5 +1,5 @@
 import fetchOrder from "@/actions/fetchOrder";
-import OrderChats from "@/components/Orders/OrderChats";
+import OrderChats from "@/components/Orders/OrderCharts/OrderChats";
 import OrderContainer from "@/components/Orders/OrderContainer";
 import React from "react";
 

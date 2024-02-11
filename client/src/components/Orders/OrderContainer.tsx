@@ -1,7 +1,7 @@
 "use client";
 import { ordersType } from "@/models/dataTypes";
 import { Card, Badge } from "@tremor/react";
-import { Table, Button, DatePicker } from "antd";
+import { Table, Button, DatePicker, Input } from "antd";
 import React, { useState } from "react";
 import OrderDetailModal from "./OrderDetailModal";
 import OrderUpdateDrawer from "./OrderUpdateDrawer";
@@ -103,13 +103,16 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
 
       <div className="w-full flex flex-col items-end gap-2 justify-end">
         <h1 className="text-2xl font-bold">Orders</h1>
-        <RangePicker
-          className="w-[25%]"
-          format={"YYYY-MM-DD"}
-          onChange={(dates, dateStrings: any) => {
-            setRangePickerValue(dateStrings);
-          }}
-        />
+        <div>
+          <Input placeholder="Search" />
+          <RangePicker
+            className="w-[25%]"
+            format={"YYYY-MM-DD"}
+            onChange={(dates, dateStrings: any) => {
+              setRangePickerValue(dateStrings);
+            }}
+          />
+        </div>
       </div>
 
       <Table

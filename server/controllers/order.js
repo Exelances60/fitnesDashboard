@@ -122,6 +122,7 @@ exports.getOrders = (req, res, next) => {
           amount: +order.products.map((product) => product.amount).join(", "),
           totalPrice: order.totalPrice,
           amountOrder: order.amount,
+          orderId: order._id,
         };
       });
 

@@ -41,6 +41,7 @@ export type orderDonutChartType = {
   amount: number;
   totalPrice: number;
   amountOrder: number;
+  orderId: string;
 };
 
 export type getOrdersType = {

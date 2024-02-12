@@ -6,6 +6,8 @@ const initialState = {
   modalProps: {} as {
     children?: React.ReactNode;
     title: string;
+    footer?: React.ReactNode;
+    width?: number;
   },
 };
 
@@ -19,9 +21,11 @@ const modalSlice = createSlice({
     },
     setHideModal: (state) => {
       state.modalType = false;
-      state.modalProps = {} as {
-        children?: React.ReactNode;
-        title: string;
+      state.modalProps = {
+        children: undefined,
+        title: "",
+        footer: undefined,
+        width: 520,
       };
     },
   },

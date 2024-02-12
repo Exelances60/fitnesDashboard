@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Form, Input, Button, Upload, message } from "antd";
 import { productsType } from "@/models/dataTypes";
 import { useRouter } from "next/navigation";
@@ -23,11 +23,21 @@ const ProductEditModal = (
   product, */
   }
 ) => {
-  const router = useRouter();
   const product = useAppSelector(selectProduct);
+  const router = useRouter();
+  const [form] = Form.useForm();
   const editModalVisible = useAppSelector(selectEditModalVisible);
   const dispatch = useAppDispatch();
   const [file, setFile] = useState<any>();
+
+  useEffect(() => {
+    form.setFieldsValue({
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      amount: product.amount,
+    });
+  }, [product, form]);
 
   const closeModal = () => {
     dispatch(setEditModalVisible(false));
@@ -83,6 +93,7 @@ const ProductEditModal = (
     >
       <Form
         initialValues={product}
+        form={form}
         onFinish={handleFinish}
         id="editProductForm"
         encType="multipart/form-data"

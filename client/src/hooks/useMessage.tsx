@@ -6,11 +6,15 @@ const useMessage = () => {
   const router = useRouter();
   const showMessage = (
     text: string,
-    type: "success" | "error" | "loading" | "info" | "warning" = "success"
+    type: "success" | "error" | "loading" | "info" | "warning" = "success",
+    time?: number
   ) => {
-    message[type](text);
+    if (type === "loading") {
+      return message[type](text, time);
+    }
     if (type === "success") {
       console.log("router refresh");
+      message[type](text);
       router.refresh();
     }
   };

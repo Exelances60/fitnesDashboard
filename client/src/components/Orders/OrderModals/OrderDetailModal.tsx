@@ -16,8 +16,8 @@ const OrderDetailModal = ({ selectedOrder }: OrderDetailModalProps) => {
               <Image
                 src={`http://localhost:8080/${product.imageUrl}`}
                 alt={product.name}
-                width={200}
-                height={200}
+                width={150}
+                height={150}
               />
               <div>
                 <p>
@@ -57,6 +57,22 @@ const OrderDetailModal = ({ selectedOrder }: OrderDetailModalProps) => {
           </p>
           <p>
             <span className="font-bold">Status:</span> {selectedOrder?.status}
+          </p>
+          <p>
+            <span className="font-bold">Phone Number:</span>{" "}
+            {selectedOrder?.phone}
+          </p>
+          <p>
+            <span className="font-bold">
+              Category: {selectedOrder.orderOwnerEmail}
+            </span>{" "}
+          </p>
+          <p>
+            {selectedOrder?.products.map((product, index) => (
+              <span className="font-bold" key={index}>
+                Category: {product.category}{" "}
+              </span>
+            ))}
           </p>
         </div>
       </div>

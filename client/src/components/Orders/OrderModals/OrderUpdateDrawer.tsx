@@ -49,7 +49,7 @@ const OrderUpdateDrawer = ({
     );
   };
   const onFinish = async (values: updateFormType) => {
-    showMessage("Loading.. With Hooks", "loading");
+    showMessage("Loading.. With Hooks", "loading", 0.3);
     const updatedOrder = {
       ...selectedOrder,
       ...values,
@@ -65,7 +65,7 @@ const OrderUpdateDrawer = ({
         data: updatedOrder,
       });
       if (response.status === 200) {
-        showMessage("Order updated successfully", "success");
+        showMessage("Order updated successfully", "success", 2);
         /*        setUpdateOrderDrawerVisible(false); */
         dispath(setHideDrawer());
       }

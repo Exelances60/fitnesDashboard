@@ -1,3 +1,21 @@
+import type { GetProp, UploadProps } from "antd";
+
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>;
+
+export type addCustomerFormType = {
+  profilePicture: FileType[];
+  name: string;
+  phone: string;
+  email: string;
+  age: number;
+  bodyWeight: number;
+  height: number;
+  membershipMonths: number;
+  membershipPrice: number;
+  membershipStatus: string;
+  coach: string;
+};
+
 export type jwtUserDecode = {
   email: string;
   ownerId: string;

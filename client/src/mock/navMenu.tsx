@@ -69,7 +69,7 @@ export const navMenu = [
         }}
       />
     ),
-    path: "/customers",
+    path: "dashboard/customer",
     key: "customers",
   },
   {

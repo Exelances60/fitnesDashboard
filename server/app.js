@@ -6,6 +6,7 @@ const authRoutes = require("./routes/auth");
 const dashboardRoutes = require("./routes/dashboard");
 const productRoutes = require("./routes/product");
 const orderRoutes = require("./routes/order");
+const customerRoutes = require("./routes/customer");
 const path = require("path");
 const cors = require("cors");
 
@@ -38,6 +39,7 @@ app.use("/auth", authRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/products", productRoutes);
 app.use("/orders", orderRoutes);
+app.use("/customers", customerRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);

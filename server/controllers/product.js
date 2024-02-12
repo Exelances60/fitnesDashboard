@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Product = require("../models/Product");
 const Owner = require("../models/owner");
 const { validationResult } = require("express-validator");
@@ -5,6 +6,7 @@ const clearImage = require("../utils/clearImage");
 const throwValidationError = require("../utils/throwValidationError");
 const throwBadRequestError = require("../utils/throwBadRequestError");
 const throwNotFoundError = require("../utils/throwNotFoundError");
+const sendMailInfoForProduct = require("../utils/sendMail");
 
 exports.addProduct = (req, res, next) => {
   const errors = validationResult(req);
@@ -72,6 +74,7 @@ exports.getProducts = (req, res, next) => {
 exports.deleteProduct = (req, res, next) => {
   const productId = req.params.productId;
   let ownerId;
+
   Product.findById(productId)
     .then((product) => {
       if (!product) {
@@ -108,7 +111,7 @@ exports.deleteProduct = (req, res, next) => {
 
 exports.updateProduct = (req, res, next) => {
   const productId = req.params.productId;
-  const { name, price, description, amount, category } = req.body;
+  const { name, price, description, amount } = req.body;
   const imageUrl = req.file ? req.file.path.replace(/\\/g, "/") : null;
 
   if (!name || !price || !description || !amount) {
@@ -133,7 +136,7 @@ exports.updateProduct = (req, res, next) => {
       product.price = +price;
       product.description = description;
       product.amount = +amount;
-      product.category = category;
+      product.category = product.category;
       return product.save();
     })
     .then((result) => {

@@ -1,14 +1,14 @@
 "use client";
 import { ordersType } from "@/models/dataTypes";
 import { Card, Badge } from "@tremor/react";
-import { Table, Button, DatePicker, Input } from "antd";
+import { Table, DatePicker, Input } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
-import OrderDetailModal from "./OrderDetailModal";
-import OrderUpdateDrawer from "./OrderUpdateDrawer";
 import useSelectUserInfo from "@/hooks/useSelectUserInfo";
-import { useAppDispatch } from "@/store/store";
-import { showModal } from "@/store/slices/modalSlice";
-import { setHideDrawer, setShowDrawer } from "@/store/slices/drawerSlice";
+import axiosClient from "@/utils/AxiosClient";
+import useMessage from "@/hooks/useMessage";
+import OrderTableDetailsCol from "./OrderTableDetailsCol";
+import { statusFilter, statusRender } from "@/mock/orderStatusFilter";
 
 const { RangePicker } = DatePicker;
 
@@ -19,9 +19,10 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
   const [updateOrderDrawerVisible, setUpdateOrderDrawerVisible] =
     useState(false);
   const [selectedOrder, setSelectedOrder] = useState<ordersType | null>(null);
+  const [searchById, setSearchById] = useState("");
   const [rangePickerValue, setRangePickerValue] = useState([null, null]);
-  const dispatch = useAppDispatch();
   const userInfo = useSelectUserInfo();
+  const showMessage = useMessage();
 
   const categoryFilter = userInfo?.productCategory
     ? [
@@ -37,62 +38,31 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
     : [];
 
   const filteredOrders = orders.filter((order) => {
-    if (rangePickerValue[0] && rangePickerValue[1]) {
-      return (
-        new Date(order.createdAt).getTime() >=
-          new Date(rangePickerValue[0]).getTime() &&
-        new Date(order.createdAt).getTime() <=
-          new Date(rangePickerValue[1]).getTime()
-      );
-    }
-    return order;
+    const [start, end] = rangePickerValue;
+    return (
+      !(start && end) ||
+      (new Date(order.createdAt).getTime() >= new Date(start).getTime() &&
+        new Date(order.createdAt).getTime() <= new Date(end).getTime())
+    );
   });
 
-  const openDetailModal = (selectedOrderFuc: ordersType) => {
-    if (selectedOrderFuc) {
-      dispatch(
-        showModal({
-          children: <OrderDetailModal selectedOrder={selectedOrderFuc} />,
-          title: "Order Details",
-        })
-      );
+  const filteredOrdersById = filteredOrders.filter((order) => {
+    return order._id.toLowerCase().includes(searchById.toLowerCase());
+  });
+
+  const handleCompleteOrder = async (orderId: string) => {
+    showMessage("Loading", "loading", 0.2);
+    try {
+      const response = await axiosClient.post("/orders/ordercompleted", {
+        orderId,
+      });
+      if (response.status === 200) showMessage("Order Completed", "success", 1);
+    } catch (error) {
+      showMessage("Try again later pls", "error", 1);
     }
   };
-
-  const openUpdateDrawer = (selectedOrderFuc: ordersType) => {
-    if (selectedOrderFuc) {
-      dispatch(
-        setShowDrawer({
-          children: <OrderUpdateDrawer selectedOrder={selectedOrderFuc} />,
-          title: "Update Order",
-          footer: (
-            <div className="flex justify-end gap-4">
-              <Button
-                type="primary"
-                htmlType="submit"
-                className="p-5 box-border"
-                size="middle"
-                form="updateOrderForm"
-              >
-                Update Order
-              </Button>
-              <Button
-                type="default"
-                className="p-5 box-border"
-                size="middle"
-                onClick={() => dispatch(setHideDrawer())}
-              >
-                Cancel
-              </Button>
-            </div>
-          ),
-        })
-      );
-    }
-  };
-
   return (
-    <Card className="flex flex-col gap-5" title="Orders">
+    <Card className="flex flex-col gap-5 overflow-auto" title="Orders">
       {/*      {updateOrderDrawerVisible ? (
         <OrderUpdateDrawer
           updateOrderDrawerVisible={updateOrderDrawerVisible}
@@ -103,20 +73,18 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
 
       <div className="w-full flex flex-col items-end gap-2 justify-end">
         <h1 className="text-2xl font-bold">Orders</h1>
-        <div>
-          <Input placeholder="Search" />
-          <RangePicker
-            className="w-[25%]"
-            format={"YYYY-MM-DD"}
-            onChange={(dates, dateStrings: any) => {
-              setRangePickerValue(dateStrings);
-            }}
-          />
-        </div>
+        <RangePicker
+          className="w-[50%] md:w-[30%]"
+          format={"YYYY-MM-DD"}
+          placement="bottomRight"
+          onChange={(dates, dateStrings: any) => {
+            setRangePickerValue(dateStrings);
+          }}
+        />
       </div>
 
       <Table
-        dataSource={filteredOrders}
+        dataSource={filteredOrdersById}
         rowKey="_id"
         pagination={{ pageSize: 10 }}
         className="overflow-x-auto"
@@ -126,6 +94,21 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
           dataIndex="_id"
           key="_id"
           render={(text) => <p className="text-blue-500">{text}</p>}
+          filterDropdown={() => (
+            <div className="p-5">
+              <Input
+                placeholder="Search Order Id"
+                value={searchById}
+                onChange={(e) => setSearchById(e.target.value)}
+                prefix={<SearchOutlined />}
+              />
+            </div>
+          )}
+          filterIcon={(filtered) => (
+            <SearchOutlined
+              style={{ color: filtered ? "#1890ff" : undefined }}
+            />
+          )}
         />
 
         <Table.Column
@@ -146,38 +129,8 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
           title="Status"
           dataIndex="status"
           key="status"
-          render={(text) => {
-            if (text === "Pending" || text === "pending") {
-              return <Badge color="violet">{text}</Badge>;
-            }
-            if (text === "Completed" || text === "completed") {
-              return <Badge color="emerald">{text}</Badge>;
-            }
-            if (text === "Cancelled" || text === "cancelled") {
-              return <Badge color="red">{text}</Badge>;
-            }
-            if (text === "Preparing" || text === "preparing") {
-              return <Badge color="blue">{text}</Badge>;
-            }
-          }}
-          filters={[
-            {
-              text: "Pending",
-              value: "Pending" || "pending",
-            },
-            {
-              text: "Completed",
-              value: "Completed" || "completed",
-            },
-            {
-              text: "Cancelled",
-              value: "Cancelled" || "cancelled",
-            },
-            {
-              text: "Preparing",
-              value: "Preparing" || "preparing",
-            },
-          ]}
+          render={statusRender}
+          filters={statusFilter}
           onFilter={(value, record: any) => record.status.indexOf(value) === 0}
         />
         <Table.Column
@@ -220,29 +173,12 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
         <Table.Column
           title="Details"
           key="details"
-          render={(text, record: ordersType) => {
-            return (
-              <div className="flex gap-2">
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    openDetailModal(record);
-                  }}
-                >
-                  Details
-                </Button>
-                <Button
-                  type="primary"
-                  ghost
-                  onClick={() => {
-                    openUpdateDrawer(record);
-                  }}
-                >
-                  Update
-                </Button>
-              </div>
-            );
-          }}
+          render={(record: ordersType) => (
+            <OrderTableDetailsCol
+              record={record}
+              handleCompleteOrder={handleCompleteOrder}
+            />
+          )}
         />
       </Table>
     </Card>

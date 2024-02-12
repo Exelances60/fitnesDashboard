@@ -16,10 +16,11 @@ const GlobalModal = () => {
     <Modal
       title={modalProps.title}
       open={modalVisible}
+      width={modalProps.width ? modalProps.width : 520}
       onCancel={() => dispatch(setHideModal())}
-      footer={null}
+      footer={modalProps.footer ? modalProps.footer : null}
     >
-      {modalProps.children}
+      {modalProps?.children}
     </Modal>
   );
 };

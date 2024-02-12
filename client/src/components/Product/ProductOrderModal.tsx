@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Modal, Button, Form, Input } from "antd";
 import { productsType } from "@/models/dataTypes";
 import Image from "next/image";
@@ -34,10 +34,19 @@ const ProductOrderModal = (
   product, */
   }
 ) => {
+  const product = useAppSelector(selectProduct);
   const showMessage = useMessage();
   const dispatch = useAppDispatch();
-  const product = useAppSelector(selectProduct);
+  const [form] = Form.useForm();
   const orderModalVisible = useAppSelector(selectOrderModalVisible);
+
+  useEffect(() => {
+    form.setFieldsValue({
+      productName: product.name,
+      price: product.price,
+    });
+  }, [product, form]);
+
   const formOnFinish = async (values: formValuesType) => {
     showMessage("Loading..", "loading");
     try {
@@ -51,12 +60,14 @@ const ProductOrderModal = (
       });
       if (response.status === 201) {
         showMessage("Order is created!", "success");
+        form.resetFields();
         dispatch(setOrderModalVisible(false));
       }
     } catch (error) {
       showMessage("An error occurred!", "error");
     }
   };
+
   return (
     <Modal
       title="Order Product"
@@ -82,6 +93,7 @@ const ProductOrderModal = (
       <Form
         name="orderProduct"
         layout="vertical"
+        form={form}
         initialValues={{ productName: product.name, price: product.price }}
         onFinish={formOnFinish}
       >

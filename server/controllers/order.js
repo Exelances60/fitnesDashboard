@@ -1,10 +1,12 @@
 const { validationResult } = require("express-validator");
+require("dotenv").config();
 const Product = require("../models/Product");
 const Order = require("../models/Order");
 const Owner = require("../models/owner");
 const throwValidationError = require("../utils/throwValidationError");
 const throwNotFoundError = require("../utils/throwNotFoundError");
 const throwBadRequestError = require("../utils/throwBadRequestError");
+const sendMailOrderCreate = require("../utils/sendMailOrderCreate");
 
 exports.createOrder = (req, res, next) => {
   const errors = validationResult(req);
@@ -45,6 +47,7 @@ exports.createOrder = (req, res, next) => {
 
       fetchedProduct = product;
       product.amount = product.amount - amount;
+
       return product.save();
     })
     .then((result) => {
@@ -74,6 +77,19 @@ exports.createOrder = (req, res, next) => {
       return owner.save();
     })
     .then((result) => {
+      sendMailOrderCreate(
+        fetchedOrder.orderOwnerEmail,
+        process.env.SENDER_MAIL,
+        "Order Confirmation",
+        "Your order has been successfully placed!",
+        {
+          name: fetchedProduct.name,
+          imageUrl: fetchedProduct.imageUrl,
+          amount: fetchedOrder.amount,
+          price: fetchedProduct.price,
+          totalPrice: fetchedOrder.totalPrice,
+        }
+      );
       res.status(201).json({
         message: "Order created successfully!",
         order: result,
@@ -140,7 +156,6 @@ exports.getOrders = (req, res, next) => {
 exports.updateOrder = (req, res, next) => {
   const updatedOrder = req.body.data;
   const orderId = req.body.params.orderId;
-  console.log(updatedOrder);
   Order.findByIdAndUpdate(orderId, updatedOrder).then((result) => {
     if (!result) {
       throwNotFoundError("Order not found.");
@@ -149,4 +164,35 @@ exports.updateOrder = (req, res, next) => {
       .status(200)
       .json({ message: "Order updated successfully!", status: 200 });
   });
+};
+
+exports.orderCompleted = (req, res, next) => {
+  const orderId = req.body.orderId;
+  Order.findById(orderId)
+    .then((order) => {
+      if (!order) {
+        return throwNotFoundError("Order not found.");
+      }
+      if (order.status === "Completed") {
+        return throwBadRequestError("Order already completed.");
+      }
+
+      order.status = "Completed";
+      return order.save();
+    })
+    .then((result) => {
+      if (!result) {
+        throwNotFoundError("Order not found.");
+      }
+      sendMail(
+        result.orderOwnerEmail,
+        process.env.SENDER_MAIL,
+        "Order Completed",
+        "Your order has been completed successfully!"
+      );
+      res.status(200).json({
+        message: "Order completed successfully!",
+        status: 200,
+      });
+    });
 };

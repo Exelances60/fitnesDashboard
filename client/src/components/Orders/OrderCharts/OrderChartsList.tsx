@@ -1,5 +1,5 @@
 import { orderDonutChartType } from "@/models/dataTypes";
-import { currencyFormatter } from "@/utils/currencyFormatter";
+import { currencyFormatter } from "@/utils/utils";
 import React from "react";
 
 const OrderChartsList = ({ item }: { item: orderDonutChartType }) => {

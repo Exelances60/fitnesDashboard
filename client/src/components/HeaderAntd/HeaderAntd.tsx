@@ -19,8 +19,8 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
   const { handleChangeMenuKeys } = useSetMenuKeys();
   const menuKeys = useAppSelector(selectMenuKeys);
   const userInfo = useAppSelector(selectUser);
-
   useSetUserFromToken();
+
   const menuItems = useMemo(() => {
     return navMenu.map((item) => (
       <Menu.Item key={item.key} icon={item.icon} onClick={handleChangeMenuKeys}>

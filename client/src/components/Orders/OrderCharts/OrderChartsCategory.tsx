@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import { Card, DonutChart, List, ListItem } from "@tremor/react";
-import { currencyFormatter } from "@/utils/currencyFormatter";
 import { orderDonutChartType } from "@/models/dataTypes";
+import { currencyFormatter } from "@/utils/utils";
 
 type OrderChartsCategoryProps = {
   chartsDonutData: orderDonutChartType[];
@@ -24,7 +24,7 @@ const OrderChartsCategory = ({ chartsDonutData }: OrderChartsCategoryProps) => {
   return (
     <Card title="Order Chats" className="order-chats">
       <h3 className="text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
-        Total amount by category
+        Total price by category
       </h3>
       <DonutChart
         className="mt-8"

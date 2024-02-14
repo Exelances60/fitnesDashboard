@@ -1,6 +1,6 @@
 "use client";
 import { ordersType } from "@/models/dataTypes";
-import { Card, Badge } from "@tremor/react";
+import { Card } from "@tremor/react";
 import { Table, DatePicker, Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import React, { useState } from "react";

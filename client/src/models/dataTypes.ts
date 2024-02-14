@@ -1,9 +1,17 @@
 import type { GetProp, UploadProps } from "antd";
 
-type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>;
+/* type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>;
+ */
+type FileType = {
+  uid: string;
+  name: string;
+  status?: string;
+  response?: string;
+  originFileObj?: File;
+};
 
 export type addCustomerFormType = {
-  profilePicture: FileType[];
+  image: FileType[];
   name: string;
   phone: string;
   email: string;
@@ -65,4 +73,25 @@ export type orderDonutChartType = {
 export type getOrdersType = {
   orders: ordersType[];
   chartsData: orderDonutChartType[];
+};
+
+export type CustomerType = {
+  _id: string;
+  name: string;
+  phone: number;
+  email: string;
+  coachPT: string | null;
+  age: number;
+  bodyWeight: number;
+  height: number;
+  membershipPrice: number;
+  membershipStartDate: string;
+  membershipEndDate: string;
+  membershipType: string;
+  membershipStatus: "standart" | "passive" | "vip";
+  ownerId: string;
+  profilePicture: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
 };

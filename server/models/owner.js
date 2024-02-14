@@ -29,10 +29,10 @@ const ownerSchema = new Schema({
       ref: "Employee",
     },
   ],
-  members: [
+  customer: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Member",
+      ref: "Customer",
     },
   ],
   role: {

@@ -2,10 +2,16 @@ import React, { ReactNode, useState } from "react";
 import { Form, Input, Select, Space, Button, Divider, Upload } from "antd";
 import * as Icon from "@ant-design/icons";
 import { addCustomerFormType } from "@/models/dataTypes";
+import useMessage from "@/hooks/useMessage";
+import useSelectUserInfo from "@/hooks/useSelectUserInfo";
+import axiosClient from "@/utils/AxiosClient";
 
 const CustomerAddModal = () => {
   const [form] = Form.useForm();
   const [vipStatus, setVipStatus] = useState(false);
+  const [image, setImage] = useState<any>(null);
+  const userInfo = useSelectUserInfo();
+  const showMessage = useMessage();
 
   const renderFormItem = (
     label: string,
@@ -27,10 +33,40 @@ const CustomerAddModal = () => {
     </Form.Item>
   );
 
-  const onFinish = (values: addCustomerFormType) => {
-    console.log("Success:", values);
+  const onFinish = async (values: addCustomerFormType) => {
+    if (!userInfo) return;
+    showMessage("Adding Customer", "loading", 1);
+    console.log(values);
+
+    const formData = new FormData();
+    if (image) {
+      formData.append("profilePicture", image);
+    }
+    formData.append("name", values.name);
+    formData.append("phone", values.phone);
+    formData.append("email", values.email);
+    formData.append("age", values.age.toString());
+    formData.append("bodyWeight", values.bodyWeight.toString());
+    formData.append("height", values.height.toString());
+    formData.append("membershipMonths", values.membershipMonths.toString());
+    formData.append("membershipPrice", values.membershipPrice.toString());
+    formData.append("membershipStatus", values.membershipStatus);
+    formData.append("ownerId", userInfo?._id);
+    if (values.coach) {
+      formData.append("coach", values.coach);
+    }
     try {
-    } catch (error) {}
+      const response = await axiosClient.postForm(
+        "/customers/add-customer",
+        formData
+      );
+      if (response.status === 201) {
+        showMessage("Customer Added", "success", 3);
+        form.resetFields();
+      }
+    } catch (error) {
+      showMessage("Failed to add customer", "error", 3);
+    }
   };
 
   return (
@@ -54,7 +90,12 @@ const CustomerAddModal = () => {
           return e && e.fileList;
         }}
       >
-        <Upload name="profilePicture" listType="picture-card" maxCount={1}>
+        <Upload
+          name="profilePicture"
+          listType="picture-card"
+          maxCount={1}
+          onChange={(info: any) => setImage(info.file.originFileObj)}
+        >
           <Button icon={<Icon.UploadOutlined />}>Upload</Button>
         </Upload>
       </Form.Item>
@@ -100,17 +141,26 @@ const CustomerAddModal = () => {
       >
         <Select
           onChange={(value) => {
-            form.setFieldsValue({
-              membershipPrice: value,
-            });
+            if (value === "1") {
+              form.setFieldsValue({ membershipPrice: 700 });
+            }
+            if (value === "3") {
+              form.setFieldsValue({ membershipPrice: 1800 });
+            }
+            if (value === "6") {
+              form.setFieldsValue({ membershipPrice: 3400 });
+            }
+            if (value === "12") {
+              form.setFieldsValue({ membershipPrice: 6000 });
+            }
           }}
           placeholder="Select a membership price"
           showSearch
           options={[
-            { label: "1 Month", value: 700 },
-            { label: "3 Month", value: 2100 },
-            { label: "6 Month", value: 4200 },
-            { label: "12 Month", value: 8400 },
+            { label: "1 Month", value: "1" },
+            { label: "3 Months", value: "3" },
+            { label: "6 Months", value: "6" },
+            { label: "12 Months", value: "12" },
           ]}
         />
       </Form.Item>
@@ -162,9 +212,9 @@ const CustomerAddModal = () => {
       {vipStatus ? (
         <Form.Item label="Coach" name="coach">
           <Select placeholder="Select a coach">
-            {[1, 2, 3, 4].map((coachNumber) => (
+            {["coach1", "coach2", "coach3"].map((coachNumber) => (
               <Select.Option key={coachNumber} value={coachNumber}>
-                Coach {coachNumber}
+                {coachNumber}
               </Select.Option>
             ))}
           </Select>

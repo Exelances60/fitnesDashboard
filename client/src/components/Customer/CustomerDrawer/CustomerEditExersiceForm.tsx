@@ -33,7 +33,8 @@ const CustomerEditExersiceForm = ({
         placeholder="Select a program"
         mode="multiple"
         showSearch
-        placement="topLeft"
+        placement="topRight"
+        size="large"
         onSearch={(value) => setSearchExersice(value)}
         tagRender={tagRender}
         dropdownRender={(menu) => (
@@ -61,10 +62,10 @@ const CustomerEditExersiceForm = ({
           <Select.Option value={exersice.name} key={exersice._id}>
             <div className="flex justify-between">
               <Image
-                src={exersice.gifUrl}
+                src={`http://localhost:8080${exersice.gifUrl}`}
                 width={90}
                 height={30}
-                alt="gif"
+                alt={exersice.name}
                 className="rounded-md"
                 quality={70}
                 unoptimized={true}

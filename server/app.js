@@ -6,9 +6,6 @@ const authRoutes = require("./routes/auth");
 const dashboardRoutes = require("./routes/dashboard");
 const productRoutes = require("./routes/product");
 const orderRoutes = require("./routes/order");
-const axios = require("axios");
-const Exercises = require("./models/Exercise");
-const fs = require("fs");
 const customerRoutes = require("./routes/customer");
 const exercisesRoutes = require("./routes/exercises");
 const path = require("path");
@@ -39,41 +36,6 @@ app.use(cors());
 }); */
 
 app.use(helmet());
-
-app.use(async (req, res, next) => {
-  const options = {
-    method: "GET",
-    url: "https://exercisedb.p.rapidapi.com/exercises",
-    params: { limit: "1000" },
-    headers: {
-      "X-RapidAPI-Key": "a550badb16msha21c027e2067399p13ce05jsn541e4ed1688e",
-      "X-RapidAPI-Host": "exercisedb.p.rapidapi.com",
-    },
-  };
-
-  try {
-    const { data } = await axios.request(options);
-
-    data.forEach(async (exercise, index) => {
-      axios
-        .request(exercise.gifUrl, { responseType: "stream" })
-        .then((response) => {
-          response.data.pipe(fs.createWriteStream(`./images/${index}.gif`));
-        });
-      const exerciseModel = new Exercises({
-        name: exercise.name,
-        gifUrl: exercise.gifUrl,
-        bodyPart: exercise.bodyPart,
-        equipment: exercise.equipment,
-        instructions: exercise.instructions,
-        secondaryMuscles: exercise.secondaryMuscles,
-      });
-      await exerciseModel.save();
-    });
-  } catch (error) {
-    console.error(error);
-  }
-});
 
 app.use("/auth", authRoutes);
 app.use("/dashboard", dashboardRoutes);

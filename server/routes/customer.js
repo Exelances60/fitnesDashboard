@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { body } = require("express-validator");
 const isAuth = require("../middleware/isAuth");
 const customerController = require("../controllers/customer");
 
@@ -37,5 +38,21 @@ router.post(
 );
 
 router.get("/get-customer/:ownerId", isAuth, customerController.getCustomer);
+
+router.put(
+  "/update-customer",
+  isAuth,
+  [
+    body("name").trim().isLength({ min: 3 }),
+    body("phone").trim().isLength({ min: 10 }),
+    body("email").isEmail(),
+    body("age").isNumeric(),
+    body("bodyWeight").isNumeric(),
+    body("height").isNumeric(),
+    body("membershipMonths").isNumeric(),
+    body("membershipPrice").isNumeric(),
+  ],
+  customerController.updateCustomer
+);
 
 module.exports = router;

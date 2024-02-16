@@ -12,7 +12,19 @@ const customerSchema = new Schema(
       type: Number,
       require: true,
     },
+    parentPhone: {
+      type: Number,
+      require: true,
+    },
     email: {
+      type: String,
+      require: true,
+    },
+    address: {
+      type: String,
+      require: true,
+    },
+    bloodGroup: {
       type: String,
       require: true,
     },
@@ -32,7 +44,6 @@ const customerSchema = new Schema(
       type: Number,
       require: true,
     },
-
     membershipPrice: {
       type: Number,
       require: true,

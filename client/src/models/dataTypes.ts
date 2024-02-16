@@ -1,5 +1,3 @@
-import type { GetProp, UploadProps } from "antd";
-
 /* type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>;
  */
 type FileType = {
@@ -22,6 +20,9 @@ export type addCustomerFormType = {
   membershipPrice: number;
   membershipStatus: string;
   coach: string;
+  address: string;
+  bloodGroup: string;
+  parentPhone: string;
 };
 
 export type jwtUserDecode = {
@@ -91,7 +92,32 @@ export type CustomerType = {
   membershipStatus: "standart" | "passive" | "vip";
   ownerId: string;
   profilePicture: string;
+  exercisePlan: string[];
   createdAt: string;
   updatedAt: string;
   __v: number;
+};
+
+export type ExerciseType = {
+  _id: string;
+  bodyPart: string;
+  equipment: string;
+  gifUrl: string;
+  name: string;
+  secondaryMuscle: string[];
+  instructions: string[];
+};
+
+export type updateCustomerFormType = {
+  age: number;
+  bodyWeight: number;
+  coach: string;
+  email: string;
+  exercisePlan: string[];
+  height: number;
+  membershipMonths: string;
+  membershipPrice: number;
+  membershipStatus: string;
+  name: string;
+  phone: string;
 };

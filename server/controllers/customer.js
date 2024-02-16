@@ -19,11 +19,15 @@ exports.addCustomer = async (req, res, next) => {
       height,
       membershipMonths,
       membershipPrice,
-      coach,
       membershipStatus,
+      coach,
       ownerId,
       gender,
+      address,
+      bloodGroup,
+      parentPhone,
     } = req.body;
+
     const fetchedOwner = await Owner.findById(ownerId);
     if (!fetchedOwner) {
       throwBadRequestError("Owner not found.");
@@ -45,13 +49,16 @@ exports.addCustomer = async (req, res, next) => {
       membershipType: membershipMonths,
       membershipStatus: membershipStatus,
       gender: gender,
-      exercisePlan: {},
+      exercisePlan: null,
       ownerId,
       profilePicture: profilePicture,
+      address,
+      bloodGroup,
+      parentPhone: parentPhone ? parentPhone : null,
     });
 
     const savedCustomer = await customer.save();
-    fetchedOwner.members.push(savedCustomer._id);
+    fetchedOwner.customer.push(savedCustomer._id);
     await fetchedOwner.save();
     res.status(201).json({
       message: "Customer created successfully!",
@@ -73,6 +80,61 @@ exports.getCustomer = async (req, res, next) => {
     res.status(200).json({
       message: "Fetched customers successfully!",
       customers: fetchedOwner.customer,
+      status: 200,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.updateCustomer = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    throwValidationError("Validation failed, entered data is incorrect.");
+  }
+  const {
+    name,
+    email,
+    phone,
+    age,
+    bodyWeight,
+    height,
+    membershipMonths,
+    membershipPrice,
+    membershipStatus,
+    exercisePlan,
+    coach,
+    _id,
+    ownerId,
+  } = req.body;
+  try {
+    const fetchedOwner = await Owner.findById(ownerId);
+    if (!fetchedOwner) {
+      throwBadRequestError("Owner not found.");
+    }
+    if (!fetchedOwner.customer.includes(_id)) {
+      throwBadRequestError("Customer not found.");
+    }
+    const customer = await Customer.findById(_id);
+    if (!customer) {
+      throwBadRequestError("Customer not found.");
+    }
+
+    customer.name = name;
+    customer.email = email;
+    customer.phone = phone;
+    customer.age = age;
+    customer.bodyWeight = bodyWeight;
+    customer.height = height;
+    customer.membershipType = membershipMonths;
+    customer.membershipPrice = membershipPrice;
+    customer.membershipStatus = membershipStatus;
+    customer.exercisePlan = exercisePlan || customer.exercisePlan;
+    customer.coachPT = coach || null;
+    const updatedCustomer = await customer.save();
+    res.status(200).json({
+      message: "Customer updated successfully!",
+      customer: updatedCustomer,
       status: 200,
     });
   } catch (error) {

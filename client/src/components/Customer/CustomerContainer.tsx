@@ -3,13 +3,18 @@ import React from "react";
 import CustomerContainerHeader from "./CustomerContainerHeader";
 import CustomerTable from "./CustomerTable/CustomerTable";
 import { fetchCustomer } from "@/actions/fetchCustomer";
+import { fetchExersice } from "@/actions/fetchExersice";
 
 const CustomerContainer = async () => {
-  const data = await fetchCustomer();
+  const [data, exersice] = await Promise.all([
+    fetchCustomer(),
+    fetchExersice(),
+  ]);
+
   return (
     <Card className="overflow-auto flex flex-col gap-2">
       <CustomerContainerHeader />
-      <CustomerTable customers={data} />
+      <CustomerTable customers={data} exersice={exersice} />
     </Card>
   );
 };

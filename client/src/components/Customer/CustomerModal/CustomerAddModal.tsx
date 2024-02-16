@@ -1,37 +1,19 @@
-import React, { ReactNode, useState } from "react";
-import { Form, Input, Select, Space, Button, Divider, Upload } from "antd";
+import React, { useState } from "react";
+import { Form, Input, Select, Button, Upload } from "antd";
 import * as Icon from "@ant-design/icons";
 import { addCustomerFormType } from "@/models/dataTypes";
 import useMessage from "@/hooks/useMessage";
 import useSelectUserInfo from "@/hooks/useSelectUserInfo";
 import axiosClient from "@/utils/AxiosClient";
+import CustomerMemberShipStatus from "./CustomerMemberShipStatus";
+import CustomerAddAge from "./CustomerAddAge";
+import { renderFormItem } from "@/utils/renderForTables/Customers/renderCustomerFormItem";
 
 const CustomerAddModal = () => {
   const [form] = Form.useForm();
-  const [vipStatus, setVipStatus] = useState(false);
   const [image, setImage] = useState<any>(null);
   const userInfo = useSelectUserInfo();
   const showMessage = useMessage();
-
-  const renderFormItem = (
-    label: string,
-    name: string,
-    placeholder: string,
-    type: string,
-    addonBefore: ReactNode | string | null
-  ) => (
-    <Form.Item
-      label={label}
-      name={name}
-      className="w-full"
-      rules={[
-        { required: true, message: `${label} is required or too short` },
-        { min: 1, message: `${label} is required or too short` },
-      ]}
-    >
-      <Input placeholder={placeholder} type={type} addonBefore={addonBefore} />
-    </Form.Item>
-  );
 
   const onFinish = async (values: addCustomerFormType) => {
     if (!userInfo) return;
@@ -52,9 +34,15 @@ const CustomerAddModal = () => {
     formData.append("membershipPrice", values.membershipPrice.toString());
     formData.append("membershipStatus", values.membershipStatus);
     formData.append("ownerId", userInfo?._id);
+    formData.append("address", values.address);
+    if (values.parentPhone) {
+      formData.append("parentPhone", values.parentPhone);
+    }
     if (values.coach) {
       formData.append("coach", values.coach);
     }
+    formData.append("bloodGroup", values.bloodGroup);
+
     try {
       const response = await axiosClient.postForm(
         "/customers/add-customer",
@@ -103,22 +91,7 @@ const CustomerAddModal = () => {
         {renderFormItem("Name", "name", "Enter Name", "text", null)}
         {renderFormItem("Phone", "phone", "Enter Phone", "tel", "+90")}
       </div>
-      <div className="flex gap-4">
-        {renderFormItem(
-          "Email",
-          "email",
-          "Enter Email",
-          "email",
-          <Icon.MailOutlined />
-        )}
-        {renderFormItem(
-          "Age",
-          "age",
-          "Enter Age",
-          "number",
-          <Icon.UserOutlined />
-        )}
-      </div>
+      <CustomerAddAge />
       <div className="flex gap-4">
         {renderFormItem(
           "Body Weight",
@@ -129,6 +102,37 @@ const CustomerAddModal = () => {
         )}
         {renderFormItem("Height", "height", "Enter Height", "number", "cm")}
       </div>
+      {renderFormItem(
+        "Address",
+        "address",
+        "Enter Address",
+        "text",
+        <Icon.EnvironmentOutlined />
+      )}
+      <Form.Item
+        label="Blood Type"
+        name="bloodGroup"
+        rules={[
+          {
+            required: true,
+            message: "Please select",
+          },
+        ]}
+      >
+        <Select
+          placeholder="Select"
+          options={[
+            { label: "A Rh+", value: "A Rh+" },
+            { label: "A Rh-", value: "A Rh-" },
+            { label: "B Rh+", value: "B Rh+" },
+            { label: "B Rh-", value: "B Rh-" },
+            { label: "AB Rh+", value: "AB Rh+" },
+            { label: "AB Rh-", value: "AB Rh-" },
+            { label: "0 Rh+", value: "0 Rh+" },
+            { label: "0 Rh-", value: "0 Rh-" },
+          ]}
+        />
+      </Form.Item>
       <Form.Item
         label="Membership Months"
         name="membershipMonths"
@@ -167,60 +171,7 @@ const CustomerAddModal = () => {
       <Form.Item label="Membership Price" name="membershipPrice">
         <Input placeholder="Enter Price" addonBefore="₺" />
       </Form.Item>
-      <Form.Item
-        label="Membership Status"
-        name="membershipStatus"
-        rules={[
-          {
-            required: true,
-            message: "Membership Status is required",
-          },
-        ]}
-      >
-        <Select
-          placeholder="Select a membership status"
-          dropdownRender={(menu) => {
-            return (
-              <div>
-                {menu}
-                <Divider style={{ margin: "8px 0" }} />
-                <Space style={{ padding: "0 8px 4px" }}>
-                  <Input
-                    placeholder="Please enter item"
-                    onKeyDown={(e) => e.stopPropagation()}
-                  />
-                  <Button type="text" icon={<Icon.PlusOutlined />}>
-                    Add item
-                  </Button>
-                </Space>
-              </div>
-            );
-          }}
-          onChange={(value) => {
-            if (value !== "vip") {
-              return setVipStatus(false);
-            }
-            return setVipStatus(true);
-          }}
-        >
-          <Select.Option value="standart">Standart</Select.Option>
-          <Select.Option value="passive">Passive</Select.Option>
-          <Select.Option value="vip">VIP</Select.Option>
-        </Select>
-      </Form.Item>
-
-      {vipStatus ? (
-        <Form.Item label="Coach" name="coach">
-          <Select placeholder="Select a coach">
-            {["coach1", "coach2", "coach3"].map((coachNumber) => (
-              <Select.Option key={coachNumber} value={coachNumber}>
-                {coachNumber}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-      ) : null}
-
+      <CustomerMemberShipStatus />
       <Form.Item
         label="Gender"
         name="gender"

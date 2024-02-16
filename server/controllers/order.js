@@ -184,12 +184,12 @@ exports.orderCompleted = (req, res, next) => {
       if (!result) {
         throwNotFoundError("Order not found.");
       }
-      sendMail(
+      /*       sendMail(
         result.orderOwnerEmail,
         process.env.SENDER_MAIL,
         "Order Completed",
         "Your order has been completed successfully!"
-      );
+      ); */
       res.status(200).json({
         message: "Order completed successfully!",
         status: 200,

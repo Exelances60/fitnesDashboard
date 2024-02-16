@@ -1,11 +1,12 @@
 "use client";
 import React from "react";
-import { UserOutlined } from "@ant-design/icons";
+import { UserOutlined, UserAddOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import { useAppDispatch } from "@/store/store";
+
+import { setShowDrawer } from "@/store/slices/drawerSlice";
 import CustomerAddModal from "./CustomerModal/CustomerAddModal";
 import CustomerAddModalFooter from "./CustomerModal/CustomerAddModalFooter";
-import { setShowDrawer } from "@/store/slices/drawerSlice";
 
 const CustomerContainerHeader = () => {
   const dispatch = useAppDispatch();
@@ -26,7 +27,12 @@ const CustomerContainerHeader = () => {
         <UserOutlined />
         <p className="font-bold"> Customer </p>
       </h1>
-      <Button type="primary" ghost onClick={handleOpenAddCustomer}>
+      <Button
+        type="primary"
+        ghost
+        onClick={handleOpenAddCustomer}
+        icon={<UserAddOutlined />}
+      >
         Add To Customer
       </Button>
     </div>

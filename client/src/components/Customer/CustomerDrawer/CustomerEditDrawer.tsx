@@ -27,7 +27,7 @@ const CustomerEditDrawer = ({
   const dispatch = useAppDispatch();
   const [selectedMembershipStatus, setSelectedMembershipStatus] = useState();
   const findExersiceById = exersice.filter((exersice) => {
-    if (customer.exercisePlan.includes(exersice._id)) {
+    if (customer.exercisePlan?.includes(exersice._id)) {
       return exersice.name;
     }
   });

@@ -1,5 +1,3 @@
-/* type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>;
- */
 type FileType = {
   uid: string;
   name: string;
@@ -93,6 +91,9 @@ export type CustomerType = {
   ownerId: string;
   profilePicture: string;
   exercisePlan: string[];
+  parentPhone: string;
+  bloodGroup: string;
+  address: string;
   createdAt: string;
   updatedAt: string;
   __v: number;

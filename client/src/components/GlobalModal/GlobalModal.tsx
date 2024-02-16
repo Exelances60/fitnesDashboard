@@ -11,7 +11,6 @@ const GlobalModal = () => {
   const dispatch = useAppDispatch();
   const modalVisible = useAppSelector(selectModalType);
   const modalProps = useAppSelector(selectModalProps);
-
   return (
     <Modal
       title={modalProps.title}

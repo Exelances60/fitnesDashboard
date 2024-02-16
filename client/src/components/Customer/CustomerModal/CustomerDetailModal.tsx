@@ -29,6 +29,12 @@ const CustomerDetailsModal = ({ customer }: CustomerEditModalProps) => {
         <p className="flex gap-2">
           Phone: <p className="font-bold">+90{customer.phone}</p>
         </p>
+        {customer.age < 18 ? (
+          <p className="flex gap-2">
+            Parent Name: <p className="font-bold">{customer.parentPhone}</p>
+          </p>
+        ) : null}
+
         <p className="flex gap-2">
           Age: <p className="font-bold">{customer.age}</p>
         </p>

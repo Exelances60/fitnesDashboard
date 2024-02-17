@@ -1,4 +1,4 @@
-import { CustomerType } from "@/models/dataTypes";
+import { CustomerType } from "@/types/Customer";
 import { capitalizeFirstLetter } from "@/utils/utils";
 import Image from "next/image";
 import Link from "next/link";

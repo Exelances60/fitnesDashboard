@@ -1,4 +1,4 @@
-import { orderDonutChartType } from "@/models/dataTypes";
+import { orderDonutChartType } from "@/types/Order";
 import { currencyFormatter } from "@/utils/utils";
 import { motion } from "framer-motion";
 import React from "react";

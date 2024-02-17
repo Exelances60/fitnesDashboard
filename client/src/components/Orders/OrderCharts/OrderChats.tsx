@@ -1,8 +1,8 @@
-import { orderDonutChartType } from "@/models/dataTypes";
 import { Grid } from "@tremor/react";
 import React from "react";
 import OrderChartsTotalPrice from "./OrderChartsTotalPrice";
 import OrderChartsCategory from "./OrderChartsCategory";
+import { orderDonutChartType } from "@/types/Order";
 
 type OrderChatsProps = {
   chartsDonutData: orderDonutChartType[];

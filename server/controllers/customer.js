@@ -141,3 +141,28 @@ exports.updateCustomer = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.deleteCustomer = async (req, res, next) => {
+  const customerId = req.params.customerId;
+  if (!customerId) throwBadRequestError("Customer not found.");
+  try {
+    const customer = await Customer.findById(customerId);
+    if (!customer) {
+      throwBadRequestError("Customer not found.");
+    }
+    const ownerId = customer.ownerId;
+    const fetchedOwner = await Owner.findById(ownerId);
+    if (!fetchedOwner) {
+      throwBadRequestError("Owner not found.");
+    }
+    fetchedOwner.customer.pull(customerId);
+    await fetchedOwner.save();
+    await customer.deleteOne();
+    res.status(200).json({
+      message: "Customer deleted successfully!",
+      status: 200,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

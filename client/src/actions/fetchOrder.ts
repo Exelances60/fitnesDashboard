@@ -1,5 +1,5 @@
 "use server";
-import { getOrdersType } from "@/models/dataTypes";
+import { getOrdersType } from "@/types/Order";
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 

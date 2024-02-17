@@ -1,4 +1,3 @@
-import { productsType } from "@/models/dataTypes";
 import { TableRow, TableCell } from "@tremor/react";
 import { Popconfirm, Button, Image } from "antd";
 import {
@@ -16,6 +15,7 @@ import {
   setOrderModalVisible,
   setProduct,
 } from "@/store/slices/productPageSlice";
+import { productsType } from "@/types/Product";
 
 type productsRowType = {
   product: productsType;
@@ -23,8 +23,6 @@ type productsRowType = {
 };
 const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
   const dispatch = useAppDispatch();
-  /*  const [editModalVisible, setEditModalVisible] = useState(false);
-  const [orderModalVisible, setOrderModalVisible] = useState(false); */
 
   const handleClickEditButton = () => {
     dispatch(setProduct(product));
@@ -39,20 +37,6 @@ const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
 
   return (
     <TableRow key={product._id} className="text-black ">
-      {/*    {editModalVisible ? (
-        <ProductEditModal
-          editModalVisible={editModalVisible}
-          setEditModalVisible={setEditModalVisible}
-          product={product}
-        />
-      ) : null}
-      {orderModalVisible ? (
-        <ProductOrderModal
-          orderModalVisible={orderModalVisible}
-          setOrderModalVisible={setOrderModalVisible}
-          product={product}
-        />
-      ) : null} */}
       <TableCell>
         <Image
           src={`http://localhost:8080/${product.imageUrl}`}

@@ -109,6 +109,13 @@ export type ExerciseType = {
   instructions: string[];
 };
 
+export type fetchExersiceType = {
+  exercises: ExerciseType[] | [];
+  totalExercisesCount: number;
+  currentPage: number;
+  pageSize: number;
+};
+
 export type updateCustomerFormType = {
   age: number;
   bodyWeight: number;

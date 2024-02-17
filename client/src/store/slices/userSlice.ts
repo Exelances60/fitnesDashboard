@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { jwtUserDecode } from "@/models/dataTypes";
-
+import { jwtUserDecode } from "@/types/Auth";
 interface UserState {
   user: jwtUserDecode | null;
   menuKeys: "dashboard" | "users" | "products" | "orders" | "settings";

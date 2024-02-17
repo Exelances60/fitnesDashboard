@@ -7,7 +7,7 @@ import axiosClient from "@/utils/AxiosClient";
 import { jwtDecode } from "jwt-decode";
 import { useAppDispatch } from "@/store/store";
 import { setUser } from "@/store/slices/userSlice";
-import { jwtUserDecode } from "@/models/dataTypes";
+import { jwtUserDecode } from "@/types/Auth";
 
 const LoginPageForm = () => {
   const router = useRouter();

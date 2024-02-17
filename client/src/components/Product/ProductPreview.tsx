@@ -2,13 +2,13 @@
 import React, { useState } from "react";
 import { Card } from "@tremor/react";
 import { Pagination, message } from "antd";
-import { productsType } from "@/models/dataTypes";
 import axiosClient from "@/utils/AxiosClient";
 import { useRouter } from "next/navigation";
 import ProductTable from "./ProductTable";
 import ProductSeacrh from "./ProductSearch";
 import ProductEditModal from "./ProductEditModal";
 import ProductOrderModal from "./ProductOrderModal";
+import { productsType } from "@/types/Product";
 
 type ProductPreviewProps = {
   products: productsType[];

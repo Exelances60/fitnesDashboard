@@ -1,9 +1,9 @@
 import React from "react";
-import { ordersType } from "@/models/dataTypes";
 import Image from "next/image";
+import { OrdersType } from "@/types/Order";
 
 type OrderDetailModalProps = {
-  selectedOrder: ordersType;
+  selectedOrder: OrdersType;
 };
 
 const OrderDetailModal = ({ selectedOrder }: OrderDetailModalProps) => {

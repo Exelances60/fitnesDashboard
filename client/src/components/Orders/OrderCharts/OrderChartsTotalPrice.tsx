@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import { Card, DonutChart, List, ListItem } from "@tremor/react";
-import { orderDonutChartType } from "@/models/dataTypes";
 import OrderChartsSelectedDetails from "./OrderChartsSelectedDetails";
 import OrderChartsList from "./OrderChartsList";
 import { currencyFormatter } from "@/utils/utils";
+import { orderDonutChartType } from "@/types/Order";
 
 type OrderChartsTotalPriceProps = {
   chartsDonutData: orderDonutChartType[];

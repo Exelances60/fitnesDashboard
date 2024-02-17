@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Modal, Button, Form, Input } from "antd";
-import { productsType } from "@/models/dataTypes";
 import Image from "next/image";
 import axiosClient from "@/utils/AxiosClient";
 import useMessage from "@/hooks/useMessage";
@@ -10,12 +9,6 @@ import {
   selectProduct,
   setOrderModalVisible,
 } from "@/store/slices/productPageSlice";
-
-type ProductOrderModalType = {
-  orderModalVisible: boolean;
-  setOrderModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  product: productsType;
-};
 
 type formValuesType = {
   productName: string;
@@ -27,13 +20,7 @@ type formValuesType = {
   orderOwner: string;
 };
 
-const ProductOrderModal = (
-  {
-    /*   orderModalVisible,
-  setOrderModalVisible,
-  product, */
-  }
-) => {
+const ProductOrderModal = () => {
   const product = useAppSelector(selectProduct);
   const showMessage = useMessage();
   const dispatch = useAppDispatch();

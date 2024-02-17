@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import { Card, DonutChart, List, ListItem } from "@tremor/react";
-import { orderDonutChartType } from "@/models/dataTypes";
 import { currencyFormatter } from "@/utils/utils";
+import { orderDonutChartType } from "@/types/Order";
 
 type OrderChartsCategoryProps = {
   chartsDonutData: orderDonutChartType[];

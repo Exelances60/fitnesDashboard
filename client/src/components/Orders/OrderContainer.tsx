@@ -1,5 +1,4 @@
 "use client";
-import { ordersType } from "@/models/dataTypes";
 import { Card } from "@tremor/react";
 import { Table, DatePicker, Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
@@ -9,17 +8,17 @@ import axiosClient from "@/utils/AxiosClient";
 import useMessage from "@/hooks/useMessage";
 import OrderTableDetailsCol from "./OrderTableDetailsCol";
 import { statusFilter, statusRender } from "@/mock/orderStatusFilter";
+import { OrdersType } from "@/types/Order";
+import useTableFilterSearchDropDown from "@/hooks/useTableFilterSearchDropDown";
 
 const { RangePicker } = DatePicker;
 
 type OrderContainerProps = {
-  orders: ordersType[];
+  orders: OrdersType[];
 };
 const OrderContainer = ({ orders }: OrderContainerProps) => {
-  const [updateOrderDrawerVisible, setUpdateOrderDrawerVisible] =
-    useState(false);
-  const [selectedOrder, setSelectedOrder] = useState<ordersType | null>(null);
-  const [searchById, setSearchById] = useState("");
+  const { filterDropdown, filterIcon, searchById } =
+    useTableFilterSearchDropDown();
   const [rangePickerValue, setRangePickerValue] = useState([null, null]);
   const userInfo = useSelectUserInfo();
   const showMessage = useMessage();
@@ -63,14 +62,6 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
   };
   return (
     <Card className="flex flex-col gap-5 overflow-auto" title="Orders">
-      {/*      {updateOrderDrawerVisible ? (
-        <OrderUpdateDrawer
-          updateOrderDrawerVisible={updateOrderDrawerVisible}
-          setUpdateOrderDrawerVisible={setUpdateOrderDrawerVisible}
-          selectedOrder={selectedOrder}
-        />
-      ) : null} */}
-
       <div className="w-full flex flex-col items-end gap-2 justify-end">
         <h1 className="text-2xl font-bold">Orders</h1>
         <RangePicker
@@ -94,21 +85,8 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
           dataIndex="_id"
           key="_id"
           render={(text) => <p className="text-blue-500">{text}</p>}
-          filterDropdown={() => (
-            <div className="p-5">
-              <Input
-                placeholder="Search Order Id"
-                value={searchById}
-                onChange={(e) => setSearchById(e.target.value)}
-                prefix={<SearchOutlined />}
-              />
-            </div>
-          )}
-          filterIcon={(filtered) => (
-            <SearchOutlined
-              style={{ color: filtered ? "#1890ff" : undefined }}
-            />
-          )}
+          filterDropdown={filterDropdown}
+          filterIcon={filterIcon}
         />
 
         <Table.Column
@@ -122,7 +100,7 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
           title="Total Price"
           dataIndex="totalPrice"
           key="totalPrice"
-          sorter={(a: ordersType, b: ordersType) => a.totalPrice - b.totalPrice}
+          sorter={(a: OrdersType, b: OrdersType) => a.totalPrice - b.totalPrice}
           render={(text) => <p className="text-green-500">{text} TL</p>}
         />
         <Table.Column
@@ -160,7 +138,7 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
           dataIndex="createdAt"
           key="createdAt"
           render={(text) => new Date(text).toLocaleString()}
-          sorter={(a: ordersType, b: ordersType) =>
+          sorter={(a: OrdersType, b: OrdersType) =>
             new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
           }
         />
@@ -173,7 +151,7 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
         <Table.Column
           title="Details"
           key="details"
-          render={(record: ordersType) => (
+          render={(record: OrdersType) => (
             <OrderTableDetailsCol
               record={record}
               handleCompleteOrder={handleCompleteOrder}

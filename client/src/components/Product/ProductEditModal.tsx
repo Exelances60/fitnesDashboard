@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Form, Input, Button, Upload, message } from "antd";
-import { productsType } from "@/models/dataTypes";
 import { useRouter } from "next/navigation";
 import axiosClient from "@/utils/AxiosClient";
 import { useAppDispatch, useAppSelector } from "@/store/store";
@@ -10,19 +9,7 @@ import {
   setEditModalVisible,
 } from "@/store/slices/productPageSlice";
 
-type ProductEditModalType = {
-  editModalVisible: boolean;
-  setEditModalVisible: (value: boolean) => void;
-  product: productsType;
-};
-
-const ProductEditModal = (
-  {
-    /*editModalVisible,
-  setEditModalVisible,
-  product, */
-  }
-) => {
+const ProductEditModal = () => {
   const product = useAppSelector(selectProduct);
   const router = useRouter();
   const [form] = Form.useForm();

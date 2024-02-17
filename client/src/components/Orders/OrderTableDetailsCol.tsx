@@ -1,16 +1,16 @@
 import React from "react";
 import { Button } from "antd";
 import { useAppDispatch } from "@/store/store";
-import { ordersType } from "@/models/dataTypes";
 import { showModal } from "@/store/slices/modalSlice";
 import { setShowDrawer } from "@/store/slices/drawerSlice";
 import OrderUpdateDrawer from "./OrderModals/OrderUpdateDrawer";
 import OrderUpdateDrawerFooter from "./OrderModals/OrderUpdateDrawerFooter";
 import OrderDetailModal from "./OrderModals/OrderDetailModal";
 import { CheckOutlined } from "@ant-design/icons";
+import { OrdersType } from "@/types/Order";
 
 type OrderTableDetailsColProps = {
-  record: ordersType;
+  record: OrdersType;
   handleCompleteOrder: (orderId: string) => void;
 };
 
@@ -20,7 +20,7 @@ const OrderTableDetailsCol = ({
 }: OrderTableDetailsColProps) => {
   const dispatch = useAppDispatch();
 
-  const openDetailModal = (selectedOrderFuc: ordersType) => {
+  const openDetailModal = (selectedOrderFuc: OrdersType) => {
     if (selectedOrderFuc) {
       dispatch(
         showModal({
@@ -31,7 +31,7 @@ const OrderTableDetailsCol = ({
     }
   };
 
-  const openUpdateDrawer = (selectedOrderFuc: ordersType) => {
+  const openUpdateDrawer = (selectedOrderFuc: OrdersType) => {
     if (selectedOrderFuc) {
       dispatch(
         setShowDrawer({

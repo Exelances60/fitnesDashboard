@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Form, Input, Select, Button, Upload } from "antd";
 import * as Icon from "@ant-design/icons";
-import { addCustomerFormType } from "@/models/dataTypes";
 import useMessage from "@/hooks/useMessage";
 import useSelectUserInfo from "@/hooks/useSelectUserInfo";
 import axiosClient from "@/utils/AxiosClient";
 import CustomerMemberShipStatus from "./CustomerMemberShipStatus";
 import CustomerAddAge from "./CustomerAddAge";
 import { renderFormItem } from "@/utils/renderForTables/Customers/renderCustomerFormItem";
+import { AddCustomerFormType } from "@/types/Customer";
 
 const CustomerAddModal = () => {
   const [form] = Form.useForm();
@@ -15,10 +15,9 @@ const CustomerAddModal = () => {
   const userInfo = useSelectUserInfo();
   const showMessage = useMessage();
 
-  const onFinish = async (values: addCustomerFormType) => {
+  const onFinish = async (values: AddCustomerFormType) => {
     if (!userInfo) return;
     showMessage("Adding Customer", "loading", 1);
-    console.log(values);
 
     const formData = new FormData();
     if (image) {

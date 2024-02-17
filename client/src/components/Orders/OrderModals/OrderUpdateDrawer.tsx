@@ -1,6 +1,5 @@
 import React from "react";
-import { Drawer, Form, Input, Select, Button } from "antd";
-import { ordersType } from "@/models/dataTypes";
+import { Form, Input, Select } from "antd";
 import delivaryImage from "@/../public/orders/delivary.png";
 import preparingImage from "@/../public/orders/preparing.png";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
@@ -9,11 +8,10 @@ import axiosClient from "@/utils/AxiosClient";
 import useMessage from "@/hooks/useMessage";
 import { useAppDispatch } from "@/store/store";
 import { setHideDrawer } from "@/store/slices/drawerSlice";
+import { OrdersType } from "@/types/Order";
 
 type OrderUpdateDrawerProps = {
-  /*   updateOrderDrawerVisible: boolean;
-  setUpdateOrderDrawerVisible: React.Dispatch<React.SetStateAction<boolean>>; */
-  selectedOrder: ordersType | null;
+  selectedOrder: OrdersType | null;
 };
 
 type updateFormType = {
@@ -25,11 +23,7 @@ type updateFormType = {
   amount: number;
 };
 
-const OrderUpdateDrawer = ({
-  /*   updateOrderDrawerVisible,
-  setUpdateOrderDrawerVisible, */
-  selectedOrder,
-}: OrderUpdateDrawerProps) => {
+const OrderUpdateDrawer = ({ selectedOrder }: OrderUpdateDrawerProps) => {
   const showMessage = useMessage();
   const dispath = useAppDispatch();
   const optionRender = (item: any) => {
@@ -76,33 +70,6 @@ const OrderUpdateDrawer = ({
 
   return (
     <>
-      {/*       <Drawer
-        open={updateOrderDrawerVisible}
-        onClose={() => setUpdateOrderDrawerVisible(false)}
-        size="large"
-        title="Update Order"
-        footer={
-          <div className="flex justify-end gap-4">
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="p-5 box-border"
-              size="middle"
-              form="updateOrderForm"
-            >
-              Update Order
-            </Button>
-            <Button
-              type="default"
-              className="p-5 box-border"
-              size="middle"
-              onClick={() => setUpdateOrderDrawerVisible(false)}
-            >
-              Cancel
-            </Button>
-          </div>
-        }
-      > */}
       <Form
         layout="vertical"
         initialValues={selectedOrder || []}
@@ -144,7 +111,6 @@ const OrderUpdateDrawer = ({
           <Input />
         </Form.Item>
       </Form>
-      {/*       </Drawer>{" "} */}
     </>
   );
 };

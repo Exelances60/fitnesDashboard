@@ -1,13 +1,34 @@
 const Exercises = require("../models/Exercise");
-exports.getExercises = (req, res, next) => {
-  Exercises.find()
-    .then((exercises) => {
-      res.status(200).json({
-        message: "Exercises fetched successfully!",
-        exercises: exercises,
+
+exports.getExercises = async (req, res, next) => {
+  const { page, search } = req.query;
+
+  const pageSize = 20;
+  const currentPage = page ? parseInt(page) : 1;
+
+  try {
+    let exercises;
+    let totalExercisesCount;
+
+    if (search) {
+      exercises = await Exercises.find({
+        name: { $regex: search, $options: "i" },
       });
-    })
-    .catch((error) => {
-      next(error);
+      totalExercisesCount = exercises.length;
+    } else {
+      totalExercisesCount = await Exercises.countDocuments();
+      exercises = await Exercises.find()
+        .skip((currentPage - 1) * pageSize)
+        .limit(pageSize);
+    }
+
+    res.status(200).json({
+      exercises,
+      totalExercisesCount,
+      currentPage,
+      pageSize,
     });
+  } catch (err) {
+    res.status(500).json({ message: "Server Error" });
+  }
 };

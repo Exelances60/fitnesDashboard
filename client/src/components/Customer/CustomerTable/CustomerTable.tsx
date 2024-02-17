@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
-import { Table, Image, Button } from "antd";
-import { CustomerType, ExerciseType } from "@/models/dataTypes";
+import { Table, Image, Button, Popconfirm } from "antd";
 import { renderMembershipStatus } from "@/utils/renderForTables/Customers/renderMembershipStatus";
 import { renderCustomerEmailRender } from "@/utils/renderForTables/Customers/renderCustomerEmailRender";
 import {
@@ -15,15 +14,20 @@ import { setShowDrawer } from "@/store/slices/drawerSlice";
 import CustomerEditDrawer from "../CustomerDrawer/CustomerEditDrawer";
 import CustomerDetailsModal from "../CustomerModal/CustomerDetailModal";
 import CustomerEditFooter from "../CustomerDrawer/CustomerEditFooter";
+import { CustomerType } from "@/types/Customer";
+import useMessage from "@/hooks/useMessage";
+import axiosClient from "@/utils/AxiosClient";
+import useTableFilterSearchDropDown from "@/hooks/useTableFilterSearchDropDown";
 
 interface CustomerTableProps {
   customers: CustomerType[];
-  exersice: ExerciseType[];
 }
 
-const CustomerTable = ({ customers, exersice }: CustomerTableProps) => {
+const CustomerTable = ({ customers }: CustomerTableProps) => {
   const dispatch = useAppDispatch();
-
+  const showMessage = useMessage();
+  const { filterDropdown, filterIcon, searchById } =
+    useTableFilterSearchDropDown();
   const handleOnDetails = (record: CustomerType) => {
     dispatch(
       showModal({
@@ -37,15 +41,34 @@ const CustomerTable = ({ customers, exersice }: CustomerTableProps) => {
   const handleEditOnClick = (record: CustomerType) => {
     dispatch(
       setShowDrawer({
-        children: <CustomerEditDrawer customer={record} exersice={exersice} />,
+        children: <CustomerEditDrawer customer={record} />,
         title: "Edit Customer",
         footer: <CustomerEditFooter />,
       })
     );
   };
+
+  const handleDeleteCustomerOnClick = async (record: CustomerType) => {
+    showMessage("Wait a moment", "loading", 0.4);
+    try {
+      const response = await axiosClient.delete(
+        `/customers/delete-customer/${record._id}`
+      );
+      if (response.status === 200) {
+        showMessage("Customer deleted successfully", "success", 2);
+      }
+    } catch (error) {
+      showMessage("An error occurred", "error", 2);
+    }
+  };
+
+  const diplayCustomers = customers.filter((customer) => {
+    return customer.name.toLowerCase().includes(searchById.toLowerCase());
+  });
+
   return (
     <Table
-      dataSource={customers}
+      dataSource={diplayCustomers}
       pagination={{ pageSize: 10 }}
       className="overflow-x-auto"
     >
@@ -69,6 +92,8 @@ const CustomerTable = ({ customers, exersice }: CustomerTableProps) => {
         title="Name"
         dataIndex="name"
         key="name"
+        filterDropdown={filterDropdown}
+        filterIcon={filterIcon}
         render={(text) => {
           return <p>{text} </p>;
         }}
@@ -87,11 +112,24 @@ const CustomerTable = ({ customers, exersice }: CustomerTableProps) => {
         className="overflow-hidden"
         render={renderCustomerEmailRender}
       />
-      <Table.Column title="Age" dataIndex="age" key="age" />
+      <Table.Column
+        title="Age"
+        dataIndex="age"
+        key="age"
+        sorter={(a: CustomerType, b: CustomerType) => a.age - b.age}
+      />
       <Table.Column
         title="Membership"
         dataIndex="membershipStatus"
         key="membershipStatus"
+        filters={[
+          { text: "Standart", value: "standart" },
+          { text: "Passive", value: "passive" },
+          { text: "Vip", value: "vip" },
+        ]}
+        onFilter={(value: any, record: CustomerType) =>
+          record.membershipStatus.indexOf(value) === 0
+        }
         render={renderMembershipStatus}
       />
       <Table.Column
@@ -165,9 +203,14 @@ const CustomerTable = ({ customers, exersice }: CustomerTableProps) => {
               >
                 Edit
               </Button>
-              <Button type="primary" danger ghost icon={<DeleteOutlined />}>
-                Delete
-              </Button>
+              <Popconfirm
+                title="Are you sure to delete this customer?"
+                onConfirm={() => handleDeleteCustomerOnClick(record)}
+              >
+                <Button type="primary" danger ghost icon={<DeleteOutlined />}>
+                  Delete
+                </Button>
+              </Popconfirm>
             </div>
           );
         }}

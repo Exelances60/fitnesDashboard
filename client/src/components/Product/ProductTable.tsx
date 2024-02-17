@@ -1,4 +1,3 @@
-import { productsType } from "@/models/dataTypes";
 import { Empty } from "antd";
 import {
   Table,
@@ -8,6 +7,7 @@ import {
   TableBody,
 } from "@tremor/react";
 import ProductRow from "./ProductRow";
+import { productsType } from "@/types/Product";
 
 type ProductTableProps = {
   currentProducts: productsType[];

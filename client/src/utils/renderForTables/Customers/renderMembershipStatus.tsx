@@ -1,19 +1,20 @@
 import { capitalizeFirstLetter } from "@/utils/utils";
+import { Badge } from "@tremor/react";
 
 export const renderMembershipStatus = (membershipStatus: string) => {
-  let className = "";
+  let color = "";
   switch (membershipStatus) {
     case "standart":
-      className = "text-green-600";
+      color = "green";
       break;
     case "passive":
-      className = "text-red-500";
+      color = "gray";
       break;
     case "vip":
-      className = "text-purple-600";
+      color = "violet";
       break;
     default:
       break;
   }
-  return <p className={className}>{capitalizeFirstLetter(membershipStatus)}</p>;
+  return <Badge color={color}>{capitalizeFirstLetter(membershipStatus)}</Badge>;
 };

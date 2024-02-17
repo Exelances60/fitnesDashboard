@@ -1,7 +1,7 @@
 "use server";
-import { productsType } from "@/models/dataTypes";
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
+import { productsType } from "@/types/Product";
 
 export const fetchProducts = async (): Promise<productsType[]> => {
   const cookiesStore = cookies();

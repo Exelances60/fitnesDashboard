@@ -1,4 +1,4 @@
-import { fetchExersiceType } from "@/types/ExercisType";
+import { ExerciseType, fetchExersiceType } from "@/types/ExercisType";
 import axiosClient from "@/utils/AxiosClient";
 import React, { useEffect } from "react";
 

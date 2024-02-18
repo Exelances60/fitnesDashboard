@@ -6,6 +6,7 @@ import { capitalizeFirstLetter } from "@/utils/utils";
 import { useFetchExersice } from "@/hooks/useFetchExersice";
 import useDebounce from "@/hooks/useDebounce";
 import { ProgressCircle } from "@tremor/react";
+import { ExerciseType } from "@/types/ExercisType";
 
 const CustomerEditExersiceForm = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,7 +16,7 @@ const CustomerEditExersiceForm = () => {
     currentPage,
     debounceSearch as string
   );
-  const exercises = data ? data.exercises : [];
+  const exercises: ExerciseType[] = data ? data.exercises : [];
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);

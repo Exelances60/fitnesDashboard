@@ -27,7 +27,17 @@ export type OrdersType = {
 
 export type orderDonutChartType = Global.OrderDonutChartType;
 
+export type CardDataType = {
+  totalOrders: number;
+  totalSalesPrice: number;
+  increasePercentageForSales: number;
+  totalSalesCompleted: number;
+  increasePercentageForAmount: number;
+  increasePercentageForCompletedSales: number;
+};
+
 export type getOrdersType = {
   orders: Global.ordersType[];
   chartsData: orderDonutChartType[];
+  cardData: CardDataType;
 };

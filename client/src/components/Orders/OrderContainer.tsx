@@ -10,6 +10,7 @@ import OrderTableDetailsCol from "./OrderTableDetailsCol";
 import { statusFilter, statusRender } from "@/mock/orderStatusFilter";
 import { OrdersType } from "@/types/Order";
 import useTableFilterSearchDropDown from "@/hooks/useTableFilterSearchDropDown";
+import OrdersCards from "./OrdersCards";
 
 const { RangePicker } = DatePicker;
 
@@ -63,7 +64,6 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
   return (
     <Card className="flex flex-col gap-5 overflow-auto" title="Orders">
       <div className="w-full flex flex-col items-end gap-2 justify-end">
-        <h1 className="text-2xl font-bold">Orders</h1>
         <RangePicker
           className="w-[50%] md:w-[30%]"
           format={"YYYY-MM-DD"}
@@ -73,7 +73,6 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
           }}
         />
       </div>
-
       <Table
         dataSource={filteredOrdersById}
         rowKey="_id"

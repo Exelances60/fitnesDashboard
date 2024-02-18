@@ -3,9 +3,9 @@ const Product = require("../models/Product");
 const Owner = require("../models/owner");
 const { validationResult } = require("express-validator");
 const clearImage = require("../utils/clearImage");
-const throwValidationError = require("../utils/throwValidationError");
-const throwBadRequestError = require("../utils/throwBadRequestError");
-const throwNotFoundError = require("../utils/throwNotFoundError");
+const throwValidationError = require("../utils/err/throwValidationError");
+const throwBadRequestError = require("../utils/err/throwBadRequestError");
+const throwNotFoundError = require("../utils/err/throwNotFoundError");
 const sendMailInfoForProduct = require("../utils/sendMail");
 
 exports.addProduct = (req, res, next) => {

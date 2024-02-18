@@ -159,9 +159,7 @@ const CustomerTable = ({ customers }: CustomerTableProps) => {
         render={(text) => {
           return (
             <div className="flex items-center justify-center">
-              <p className="text-md font-bold">
-                {new Date(text).toLocaleDateString()}
-              </p>
+              <p>{new Date(text).toLocaleDateString()}</p>
             </div>
           );
         }}
@@ -173,9 +171,7 @@ const CustomerTable = ({ customers }: CustomerTableProps) => {
         render={(text) => {
           return (
             <div className="flex items-center justify-center">
-              <p className="text-md font-bold">
-                {new Date(text).toLocaleDateString()}
-              </p>
+              <p>{new Date(text).toLocaleDateString()}</p>
             </div>
           );
         }}

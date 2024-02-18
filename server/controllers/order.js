@@ -3,10 +3,15 @@ require("dotenv").config();
 const Product = require("../models/Product");
 const Order = require("../models/Order");
 const Owner = require("../models/owner");
-const throwValidationError = require("../utils/throwValidationError");
-const throwNotFoundError = require("../utils/throwNotFoundError");
-const throwBadRequestError = require("../utils/throwBadRequestError");
+const throwValidationError = require("../utils/err/throwValidationError");
+const throwNotFoundError = require("../utils/err/throwNotFoundError");
+const throwBadRequestError = require("../utils/err/throwBadRequestError");
 const sendMailOrderCreate = require("../utils/sendMailOrderCreate");
+const {
+  calculatePreviousMonthSales,
+  calculatePreviousMonthAmount,
+  calculatePreviosMonthComplateSales,
+} = require("../services/businessLogic/calculatePreviousMonthSales");
 
 exports.createOrder = (req, res, next) => {
   const errors = validationResult(req);
@@ -77,7 +82,7 @@ exports.createOrder = (req, res, next) => {
       return owner.save();
     })
     .then((result) => {
-      sendMailOrderCreate(
+      /* sendMailOrderCreate(
         fetchedOrder.orderOwnerEmail,
         process.env.SENDER_MAIL,
         "Order Confirmation",
@@ -89,7 +94,7 @@ exports.createOrder = (req, res, next) => {
           price: fetchedProduct.price,
           totalPrice: fetchedOrder.totalPrice,
         }
-      );
+      ); */
       res.status(201).json({
         message: "Order created successfully!",
         order: result,
@@ -98,59 +103,82 @@ exports.createOrder = (req, res, next) => {
     });
 };
 
-exports.getOrders = (req, res, next) => {
-  const ownerId = req.params.ownerId;
+exports.getOrders = async (req, res, next) => {
+  try {
+    const ownerId = req.params.ownerId;
+    if (!ownerId) {
+      throwNotFoundError("Owner not found.");
+    }
 
-  if (!ownerId) {
-    throwNotFoundError("Owner not found.");
-  }
-  let fetchOrder;
+    const orders = await Order.find({ creator: ownerId });
+    if (!orders || !orders.length) {
+      throwNotFoundError("Orders not found.");
+    }
 
-  Order.find({ creator: ownerId })
-    .then((orders) => {
-      if (!orders) {
-        throwNotFoundError("Orders not found.");
-      }
-      fetchOrder = orders;
-      const productsIds = orders.flatMap((order) => order.productsId);
+    const productIds = orders.flatMap((order) => order.productsId);
+    const products = await Product.find({ _id: { $in: productIds } });
+    if (!products || !products.length) {
+      throwNotFoundError("Products not found.");
+    }
 
-      return Product.find({ _id: { $in: productsIds } });
-    })
-    .then((products) => {
-      if (!products) {
-        throwNotFoundError("Products not found.");
-      }
-
-      const ordersWithProducts = fetchOrder.map((order) => {
-        const orderProducts = products.filter((product) =>
-          order.productsId.includes(product._id.toString())
-        );
-        return { ...order.toObject(), products: orderProducts };
-      });
-
-      const chartsData = ordersWithProducts.map((order) => {
-        return {
-          name: order.products.map((product) => product.name).join(", "),
-          category: order.products
-            .map((product) => product.category)
-            .join(", "),
-          price: +order.products.map((product) => product.price).join(", "),
-          amount: +order.products.map((product) => product.amount).join(", "),
-          totalPrice: order.totalPrice,
-          amountOrder: order.amount,
-          orderId: order._id,
-        };
-      });
-
-      res.status(200).json({
-        message: "Fetched orders successfully.",
-        orders: ordersWithProducts,
-        chartsData,
-      });
-    })
-    .catch((err) => {
-      throwNotFoundError("Fetching orders failed.");
+    const ordersWithProducts = orders.map((order) => {
+      const orderProducts = products.filter((product) =>
+        order.productsId.includes(product._id.toString())
+      );
+      return { ...order.toObject(), products: orderProducts };
     });
+
+    const chartsData = ordersWithProducts.flatMap((order) => {
+      return {
+        name: order.products.map((product) => product.name).join(", "),
+        category: order.products.map((product) => product.category).join(", "),
+        price: +order.products.map((product) => product.price).join(", "),
+        amount: +order.products.map((product) => product.amount).join(", "),
+        totalPrice: order.totalPrice,
+        amountOrder: order.amount,
+        orderId: order._id,
+      };
+
+      return [];
+    });
+
+    const increasePercentageForSales =
+      calculatePreviousMonthSales(ordersWithProducts);
+    const previousMonthAmount =
+      calculatePreviousMonthAmount(ordersWithProducts);
+    const increasePercentageForCompletedSales =
+      calculatePreviosMonthComplateSales(ordersWithProducts);
+
+    const totalSalesPrice = ordersWithProducts.reduce(
+      (acc, order) => acc + order.totalPrice,
+      0
+    );
+
+    const totalSalesCompleted = ordersWithProducts
+      .filter((order) => order.status === "Completed")
+      .reduce((acc, order) => acc + order.totalPrice, 0);
+
+    const increasePercentageForAmount =
+      ((ordersWithProducts.length - previousMonthAmount) /
+        previousMonthAmount) *
+      100;
+
+    res.status(200).json({
+      message: "Fetched orders successfully.",
+      orders: ordersWithProducts,
+      chartsData,
+      cardData: {
+        totalOrders: ordersWithProducts.length,
+        totalSalesPrice,
+        increasePercentageForSales,
+        totalSalesCompleted,
+        increasePercentageForAmount,
+        increasePercentageForCompletedSales,
+      },
+    });
+  } catch (err) {
+    throwNotFoundError("Fetching orders failed.");
+  }
 };
 
 exports.updateOrder = (req, res, next) => {

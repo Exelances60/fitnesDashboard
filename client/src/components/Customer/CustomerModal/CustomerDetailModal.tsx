@@ -1,3 +1,5 @@
+import { setHideModal } from "@/store/slices/modalSlice";
+import { useAppDispatch } from "@/store/store";
 import { CustomerType } from "@/types/Customer";
 import { capitalizeFirstLetter } from "@/utils/utils";
 import Image from "next/image";
@@ -9,6 +11,7 @@ interface CustomerEditModalProps {
 }
 
 const CustomerDetailsModal = ({ customer }: CustomerEditModalProps) => {
+  const dispatch = useAppDispatch();
   return (
     <div className="flex flex-col  gap-5">
       <div className="flex flex-col items-center justify-center gap-5 w-full">
@@ -63,7 +66,14 @@ const CustomerDetailsModal = ({ customer }: CustomerEditModalProps) => {
         </p>
       </div>
 
-      <Link href={`#`}>More Details..</Link>
+      <Link
+        href={`/dashboard/customer/${customer._id}`}
+        onClick={() => {
+          dispatch(setHideModal());
+        }}
+      >
+        More Details
+      </Link>
     </div>
   );
 };

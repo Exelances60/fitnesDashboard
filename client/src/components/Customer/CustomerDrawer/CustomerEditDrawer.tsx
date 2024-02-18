@@ -7,6 +7,7 @@ import axiosClient from "@/utils/AxiosClient";
 import useMessage from "@/hooks/useMessage";
 import { useAppDispatch } from "@/store/store";
 import { setHideDrawer } from "@/store/slices/drawerSlice";
+import { CustomerType, UpdateCustomerFormType } from "@/types/Customer";
 
 interface CustomerEditDrawerProps {
   customer: CustomerType;
@@ -19,7 +20,7 @@ const CustomerEditDrawer = ({ customer }: CustomerEditDrawerProps) => {
   const [selectedMembershipStatus, setSelectedMembershipStatus] = useState();
   const [form] = Form.useForm();
 
-  const onFinish = async (values: updateCustomerFormType) => {
+  const onFinish = async (values: UpdateCustomerFormType) => {
     if (!userInfo) return;
     showMessage("Updating customer", "loading", 2);
 

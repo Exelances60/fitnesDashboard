@@ -20,7 +20,7 @@ const OrderChartsCategory = ({ chartsDonutData }: OrderChartsCategoryProps) => {
     category,
     totalPrice: filteredByCategory[category],
   }));
-
+  data.sort((a, b) => b.totalPrice - a.totalPrice);
   return (
     <Card title="Order Chats" className="order-chats">
       <h3 className="text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">

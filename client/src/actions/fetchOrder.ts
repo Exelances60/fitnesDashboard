@@ -10,6 +10,14 @@ const fetchOrder = async (): Promise<getOrdersType> => {
     return {
       orders: [],
       chartsData: [],
+      cardData: {
+        totalOrders: 0,
+        totalSalesPrice: 0,
+        increasePercentageForSales: 0,
+        totalSalesCompleted: 0,
+        increasePercentageForAmount: 0,
+        increasePercentageForCompletedSales: 0,
+      },
     };
   }
   const decodedToken = jwtDecode(token) as { _id: string };
@@ -30,6 +38,14 @@ const fetchOrder = async (): Promise<getOrdersType> => {
     return {
       orders: [],
       chartsData: [],
+      cardData: {
+        totalOrders: 0,
+        totalSalesPrice: 0,
+        increasePercentageForSales: 0,
+        totalSalesCompleted: 0,
+        increasePercentageForAmount: 0,
+        increasePercentageForCompletedSales: 0,
+      },
     };
   }
 };

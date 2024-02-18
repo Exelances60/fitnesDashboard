@@ -55,6 +55,16 @@ router.put(
   customerController.updateCustomer
 );
 
-router.delete("/delete-customer/:customerId", isAuth, customerController.deleteCustomer);
+router.delete(
+  "/delete-customer/:customerId",
+  isAuth,
+  customerController.deleteCustomer
+);
+
+router.get(
+  "/findcustomer/:customerId",
+  isAuth,
+  customerController.findCustomer
+);
 
 module.exports = router;

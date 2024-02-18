@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["localhost", "v2.exercisedb.io"],
+    domains: ["localhost", "react-material.fusetheme.com"],
   },
 };
 

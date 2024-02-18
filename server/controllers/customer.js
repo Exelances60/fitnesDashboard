@@ -1,8 +1,9 @@
 const { validationResult } = require("express-validator");
-const throwValidationError = require("../utils/throwValidationError");
-const throwBadRequestError = require("../utils/throwBadRequestError");
+const throwValidationError = require("../utils/err/throwValidationError");
+const throwBadRequestError = require("../utils/err/throwBadRequestError");
 const Owner = require("../models/owner");
 const Customer = require("../models/customer");
+const clearImage = require("../utils/clearImage");
 
 exports.addCustomer = async (req, res, next) => {
   const errors = validationResult(req);
@@ -157,9 +158,28 @@ exports.deleteCustomer = async (req, res, next) => {
     }
     fetchedOwner.customer.pull(customerId);
     await fetchedOwner.save();
+    clearImage(customer.profilePicture);
     await customer.deleteOne();
     res.status(200).json({
       message: "Customer deleted successfully!",
+      status: 200,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.findCustomer = async (req, res, next) => {
+  try {
+    const customerId = req.params.customerId;
+    if (!customerId) throwBadRequestError("Customer not found.");
+    const fetchedCustomer = await Customer.findById(customerId);
+    if (!fetchedCustomer) {
+      throwBadRequestError("Customer not found.");
+    }
+    res.status(200).json({
+      message: "Fetched customer successfully!",
+      customer: fetchedCustomer,
       status: 200,
     });
   } catch (error) {

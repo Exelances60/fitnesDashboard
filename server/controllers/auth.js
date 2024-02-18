@@ -3,9 +3,9 @@ require("dotenv").config();
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const throwNotFoundError = require("../utils/throwNotFoundError");
-const throwValidationError = require("../utils/throwValidationError");
-const throwBadRequestError = require("../utils/throwBadRequestError");
+const throwNotFoundError = require("../utils/err/throwNotFoundError");
+const throwValidationError = require("../utils/err/throwValidationError");
+const throwBadRequestError = require("../utils/err/throwBadRequestError");
 
 exports.login = (req, res, next) => {
   const errors = validationResult(req);

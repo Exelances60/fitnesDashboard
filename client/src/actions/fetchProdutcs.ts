@@ -10,15 +10,19 @@ export const fetchProducts = async (): Promise<productsType[]> => {
     return [];
   }
   const decodedToken = jwtDecode(token) as { _id: string };
-  const response = await fetch(
-    `http://localhost:8080/products/get-products/${decodedToken._id}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  try {
+    const response = await fetch(
+      `http://localhost:8080/products/get-products/${decodedToken._id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-  const data = await response.json();
-  return data.products;
+    const data = await response.json();
+    return data.products;
+  } catch (error: any) {
+    return [];
+  }
 };

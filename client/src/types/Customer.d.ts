@@ -1,4 +1,5 @@
 import { Global } from "../global";
+import { ExerciseType } from "./ExercisType";
 
 export type AddCustomerFormType = {
   image: Global.FileType[];
@@ -33,7 +34,7 @@ export type CustomerType = {
   membershipStatus: "standart" | "passive" | "vip";
   ownerId: string;
   profilePicture: string;
-  exercisePlan: string[];
+  exercisePlan: string[] | ExerciseType[];
   parentPhone: string;
   bloodGroup: string;
   address: string;

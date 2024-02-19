@@ -1,5 +1,5 @@
 import { fetchFindCustomer } from "@/actions/fetchFindCustomer";
-import CustomerSlugContainer from "@/components/Customer/CustomerDetailsPage/CustomerSlugContainer";
+import CustomerDetailsContainer from "@/components/Customer/CustomerDetailsPage/CustomerDetailsContainer";
 import Link from "next/link";
 import React from "react";
 
@@ -9,7 +9,6 @@ const CustomerDetails = async ({
   params: { customerId: string };
 }) => {
   const customer = await fetchFindCustomer(params.customerId);
-  console.log(customer);
 
   if (!customer) {
     return (
@@ -22,7 +21,7 @@ const CustomerDetails = async ({
 
   return (
     <div>
-      <CustomerSlugContainer customer={customer} />
+      <CustomerDetailsContainer customer={customer} />
     </div>
   );
 };

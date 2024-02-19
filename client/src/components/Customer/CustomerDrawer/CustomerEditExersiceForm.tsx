@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { Form, Select, Tag, Pagination } from "antd";
+import { Form, Select, Tag, Pagination, Skeleton } from "antd";
 import Image from "next/image";
 import { tagRender } from "@/utils/renderForTables/Customers/tagRenderForSelectExersice";
 import { capitalizeFirstLetter } from "@/utils/utils";
 import { useFetchExersice } from "@/hooks/useFetchExersice";
 import useDebounce from "@/hooks/useDebounce";
-import { ProgressCircle } from "@tremor/react";
 import { ExerciseType } from "@/types/ExercisType";
 
 const CustomerEditExersiceForm = () => {
@@ -40,7 +39,7 @@ const CustomerEditExersiceForm = () => {
           dropdownRender={(menu) => (
             <div>
               {loading ? (
-                <ProgressCircle />
+                <Skeleton active />
               ) : error ? (
                 <div>Something went wrong</div>
               ) : (

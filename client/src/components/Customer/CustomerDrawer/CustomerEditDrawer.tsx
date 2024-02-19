@@ -15,10 +15,10 @@ interface CustomerEditDrawerProps {
 
 const CustomerEditDrawer = ({ customer }: CustomerEditDrawerProps) => {
   const userInfo = useSelectUserInfo();
-  const showMessage = useMessage();
-  const dispatch = useAppDispatch();
   const [selectedMembershipStatus, setSelectedMembershipStatus] = useState();
   const [form] = Form.useForm();
+  const showMessage = useMessage();
+  const dispatch = useAppDispatch();
 
   const onFinish = async (values: UpdateCustomerFormType) => {
     if (!userInfo) return;
@@ -37,6 +37,7 @@ const CustomerEditDrawer = ({ customer }: CustomerEditDrawerProps) => {
       });
       if (response.status === 200) {
         showMessage("Customer updated successfully", "success", 2);
+
         form.resetFields();
         dispatch(setHideDrawer());
       }

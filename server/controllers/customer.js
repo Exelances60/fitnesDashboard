@@ -2,7 +2,8 @@ const { validationResult } = require("express-validator");
 const throwValidationError = require("../utils/err/throwValidationError");
 const throwBadRequestError = require("../utils/err/throwBadRequestError");
 const Owner = require("../models/owner");
-const Customer = require("../models/customer");
+const Customer = require("../models/Customer");
+const Exersice = require("../models/Exercise");
 const clearImage = require("../utils/clearImage");
 
 exports.addCustomer = async (req, res, next) => {
@@ -174,6 +175,10 @@ exports.findCustomer = async (req, res, next) => {
     const customerId = req.params.customerId;
     if (!customerId) throwBadRequestError("Customer not found.");
     const fetchedCustomer = await Customer.findById(customerId);
+    const fetchedExersice = await Exersice.find({
+      name: fetchedCustomer.exercisePlan,
+    });
+    fetchedCustomer.exercisePlan = fetchedExersice;
     if (!fetchedCustomer) {
       throwBadRequestError("Customer not found.");
     }
@@ -185,4 +190,25 @@ exports.findCustomer = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+exports.deleteCustomerExercisePlan = async (req, res, next) => {
+  const { customerId, exerciseName } = req.body;
+  console.log(exerciseName);
+  if (!customerId) throwBadRequestError("Customer not found.");
+
+  const fetchedCustomer = await Customer.findById(customerId);
+  if (!fetchedCustomer) {
+    throwBadRequestError("Customer not found.");
+  }
+  const deleteExersice = fetchedCustomer.exercisePlan.filter(
+    (exersice) => exersice !== exerciseName
+  );
+  fetchedCustomer.exercisePlan = deleteExersice;
+  const updatedCustomer = await fetchedCustomer.save();
+  res.status(200).json({
+    message: "Customer exercise plan deleted successfully!",
+    customer: updatedCustomer,
+    status: 200,
+  });
 };

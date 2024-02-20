@@ -24,7 +24,10 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
   const menuItems = useMemo(() => {
     return navMenu.map((item) => (
       <Menu.Item key={item.key} icon={item.icon} onClick={handleChangeMenuKeys}>
-        <Link href={`http://localhost:3000/${item.path}`} passHref>
+        <Link
+          href={`https://fitnesdashboard.onrender.com/${item.path}`}
+          passHref
+        >
           <div className="flex items-center gap-5">{item.name}</div>
         </Link>
       </Menu.Item>

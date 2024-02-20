@@ -14,7 +14,7 @@ const OrderDetailModal = ({ selectedOrder }: OrderDetailModalProps) => {
           {selectedOrder?.products.map((product) => (
             <div className="flex gap-2 w-full" key={product._id}>
               <Image
-                src={`https://fitnesdashboard.onrender.com/${product.imageUrl}`}
+                src={`http://localhost:8080/${product.imageUrl}`}
                 alt={product.name}
                 width={150}
                 height={150}

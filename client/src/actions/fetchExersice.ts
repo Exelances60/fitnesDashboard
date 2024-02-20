@@ -12,7 +12,7 @@ export const fetchExersice = async (): Promise<ExerciseType[] | []> => {
   const decodedToken = jwtDecode(token) as { _id: string };
   try {
     const response = await fetch(
-      `https://fitnesdashboard.onrender.com/exercises/getExercises`,
+      `http://localhost:8080/exercises/getExercises`,
       {
         method: "GET",
         headers: {

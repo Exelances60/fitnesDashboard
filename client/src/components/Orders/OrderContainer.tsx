@@ -1,7 +1,6 @@
 "use client";
 import { Card } from "@tremor/react";
-import { Table, DatePicker, Input } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { Table, DatePicker } from "antd";
 import React, { useState } from "react";
 import useSelectUserInfo from "@/hooks/useSelectUserInfo";
 import axiosClient from "@/utils/AxiosClient";
@@ -10,7 +9,6 @@ import OrderTableDetailsCol from "./OrderTableDetailsCol";
 import { statusFilter, statusRender } from "@/mock/orderStatusFilter";
 import { OrdersType } from "@/types/Order";
 import useTableFilterSearchDropDown from "@/hooks/useTableFilterSearchDropDown";
-import OrdersCards from "./OrdersCards";
 
 const { RangePicker } = DatePicker;
 

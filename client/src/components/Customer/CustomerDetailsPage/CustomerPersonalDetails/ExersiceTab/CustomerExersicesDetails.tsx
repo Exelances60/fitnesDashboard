@@ -6,7 +6,7 @@ import { ExerciseType } from "@/types/ExercisType";
 import CustomerExerciseList from "./CustomerExersiceList";
 
 const CustomerExersicesDetails = ({ customer }: { customer: CustomerType }) => {
-  const coachImageUrl = `http://localhost:8080/${customer?.coachPT}`;
+  const coachImageUrl = `https://fitnesdashboard.onrender.com/${customer?.coachPT}`;
   const bodyPart: { [bodyPart: string]: ExerciseType[] } = {};
 
   customer.exercisePlan?.forEach((exercise) => {

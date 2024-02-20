@@ -79,7 +79,7 @@ const CustomerTable = ({ customers }: CustomerTableProps) => {
         render={(text) => {
           return (
             <Image
-              src={`http://localhost:8080/${text}`}
+              src={`https://fitnesdashboard.onrender.com/${text}`}
               width={60}
               height={60}
               className="object-cover rounded-md"

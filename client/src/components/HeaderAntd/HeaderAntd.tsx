@@ -25,7 +25,7 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
     return navMenu.map((item) => (
       <Menu.Item key={item.key} icon={item.icon} onClick={handleChangeMenuKeys}>
         <Link
-          href={`https://fitnesdashboard.onrender.com/${item.path}`}
+          href={`https://fitnes-dashboard-azba.vercel.app/${item.path}`}
           passHref
         >
           <div className="flex items-center gap-5">{item.name}</div>

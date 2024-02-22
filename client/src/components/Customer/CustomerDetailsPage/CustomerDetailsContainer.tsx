@@ -5,6 +5,11 @@ import CustomerPersonalDetails from "./CustomerPersonalDetails/PersonalInfoTab/C
 import { CustomerType } from "@/types/Customer";
 import CustomerDetailsShort from "./CustomerPersonalDetails/PersonalInfoTab/CustomerDetailsShort";
 import CustomerExersicesDetails from "./CustomerPersonalDetails/ExersiceTab/CustomerExersicesDetails";
+import {
+  ContactsOutlined,
+  FolderOpenOutlined,
+  AreaChartOutlined,
+} from "@ant-design/icons";
 
 interface CustomerSlugContainerProps {
   customer: CustomerType;
@@ -16,16 +21,19 @@ const CustomerDetailsContainer = ({ customer }: CustomerSlugContainerProps) => {
       key: "1",
       label: "Personal Details",
       children: <CustomerPersonalDetails customer={customer} />,
+      icon: <ContactsOutlined className="text-lg" />,
     },
     {
       key: "2",
       label: "Exercises Plan",
       children: <CustomerExersicesDetails customer={customer} />,
+      icon: <FolderOpenOutlined className="text-lg" />,
     },
     {
       key: "3",
-      label: "Tab 3",
-      children: "children of Tab Pane 3",
+      label: "Statistics",
+      children: "Statistics",
+      icon: <AreaChartOutlined className="text-lg" />,
     },
   ];
 

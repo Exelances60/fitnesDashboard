@@ -72,15 +72,14 @@ const CustomerPersonalDetails = ({ customer }: { customer: CustomerType }) => {
     },
     {
       key: "12",
-      label: "Address",
-      children: customer.address,
-      span: 3,
-    },
-
-    {
-      key: "13",
       label: "Blood Type",
       children: customer.bloodGroup,
+      span: 3,
+    },
+    {
+      key: "13",
+      label: "Address",
+      children: customer.address,
       span: 3,
     },
     {

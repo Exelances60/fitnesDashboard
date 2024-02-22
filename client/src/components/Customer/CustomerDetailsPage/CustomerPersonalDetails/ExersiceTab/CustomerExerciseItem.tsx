@@ -82,7 +82,6 @@ const CustomerExerciseItem = ({
           >
             <DeleteOutlined className="text-lg cursor-pointer text-red-500 hover:text-red-600 hover:scale-110 transform transition duration-300 ease-in-out" />
           </Popconfirm>
-          <EditOutlined className="text-lg cursor-pointer text-blue-500 hover:text-blue-600 hover:scale-110 transform transition duration-300 ease-in-out" />
         </motion.div>
       </div>
 

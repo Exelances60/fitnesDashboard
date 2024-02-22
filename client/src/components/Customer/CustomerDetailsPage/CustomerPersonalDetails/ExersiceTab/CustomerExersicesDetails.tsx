@@ -4,6 +4,7 @@ import DEFAULTCOACH from "@/../public/customer/defaultCoach.webp";
 import React from "react";
 import { ExerciseType } from "@/types/ExercisType";
 import CustomerExerciseList from "./CustomerExersiceList";
+import CustomerExerciseTrainer from "./CustomerExerciseTrainer";
 
 const CustomerExersicesDetails = ({ customer }: { customer: CustomerType }) => {
   const coachImageUrl = `http://localhost:8080/${customer?.coachPT}`;
@@ -20,18 +21,21 @@ const CustomerExersicesDetails = ({ customer }: { customer: CustomerType }) => {
 
   return (
     <div className="w-full">
-      <div className="flex items-center w-[45%] gap-2  h-full">
+      <div className="flex items-center w-full gap-2 h-full">
         <Image
           src={customer.coachPT ? coachImageUrl : DEFAULTCOACH.src}
           alt="Picture of the author"
           width={150}
-          height={150}
+          height={200}
           className="rounded-lg"
         />
 
-        <p className="font-bold">
-          {customer.coachPT ? customer.coachPT : "No Coach Assigned"}
-        </p>
+        <div>
+          <p className="font-bold">
+            {customer.coachPT ? customer.coachPT : "No Coach Assigned"}
+          </p>
+          <CustomerExerciseTrainer />
+        </div>
       </div>
 
       <div className="flex flex-col w-full h-full">

@@ -10,10 +10,12 @@ import { ExerciseType } from "@/types/ExercisType";
 const CustomerEditExersiceForm = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchExersice, setSearchExersice] = useState("");
+  const [showSize, setShowSize] = useState<number>(20);
   const debounceSearch = useDebounce(searchExersice, 500);
   const { data, loading, error } = useFetchExersice(
     currentPage,
-    debounceSearch as string
+    debounceSearch as string,
+    showSize
   );
   const exercises: ExerciseType[] = data ? data.exercises : [];
 
@@ -49,9 +51,10 @@ const CustomerEditExersiceForm = () => {
                     <Pagination
                       defaultCurrent={currentPage}
                       total={data.totalExercisesCount}
-                      pageSize={20}
+                      pageSize={showSize}
                       size="default"
                       onChange={handlePageChange}
+                      onShowSizeChange={(current, size) => setShowSize(size)}
                     />
                     <p
                       onClick={() => setSearchExersice("")}

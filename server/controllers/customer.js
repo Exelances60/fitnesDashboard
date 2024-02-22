@@ -212,3 +212,26 @@ exports.deleteCustomerExercisePlan = async (req, res, next) => {
     status: 200,
   });
 };
+
+exports.updateCustomerPlan = async (req, res, next) => {
+  const { customerId, exerciseName } = req.body;
+  if (!customerId) throwBadRequestError("Customer not found.");
+  const fetchedCustomer = await Customer.findById(customerId);
+  if (!fetchedCustomer) {
+    throwBadRequestError("Customer not found.");
+  }
+  const newExersice = exerciseName.filter((exersice) => {
+    if (!fetchedCustomer.exercisePlan.includes(exersice)) {
+      return exersice;
+    }
+  });
+  fetchedCustomer.exercisePlan = [
+    ...fetchedCustomer.exercisePlan,
+    ...newExersice,
+  ];
+  await fetchedCustomer.save();
+  res.status(200).json({
+    message: "Customer exercise plan updated successfully!",
+    status: 200,
+  });
+};

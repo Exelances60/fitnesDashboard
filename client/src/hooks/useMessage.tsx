@@ -17,6 +17,15 @@ const useMessage = () => {
       message[type](text);
       router.refresh();
     }
+    if (type === "error") {
+      message[type](text);
+    }
+    if (type === "info") {
+      message[type](text);
+    }
+    if (type === "warning") {
+      message[type](text);
+    }
   };
   return showMessage;
 };

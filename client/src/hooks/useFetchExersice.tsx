@@ -1,8 +1,12 @@
-import { ExerciseType, fetchExersiceType } from "@/types/ExercisType";
+import { fetchExersiceType } from "@/types/ExercisType";
 import axiosClient from "@/utils/AxiosClient";
 import React, { useEffect } from "react";
 
-export const useFetchExersice = (page: number, search: string) => {
+export const useFetchExersice = (
+  page: number,
+  search: string,
+  pageSize?: number
+) => {
   const [data, setData] = React.useState<fetchExersiceType>({
     exercises: [],
     totalExercisesCount: 0,
@@ -17,7 +21,7 @@ export const useFetchExersice = (page: number, search: string) => {
       setLoading(true);
       try {
         const response = await axiosClient.get(
-          `/exercises/getExercises?page=${page}&search=${search}`
+          `/exercises/getExercises?page=${page}&search=${search}&pageSize=${pageSize}`
         );
         const data = await response.data;
         setData(data);
@@ -27,6 +31,6 @@ export const useFetchExersice = (page: number, search: string) => {
       setLoading(false);
     };
     fetchExersice();
-  }, [page, search]);
+  }, [page, search, pageSize]);
   return { data, loading, error };
 };

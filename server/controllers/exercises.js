@@ -3,7 +3,7 @@ const Exercises = require("../models/Exercise");
 exports.getExercises = async (req, res, next) => {
   const { page, search } = req.query;
 
-  const pageSize = 20;
+  const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 20;
   const currentPage = page ? parseInt(page) : 1;
 
   try {

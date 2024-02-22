@@ -20,16 +20,15 @@ const CustomerExersicesDetails = ({ customer }: { customer: CustomerType }) => {
 
   return (
     <div className="w-full">
-      <div className="flex  items-center w-[45%] gap-2 justify-center h-full">
-        <div className="w-[50%] h-[200px] bg-gray-300 relative rounded-lg">
-          <Image
-            src={customer.coachPT ? coachImageUrl : DEFAULTCOACH.src}
-            alt="Picture of the author"
-            layout="fill"
-            objectFit="cover"
-            className="rounded-lg"
-          />
-        </div>
+      <div className="flex items-center w-[45%] gap-2  h-full">
+        <Image
+          src={customer.coachPT ? coachImageUrl : DEFAULTCOACH.src}
+          alt="Picture of the author"
+          width={150}
+          height={150}
+          className="rounded-lg"
+        />
+
         <p className="font-bold">
           {customer.coachPT ? customer.coachPT : "No Coach Assigned"}
         </p>

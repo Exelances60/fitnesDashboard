@@ -73,4 +73,10 @@ router.put(
   customerController.deleteCustomerExercisePlan
 );
 
+router.put(
+  "/update-customer-plan",
+  isAuth,
+  customerController.updateCustomerPlan
+);
+
 module.exports = router;

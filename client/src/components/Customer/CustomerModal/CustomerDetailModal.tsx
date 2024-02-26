@@ -16,7 +16,7 @@ const CustomerDetailsModal = ({ customer }: CustomerEditModalProps) => {
     <div className="flex flex-col  gap-5">
       <div className="flex flex-col items-center justify-center gap-5 w-full">
         <Image
-          src={`http://localhost:8080/${customer.profilePicture}`}
+          src={`https://fitnesdashboard.onrender.com/${customer.profilePicture}`}
           width={200}
           height={200}
           className="object-cover rounded-md"

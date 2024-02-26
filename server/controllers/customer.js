@@ -172,6 +172,7 @@ exports.deleteCustomer = async (req, res, next) => {
 };
 
 exports.findCustomer = async (req, res, next) => {
+  console.log("findCustomer");
   try {
     const customerId = req.params.customerId;
     if (!customerId) throwBadRequestError("Customer not found.");

@@ -73,7 +73,7 @@ const ProductModal = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/products/add-product",
+        "https://fitnesdashboard.onrender.com/products/add-product",
         {
           method: "POST",
           headers: {

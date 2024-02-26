@@ -4,6 +4,7 @@ const throwBadRequestError = require("../utils/err/throwBadRequestError");
 const Owner = require("../models/owner");
 const Customer = require("../models/Customer");
 const Exersice = require("../models/Exercise");
+const CalenderAcv = require("../models/CalenderAcv");
 const clearImage = require("../utils/clearImage");
 
 exports.addCustomer = async (req, res, next) => {
@@ -174,7 +175,9 @@ exports.findCustomer = async (req, res, next) => {
   try {
     const customerId = req.params.customerId;
     if (!customerId) throwBadRequestError("Customer not found.");
-    const fetchedCustomer = await Customer.findById(customerId);
+    const fetchedCustomer = await Customer.findById(customerId).populate(
+      "calendarAcv"
+    );
     const fetchedExersice = await Exersice.find({
       name: fetchedCustomer.exercisePlan,
     });
@@ -194,7 +197,6 @@ exports.findCustomer = async (req, res, next) => {
 
 exports.deleteCustomerExercisePlan = async (req, res, next) => {
   const { customerId, exerciseName } = req.body;
-  console.log(exerciseName);
   if (!customerId) throwBadRequestError("Customer not found.");
 
   const fetchedCustomer = await Customer.findById(customerId);
@@ -233,5 +235,31 @@ exports.updateCustomerPlan = async (req, res, next) => {
   res.status(200).json({
     message: "Customer exercise plan updated successfully!",
     status: 200,
+  });
+};
+
+exports.addCustomerActivity = async (req, res, next) => {
+  const { date, planText, planType, customerId, color } = req.body;
+  if (!customerId) throwBadRequestError("Customer not found.");
+
+  const fetchedCustomer = await Customer.findById(customerId);
+  if (!fetchedCustomer) {
+    throwBadRequestError("Customer not found.");
+  }
+
+  const newActivityLog = new CalenderAcv({
+    date: date,
+    text: planText,
+    type: planType,
+    customerId: customerId,
+    color: color,
+  });
+  const savedActivity = await newActivityLog.save();
+  fetchedCustomer.calendarAcv.push(savedActivity._id);
+  await fetchedCustomer.save();
+  res.status(201).json({
+    message: "Customer activity added successfully!",
+    activity: savedActivity,
+    status: 201,
   });
 };

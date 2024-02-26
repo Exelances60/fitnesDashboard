@@ -1,21 +1,21 @@
 import { fetchExersiceType } from "@/types/ExercisType";
 import axiosClient from "@/utils/AxiosClient";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 export const useFetchExersice = (
   page: number,
   search: string,
   pageSize?: number
 ) => {
-  const [data, setData] = React.useState<fetchExersiceType>({
+  const [data, setData] = useState<fetchExersiceType>({
     exercises: [],
     totalExercisesCount: 0,
     currentPage: 1,
     pageSize: 1,
   });
 
-  const [loading, setLoading] = React.useState<boolean>(false);
-  const [error, setError] = React.useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     const fetchExersice = async () => {
       setLoading(true);

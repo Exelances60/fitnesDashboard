@@ -8,7 +8,7 @@ const CustomerDetails = async ({
 }: {
   params: { customerId: string };
 }) => {
-  const customer = await fetchFindCustomer(params.customerId);
+  const [customer] = await Promise.all([fetchFindCustomer(params.customerId)]);
 
   if (!customer) {
     return (

@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\components",
+    "\\src\\components\\Customer",
+    "\\src\\components\\Customer\\CustomerDetailsPage",
+    "\\src\\components\\Customer\\CustomerDetailsPage\\CustomerPersonalDetails",
+    "\\src\\components\\Customer\\CustomerDetailsPage\\CustomerPersonalDetails\\ExersiceTab",
+    "\\src\\components\\Customer\\CustomerDetailsPage\\CustomerPersonalDetails\\StaticsticTab"
+  ],
+  "SelectedNode": "\\src\\components\\Customer\\CustomerDetailsPage\\CustomerPersonalDetails\\ExersiceTab\\CustomerTabAddDrawerItem.tsx",
+  "PreviewInSolutionExplorer": false
+}

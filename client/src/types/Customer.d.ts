@@ -40,6 +40,7 @@ export type CustomerType = {
   address: string;
   createdAt: string;
   updatedAt: string;
+  calendarAcv?: CalenderActType[];
   __v: number;
 };
 
@@ -55,4 +56,12 @@ export type UpdateCustomerFormType = {
   membershipStatus: string;
   name: string;
   phone: string;
+};
+
+export type CustomerActivityType = {
+  _id: string;
+  date: string;
+  type: string;
+  text: string;
+  color: string;
 };

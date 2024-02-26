@@ -34,7 +34,7 @@ const CustomerExersicesDetails = ({ customer }: { customer: CustomerType }) => {
           <p className="font-bold">
             {customer.coachPT ? customer.coachPT : "No Coach Assigned"}
           </p>
-          <CustomerExerciseTrainer />
+          {!customer.coachPT ? <CustomerExerciseTrainer /> : null}
         </div>
       </div>
 

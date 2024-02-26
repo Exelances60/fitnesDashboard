@@ -7,6 +7,7 @@ import { useAppDispatch } from "@/store/store";
 import { setAddedCart } from "@/store/slices/customerDetailsSlice";
 import { motion } from "framer-motion";
 
+
 interface CustomerTabAddDrawerItemProps {
   exercise: ExerciseType;
   addIcon: boolean;

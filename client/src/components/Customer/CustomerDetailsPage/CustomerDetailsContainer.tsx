@@ -10,6 +10,7 @@ import {
   FolderOpenOutlined,
   AreaChartOutlined,
 } from "@ant-design/icons";
+import CustomerDetailsStatic from "./CustomerPersonalDetails/StaticsticTab/CustomerDetailsStatic";
 
 interface CustomerSlugContainerProps {
   customer: CustomerType;
@@ -32,7 +33,7 @@ const CustomerDetailsContainer = ({ customer }: CustomerSlugContainerProps) => {
     {
       key: "3",
       label: "Statistics",
-      children: "Statistics",
+      children: <CustomerDetailsStatic customer={customer} />,
       icon: <AreaChartOutlined className="text-lg" />,
     },
   ];

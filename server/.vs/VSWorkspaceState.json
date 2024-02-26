@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\controllers",
+    "\\middleware",
+    "\\models",
+    "\\routes",
+    "\\services",
+    "\\utils"
+  ],
+  "SelectedNode": "\\controllers\\customer.js",
+  "PreviewInSolutionExplorer": false
+}

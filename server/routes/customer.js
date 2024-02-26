@@ -79,4 +79,10 @@ router.put(
   customerController.updateCustomerPlan
 );
 
+router.post(
+  "/add-customer-activity",
+  isAuth,
+  customerController.addCustomerActivity
+);
+
 module.exports = router;

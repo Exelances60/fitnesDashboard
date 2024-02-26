@@ -80,6 +80,12 @@ const customerSchema = new Schema(
       type: String,
       require: true,
     },
+    calendarAcv: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "CalenderAcv",
+      },
+    ],
   },
   { timestamps: true }
 );

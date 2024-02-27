@@ -12,7 +12,7 @@ export const fetchCustomer = async (): Promise<CustomerType[] | []> => {
   const decodedToken = jwtDecode(token) as { _id: string };
   try {
     const response = await fetch(
-      `https://fitnesdashboard.onrender.com/customers/get-customer/${decodedToken._id}`,
+      `http://localhost:8080/customers/get-customer/${decodedToken._id}`,
       {
         method: "GET",
         headers: {

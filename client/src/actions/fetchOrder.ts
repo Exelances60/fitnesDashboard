@@ -24,7 +24,7 @@ const fetchOrder = async (): Promise<getOrdersType> => {
 
   try {
     const response = await fetch(
-      `https://fitnesdashboard.onrender.com/orders/get-orders/${decodedToken._id}`,
+      `http://localhost:8080/orders/get-orders/${decodedToken._id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -4,20 +4,18 @@ import {
   Button,
   Calendar,
   CalendarProps,
-  ColorPicker,
   ColorPickerProps,
   Drawer,
-  Form,
   GetProp,
-  Input,
-  Select,
 } from "antd";
 import type { Dayjs } from "dayjs";
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 import axiosClient from "@/utils/AxiosClient";
 import useMessage from "@/hooks/useMessage";
 import { CustomerType } from "@/types/Customer";
+import CustomerDetailsStaticForm from "./CustomerDetailsStaticForm";
+import { DeleteOutlined } from "@ant-design/icons";
+import { SelectInfo } from "antd/es/calendar/generateCalendar";
 
 type Color = GetProp<ColorPickerProps, "value">;
 
@@ -39,7 +37,6 @@ const CustomerDetailsStatic = ({ customer }: { customer: CustomerType }) => {
 
   const dateCellRender = (value: Dayjs) => {
     const listData = getListData(value);
-
     return (
       <div className="z-10 cursor-pointer">
         {listData.map((item) => {
@@ -61,12 +58,14 @@ const CustomerDetailsStatic = ({ customer }: { customer: CustomerType }) => {
     return info.originNode;
   };
 
-  const openDrawerHandler = (date: Dayjs) => {
-    setSelectedDate(date);
-    setOpenDrawer(true);
+  const openDrawerHandler = (date: Dayjs, info: SelectInfo) => {
+    if (info.source === "date") {
+      setSelectedDate(date);
+      setOpenDrawer(true);
+    }
   };
 
-  const handeleAddPlan = async (value: {
+  const handleAddPlan = async (value: {
     planType: string;
     planText: string;
     color: Color;
@@ -120,57 +119,27 @@ const CustomerDetailsStatic = ({ customer }: { customer: CustomerType }) => {
           <h1 className="text-lg font-bold mb-2">
             {selectedDate?.format("DD-MM-YYYY")} Add Plan
           </h1>
-          <Form layout="vertical" onFinish={handeleAddPlan} id="addActivity">
-            <Form.Item
-              label="Select Plan"
-              name="planType"
-              rules={[{ required: true, message: "Please select plan" }]}
-            >
-              <Select
-                className="w-full"
-                placeholder="Select Plan"
-                onChange={(value) => {
-                  setSelectedPlan(value);
-                }}
-              >
-                <Select.Option value="bodyInfo">Body Info</Select.Option>
-                <Select.Option value="exercises">Exercises Info</Select.Option>
-                <Select.Option value="nutrition">Nutrition Info</Select.Option>
-                <Select.Option value="progress">Progress Info</Select.Option>
-              </Select>
-            </Form.Item>
-
-            {selectedPlan ? (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1 }}
-              >
-                <div>
-                  <Form.Item
-                    label="Add Plan"
-                    name="planText"
-                    rules={[{ required: true, message: "Please add plan" }]}
-                  >
-                    <Input.TextArea
-                      className="mt-2 "
-                      placeholder="Add Plan"
-                      autoSize={{ minRows: 3, maxRows: 5 }}
-                    />
-                  </Form.Item>
+          <CustomerDetailsStaticForm
+            handleAddPlan={handleAddPlan}
+            setSelectedPlan={setSelectedPlan}
+            selectedPlan={selectedPlan}
+          />
+          <h1 className="text-lg font-bold mb-2 font-mono">
+            {selectedDate?.format("DD-MM-YYYY")} Plans
+          </h1>
+          {customer.calendarAcv?.map((item) => {
+            if (selectedDate?.isSame(item?.date, "day")) {
+              return (
+                <div key={item._id} className="flex gap-2">
+                  <Badge color={item.color} text={item.text} />
+                  <DeleteOutlined
+                    className="cursor-pointer text-red-500 hover:scale-110 ease-in duration-300"
+                    color="red"
+                  />
                 </div>
-
-                <Form.Item
-                  label="Select Color"
-                  name="color"
-                  initialValue={"#6b41ec"}
-                  rules={[{ required: true, message: "Please select color" }]}
-                >
-                  <ColorPicker className="mt-2" format="hex" />
-                </Form.Item>
-              </motion.div>
-            ) : null}
-          </Form>
+              );
+            }
+          })}
         </div>
       </Drawer>
     </div>

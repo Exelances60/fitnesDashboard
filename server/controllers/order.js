@@ -188,9 +188,11 @@ exports.updateOrder = (req, res, next) => {
     if (!result) {
       throwNotFoundError("Order not found.");
     }
-    res
-      .status(200)
-      .json({ message: "Order updated successfully!", status: 200 });
+    res.status(200).json({
+      message: "Order updated successfully!",
+      status: 200,
+      order: result,
+    });
   });
 };
 

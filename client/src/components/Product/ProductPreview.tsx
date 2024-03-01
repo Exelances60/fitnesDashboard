@@ -16,7 +16,6 @@ type ProductPreviewProps = {
 
 const ProductPreview = ({ products }: ProductPreviewProps) => {
   const router = useRouter();
-
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 10;

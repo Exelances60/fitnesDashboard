@@ -14,8 +14,8 @@ import axiosClient from "@/utils/AxiosClient";
 import useMessage from "@/hooks/useMessage";
 import { CustomerType } from "@/types/Customer";
 import CustomerDetailsStaticForm from "./CustomerDetailsStaticForm";
-import { DeleteOutlined } from "@ant-design/icons";
 import { SelectInfo } from "antd/es/calendar/generateCalendar";
+import CustomerCalendarActList from "./CustomerCalendarActList";
 
 type Color = GetProp<ColorPickerProps, "value">;
 
@@ -24,11 +24,14 @@ const CustomerDetailsStatic = ({ customer }: { customer: CustomerType }) => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<string>("");
+  const [customerCalendarState, setCustomerCalendarState] = useState(
+    customer.calendarAcv || []
+  );
 
   const getListData = (value: Dayjs) => {
     let listData;
-    if (customer.calendarAcv) {
-      listData = customer.calendarAcv.filter((item) => {
+    if (customerCalendarState) {
+      listData = customerCalendarState.filter((item) => {
         return value.isSame(item?.date, "day");
       });
     }
@@ -127,19 +130,11 @@ const CustomerDetailsStatic = ({ customer }: { customer: CustomerType }) => {
           <h1 className="text-lg font-bold mb-2 font-mono">
             {selectedDate?.format("DD-MM-YYYY")} Plans
           </h1>
-          {customer.calendarAcv?.map((item) => {
-            if (selectedDate?.isSame(item?.date, "day")) {
-              return (
-                <div key={item._id} className="flex gap-2">
-                  <Badge color={item.color} text={item.text} />
-                  <DeleteOutlined
-                    className="cursor-pointer text-red-500 hover:scale-110 ease-in duration-300"
-                    color="red"
-                  />
-                </div>
-              );
-            }
-          })}
+          <CustomerCalendarActList
+            customerCalendarState={customerCalendarState}
+            setCustomerCalendarState={setCustomerCalendarState}
+            selectedDate={selectedDate}
+          />
         </div>
       </Drawer>
     </div>

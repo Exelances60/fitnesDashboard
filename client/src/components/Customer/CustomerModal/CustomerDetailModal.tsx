@@ -61,7 +61,9 @@ const CustomerDetailsModal = ({ customer }: CustomerEditModalProps) => {
         <p className="flex gap-2">
           Coach:
           <p className="font-bold">
-            {customer.coachPT ? customer.coachPT : "Have not assigned yet"}
+            {typeof customer.coachPT === "string"
+              ? customer.coachPT
+              : capitalizeFirstLetter(customer.coachPT?.name || "")}
           </p>
         </p>
       </div>

@@ -17,7 +17,7 @@ type OrderContainerProps = {
 };
 const OrderContainer = ({ orders }: OrderContainerProps) => {
   const { filterDropdown, filterIcon, searchById } =
-    useTableFilterSearchDropDown();
+    useTableFilterSearchDropDown("Search by order id");
   const [rangePickerValue, setRangePickerValue] = useState([null, null]);
   const userInfo = useSelectUserInfo();
   const showMessage = useMessage();

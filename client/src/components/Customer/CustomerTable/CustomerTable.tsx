@@ -18,6 +18,7 @@ import useMessage from "@/hooks/useMessage";
 import axiosClient from "@/utils/AxiosClient";
 import useTableFilterSearchDropDown from "@/hooks/useTableFilterSearchDropDown";
 import DrawerFooterButton from "@/components/DrawerFooterButton";
+import { renderForActionTable } from "@/utils/renderForTables/renderForActionTable";
 
 interface CustomerTableProps {
   customers: CustomerType[];
@@ -27,7 +28,7 @@ const CustomerTable = ({ customers }: CustomerTableProps) => {
   const dispatch = useAppDispatch();
   const showMessage = useMessage();
   const { filterDropdown, filterIcon, searchById } =
-    useTableFilterSearchDropDown();
+    useTableFilterSearchDropDown("Search by name");
   const handleOnDetails = (record: CustomerType) => {
     dispatch(
       showModal({
@@ -181,33 +182,12 @@ const CustomerTable = ({ customers }: CustomerTableProps) => {
         dataIndex="action"
         key="action"
         render={(text, record: CustomerType) => {
-          return (
-            <div className="flex gap-2 items-center">
-              <Button
-                type="primary"
-                ghost
-                icon={<FolderOutlined />}
-                onClick={() => handleOnDetails(record)}
-              >
-                Details
-              </Button>
-              <Button
-                type="primary"
-                ghost
-                icon={<HighlightOutlined />}
-                onClick={() => handleEditOnClick(record)}
-              >
-                Edit
-              </Button>
-              <Popconfirm
-                title="Are you sure to delete this customer?"
-                onConfirm={() => handleDeleteCustomerOnClick(record)}
-              >
-                <Button type="primary" danger ghost icon={<DeleteOutlined />}>
-                  Delete
-                </Button>
-              </Popconfirm>
-            </div>
+          return renderForActionTable(
+            text,
+            record,
+            handleOnDetails,
+            handleEditOnClick,
+            handleDeleteCustomerOnClick
           );
         }}
       />

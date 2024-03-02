@@ -8,6 +8,7 @@ import CustomerMemberShipStatus from "./CustomerMemberShipStatus";
 import CustomerAddAge from "./CustomerAddAge";
 import { renderFormItem } from "@/utils/renderForTables/Customers/renderCustomerFormItem";
 import { AddCustomerFormType } from "@/types/Customer";
+import { justRequired } from "@/utils/FormRules";
 
 const CustomerAddModal = () => {
   const [form] = Form.useForm();
@@ -108,16 +109,7 @@ const CustomerAddModal = () => {
         "text",
         <Icon.EnvironmentOutlined />
       )}
-      <Form.Item
-        label="Blood Type"
-        name="bloodGroup"
-        rules={[
-          {
-            required: true,
-            message: "Please select",
-          },
-        ]}
-      >
+      <Form.Item label="Blood Type" name="bloodGroup" rules={justRequired}>
         <Select
           placeholder="Select"
           options={[
@@ -135,12 +127,7 @@ const CustomerAddModal = () => {
       <Form.Item
         label="Membership Months"
         name="membershipMonths"
-        rules={[
-          {
-            required: true,
-            message: "Membership Months is required",
-          },
-        ]}
+        rules={justRequired}
       >
         <Select
           onChange={(value) => {
@@ -171,16 +158,7 @@ const CustomerAddModal = () => {
         <Input placeholder="Enter Price" addonBefore="₺" />
       </Form.Item>
       <CustomerMemberShipStatus />
-      <Form.Item
-        label="Gender"
-        name="gender"
-        rules={[
-          {
-            required: true,
-            message: "Please select",
-          },
-        ]}
-      >
+      <Form.Item label="Gender" name="gender" rules={justRequired}>
         <Select
           placeholder="Select"
           options={[

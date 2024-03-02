@@ -30,7 +30,7 @@ const customerSchema = new Schema(
     },
     coachPT: {
       type: Schema.Types.ObjectId,
-      ref: "Employees",
+      ref: "Employee",
     },
     age: {
       type: Number,

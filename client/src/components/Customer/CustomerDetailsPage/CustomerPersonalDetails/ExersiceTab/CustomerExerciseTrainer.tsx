@@ -1,107 +1,61 @@
 "use client";
-import { Button, Drawer } from "antd";
+import { Button, Drawer, Popconfirm, message } from "antd";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-const mockData = [
-  {
-    id: 1,
-    name: "John Doe",
-    imageUrl: "https://randomuser.me/api/port",
-    bodyPart: "Chest",
-  },
-  {
-    id: 2,
-    name: "John Doe",
-    imageUrl: "https://randomuser.me/api/port",
-    bodyPart: "Chest",
-  },
-  {
-    id: 3,
-    name: "John Doe",
-    imageUrl: "https://randomuser.me/api/port",
-    bodyPart: "Chest",
-  },
-  {
-    id: 4,
-    name: "John Doe",
-    imageUrl: "https://randomuser.me/api/port",
-    bodyPart: "Chest",
-  },
-  {
-    id: 5,
-    name: "John Doe",
-    imageUrl: "https://randomuser.me/api/port",
-    bodyPart: "Chest",
-  },
-  {
-    id: 6,
-    name: "John Doe",
-    imageUrl: "https://randomuser.me/api/port",
-    bodyPart: "Chest",
-  },
-  {
-    id: 7,
-    name: "John Doe",
-    imageUrl: "https://randomuser.me/api/port",
-    bodyPart: "Chest",
-  },
-  {
-    id: 8,
-    name: "John Doe",
-    imageUrl: "https://randomuser.me/api/port",
-    bodyPart: "Chest",
-  },
+import { fetchEmplooyes } from "@/actions/fetchEmployees";
+import Image from "next/image";
+import { ProgressCircle } from "@tremor/react";
+import { capitalizeFirstLetter } from "@/utils/utils";
+import { PlusCircleOutlined } from "@ant-design/icons";
+import axiosClient from "@/utils/AxiosClient";
+import useMessage from "@/hooks/useMessage";
 
-  {
-    id: 9,
-    name: "John Doe",
-    imageUrl: "https://randomuser.me/api/port",
-    bodyPart: "Chest",
-  },
-  {
-    id: 10,
-    name: "John Doe",
-    imageUrl: "https://randomuser.me/api/port",
-    bodyPart: "Chest",
-  },
-  {
-    id: 11,
-    name: "John Doe",
-    imageUrl: "https://randomuser.me/api/port",
-    bodyPart: "Chest",
-  },
-  {
-    id: 12,
-    name: "John Doe",
-    imageUrl: "https://randomuser.me/api/port",
-    bodyPart: "Chest",
-  },
-  {
-    id: 13,
-    name: "John Doe",
-    imageUrl: "https://randomuser.me/api/port",
-    bodyPart: "Chest",
-  },
-  {
-    id: 14,
-    name: "John Doe",
-    imageUrl: "https://randomuser.me/api/port",
-    bodyPart: "Chest",
-  },
-  {
-    id: 15,
-    name: "John Doe",
-    imageUrl: "https://randomuser.me/api/port",
-    bodyPart: "Chest",
-  },
-];
+interface CustomerExerciseTrainerProps {
+  customerId: string;
+}
 
-const CustomerExerciseTrainer = () => {
+const CustomerExerciseTrainer = ({
+  customerId,
+}: CustomerExerciseTrainerProps) => {
+  const showMessage = useMessage();
   const [open, setOpen] = useState(false);
+  const [data, setData] = useState<IEmployee[]>([]);
+
+  const getTrainers = async () => {
+    message.loading({ content: "Loading Trainers", key: "trainer" });
+    setOpen(true);
+    try {
+      const data = await fetchEmplooyes();
+      setData(data);
+      message.success({ content: "Trainers Loaded", key: "trainer" });
+    } catch (error) {
+      message.error({ content: "Failed to load Trainers", key: "trainer" });
+    }
+  };
+
+  const assignTrainer = async (employeeId: string) => {
+    showMessage("Assigning Trainer", "loading");
+    try {
+      const bodyValues = {
+        employeeId,
+        customerId,
+      };
+      const response = await axiosClient.post(
+        "/employees/assignCustomer",
+        bodyValues
+      );
+      if (response.status === 200) {
+        showMessage("Trainer Assigned Successfully", "success");
+        setOpen(false);
+      }
+    } catch (error) {
+      showMessage("Failed to Assign Trainer", "error");
+    }
+  };
 
   return (
     <div className="flex flex-col gap-2">
-      <Button type="primary" onClick={() => setOpen(true)}>
+      <Button type="primary" onClick={getTrainers}>
         Assign Trainer
       </Button>
       <Drawer
@@ -109,6 +63,11 @@ const CustomerExerciseTrainer = () => {
         placement="right"
         closable={false}
         onClose={() => setOpen(false)}
+        extra={
+          <Button type="primary" ghost onClick={() => setOpen(false)}>
+            Close
+          </Button>
+        }
         open={open}
       >
         <motion.div
@@ -117,18 +76,47 @@ const CustomerExerciseTrainer = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 1 }}
         >
-          {mockData.map((data) => (
-            <motion.div key={data.id} className="flex items-center gap-2">
-              <img
-                src={data.imageUrl}
-                alt="trainer"
-                className="rounded-full"
-                width={50}
-                height={50}
-              />
-              <p>{data.name}</p>
-            </motion.div>
-          ))}
+          {data.length > 0 ? (
+            data.map((trainer) => {
+              if (trainer.position === "Tranier") {
+                return (
+                  <div key={trainer._id} className="flex gap-2 items-center">
+                    <Image
+                      src={`http://localhost:8080/${trainer.profilePicture}`}
+                      width={50}
+                      height={50}
+                      className="rounded-full"
+                      alt="trainer"
+                    />
+                    <div>
+                      <p>{capitalizeFirstLetter(trainer.name)}</p>
+                      <p className="text-sm text-gray-400">
+                        {trainer.position}
+                      </p>
+                      <p className="text-sm text-gray-400">{trainer.phone}</p>
+                    </div>
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <Popconfirm
+                        title="Are you sure? Assign this Trainer?"
+                        onConfirm={() => {
+                          assignTrainer(trainer._id);
+                        }}
+                        okText="Yes"
+                        cancelText="No"
+                      >
+                        <PlusCircleOutlined className="text-green-500" />
+                      </Popconfirm>
+                    </motion.div>
+                  </div>
+                );
+              }
+            })
+          ) : (
+            <ProgressCircle />
+          )}
         </motion.div>
       </Drawer>
     </div>

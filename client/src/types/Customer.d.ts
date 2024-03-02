@@ -18,12 +18,12 @@ export type AddCustomerFormType = {
   parentPhone: string;
 };
 
-export type CustomerType = {
+interface CustomerType {
   _id: string;
   name: string;
   phone: number;
   email: string;
-  coachPT: string | null;
+  coachPT?: IEmployee | string;
   age: number;
   bodyWeight: number;
   height: number;
@@ -42,7 +42,7 @@ export type CustomerType = {
   updatedAt: string;
   calendarAcv?: CalenderActType[];
   __v: number;
-};
+}
 
 export type UpdateCustomerFormType = {
   age: number;

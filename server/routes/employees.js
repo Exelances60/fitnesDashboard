@@ -37,4 +37,6 @@ router.post(
 
 router.get("/get-employees/:ownerId", isAuth, employeeController.getEmployees);
 
+router.post("/assignCustomer", isAuth, employeeController.assignCustomer);
+
 module.exports = router;

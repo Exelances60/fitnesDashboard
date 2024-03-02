@@ -8,6 +8,7 @@ import {
   selectProduct,
   setEditModalVisible,
 } from "@/store/slices/productPageSlice";
+import { justRequired, minFive } from "@/utils/FormRules";
 
 const ProductEditModal = () => {
   const product = useAppSelector(selectProduct);
@@ -85,38 +86,20 @@ const ProductEditModal = () => {
         id="editProductForm"
         encType="multipart/form-data"
       >
-        <Form.Item
-          label="Name"
-          name="name"
-          rules={[{ required: true, message: "Please input product name!" }]}
-        >
+        <Form.Item label="Name" name="name" rules={justRequired}>
           <Input placeholder="Product Name" />
         </Form.Item>
         <Form.Item
           label="Description"
           name="description"
-          rules={[
-            {
-              required: true,
-              min: 5,
-              message: "Description is required or too short",
-            },
-          ]}
+          rules={[...justRequired, ...minFive]}
         >
           <Input.TextArea placeholder="Description" />
         </Form.Item>
-        <Form.Item
-          label="Price"
-          name="price"
-          rules={[{ required: true, message: "Price is required" }]}
-        >
+        <Form.Item label="Price" name="price" rules={justRequired}>
           <Input placeholder="Price" type="number" />
         </Form.Item>
-        <Form.Item
-          label="Amount"
-          name="amount"
-          rules={[{ required: true, message: "Amount is required" }]}
-        >
+        <Form.Item label="Amount" name="amount" rules={justRequired}>
           <Input placeholder="Amount" type="number" />
         </Form.Item>
         <Form.Item label="Image" name="image">

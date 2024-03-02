@@ -1,4 +1,5 @@
 interface IEmployee {
+  _id: string;
   profilePicture?: string;
   name: string;
   phone?: string;

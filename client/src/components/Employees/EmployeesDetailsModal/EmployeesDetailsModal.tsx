@@ -1,4 +1,4 @@
-import { Image } from "antd";
+import { Button, Image } from "antd";
 import React from "react";
 
 interface EmployeesDetailsModalProps {
@@ -43,6 +43,9 @@ const EmployeesDetailsModal = ({ employee }: EmployeesDetailsModalProps) => {
               />
             ))
           : null}
+        <Button type="primary" ghost>
+          Request Documents
+        </Button>
       </div>
     </div>
   );

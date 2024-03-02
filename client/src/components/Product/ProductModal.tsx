@@ -16,6 +16,11 @@ import useSelectUserInfo from "@/hooks/useSelectUserInfo";
 import useMessage from "@/hooks/useMessage";
 import { PlusOutlined } from "@ant-design/icons";
 import axiosClient from "@/utils/AxiosClient";
+import {
+  justRequired,
+  minFive,
+  productDescriptionRules,
+} from "@/utils/FormRules";
 
 const ProductModal = () => {
   const showMessage = useMessage();
@@ -129,54 +134,24 @@ const ProductModal = () => {
           <Form.Item
             label="Product Name"
             name="productName"
-            rules={[
-              {
-                required: true,
-                message: "Product Name is required or too short",
-              },
-              {
-                min: 5,
-                message: "Product Name is required or too short",
-              },
-            ]}
+            rules={[...justRequired, ...minFive]}
           >
             <Input placeholder="Product Name" />
           </Form.Item>
           <Form.Item
             label="Description"
             name="description"
-            rules={[
-              {
-                required: true,
-                message: "Description is required ",
-              },
-              {
-                min: 10,
-                message: "Description or too short",
-              },
-            ]}
+            rules={productDescriptionRules}
           >
             <Input.TextArea placeholder="Description" />
           </Form.Item>
-          <Form.Item
-            label="Price"
-            name="price"
-            rules={[{ required: true, message: "Price is required" }]}
-          >
+          <Form.Item label="Price" name="price" rules={justRequired}>
             <Input placeholder="Price" type="number" />
           </Form.Item>
-          <Form.Item
-            label="Amount"
-            name="amount"
-            rules={[{ required: true, message: "Amount is required" }]}
-          >
+          <Form.Item label="Amount" name="amount" rules={justRequired}>
             <Input placeholder="Amount" type="number" />
           </Form.Item>
-          <Form.Item
-            label="Category"
-            name="category"
-            rules={[{ required: true, message: "Category is required" }]}
-          >
+          <Form.Item label="Category" name="category" rules={justRequired}>
             <Select
               placeholder="Select a category"
               dropdownRender={(menu) => {
@@ -217,11 +192,7 @@ const ProductModal = () => {
             </Select>
           </Form.Item>
 
-          <Form.Item
-            label="Image"
-            name="image"
-            rules={[{ required: true, message: "Image is required" }]}
-          >
+          <Form.Item label="Image" name="image" rules={justRequired}>
             <Upload
               action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
               listType="picture"

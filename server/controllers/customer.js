@@ -5,6 +5,7 @@ const Owner = require("../models/owner");
 const Customer = require("../models/Customer");
 const Exersice = require("../models/Exercise");
 const CalenderAcv = require("../models/CalenderAcv");
+const Employee = require("../models/Employees");
 const clearImage = require("../utils/clearImage");
 
 exports.addCustomer = async (req, res, next) => {
@@ -172,20 +173,23 @@ exports.deleteCustomer = async (req, res, next) => {
 };
 
 exports.findCustomer = async (req, res, next) => {
-  console.log("findCustomer");
   try {
     const customerId = req.params.customerId;
     if (!customerId) throwBadRequestError("Customer not found.");
     const fetchedCustomer = await Customer.findById(customerId).populate(
       "calendarAcv"
     );
+
     const fetchedExersice = await Exersice.find({
       name: fetchedCustomer.exercisePlan,
     });
+    const fetchedEmployee = await Employee.findById(fetchedCustomer.coachPT);
+    fetchedCustomer.coachPT = fetchedEmployee;
     fetchedCustomer.exercisePlan = fetchedExersice;
     if (!fetchedCustomer) {
       throwBadRequestError("Customer not found.");
     }
+
     res.status(200).json({
       message: "Fetched customer successfully!",
       customer: fetchedCustomer,

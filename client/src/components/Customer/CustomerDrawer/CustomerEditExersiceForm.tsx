@@ -72,7 +72,7 @@ const CustomerEditExersiceForm = () => {
             <Select.Option value={exersice.name} key={exersice._id}>
               <div className="flex justify-between">
                 <Image
-                  src={`http://localhost:8080${exersice.gifUrl}`}
+                  src={`https://fitnesdashboard.onrender.com${exersice.gifUrl}`}
                   width={90}
                   height={30}
                   alt={exersice.name}

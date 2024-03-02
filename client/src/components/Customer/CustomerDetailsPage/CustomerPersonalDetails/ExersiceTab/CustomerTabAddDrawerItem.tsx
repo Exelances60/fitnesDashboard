@@ -25,7 +25,7 @@ const CustomerTabAddDrawerItem = ({
       <Image
         width={80}
         height={80}
-        src={`http://localhost:8080${exercise.gifUrl}`}
+        src={`https://fitnesdashboard.onrender.com${exercise.gifUrl}`}
         alt={exercise.name}
       />
       <p>{exercise.name}</p>

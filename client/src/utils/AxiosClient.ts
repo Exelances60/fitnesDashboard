@@ -2,7 +2,7 @@ import axios from "axios";
 import { getCookie } from "cookies-next";
 
 const axiosClient = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: "https://fitnesdashboard.onrender.com",
   headers: {
     "Content-Type": "application/json",
   },

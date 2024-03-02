@@ -9,7 +9,7 @@ export const fetchFindCustomer = async (customerId: string) => {
   }
   try {
     const response = await fetch(
-      `http://localhost:8080/customers/findcustomer/${customerId}`,
+      `https://fitnesdashboard.onrender.com/customers/findcustomer/${customerId}`,
       {
         method: "GET",
         headers: {

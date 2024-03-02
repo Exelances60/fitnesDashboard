@@ -39,7 +39,7 @@ const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
     <TableRow key={product._id} className="text-black ">
       <TableCell>
         <Image
-          src={`http://localhost:8080/${product.imageUrl}`}
+          src={`https://fitnesdashboard.onrender.com/${product.imageUrl}`}
           width={90}
           height={90}
           alt={product.name}

@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import { CustomerType } from "@/types/Customer";
 import DEFAULTCOACH from "@/../public/customer/defaultCoach.webp";
 import { ExerciseType } from "@/types/ExercisType";
@@ -7,6 +6,7 @@ import CustomerExerciseList from "./CustomerExersiceList";
 import CustomerExerciseTrainer from "./CustomerExerciseTrainer";
 import { capitalizeFirstLetter } from "@/utils/utils";
 import { MailOutlined, PhoneOutlined, IdcardOutlined } from "@ant-design/icons";
+import { Image } from "antd";
 
 const CustomerExersicesDetails = ({ customer }: { customer: CustomerType }) => {
   const bodyPart: { [bodyPart: string]: ExerciseType[] } = {};
@@ -26,7 +26,7 @@ const CustomerExersicesDetails = ({ customer }: { customer: CustomerType }) => {
       <div className="flex items-center w-full gap-2 h-full">
         {typeof customer.coachPT === "string" || customer.coachPT === null ? (
           <Image
-            src={DEFAULTCOACH}
+            src={DEFAULTCOACH.src}
             alt="Profile Picture"
             width={100}
             height={100}

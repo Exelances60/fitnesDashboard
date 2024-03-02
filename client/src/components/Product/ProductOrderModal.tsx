@@ -9,6 +9,7 @@ import {
   selectProduct,
   setOrderModalVisible,
 } from "@/store/slices/productPageSlice";
+import { emailRules } from "@/utils/FormRules";
 
 type formValuesType = {
   productName: string;
@@ -139,17 +140,7 @@ const ProductOrderModal = () => {
         >
           <Input type="tel" addonBefore="+90" />
         </Form.Item>
-        <Form.Item
-          label="Email"
-          name="email"
-          rules={[
-            {
-              required: true,
-              message: "Please input your email!",
-              type: "email",
-            },
-          ]}
-        >
+        <Form.Item label="Email" name="email" rules={emailRules}>
           <Input type="email" />
         </Form.Item>
         <Form.Item

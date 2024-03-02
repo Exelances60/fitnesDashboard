@@ -13,11 +13,11 @@ import { showModal } from "@/store/slices/modalSlice";
 import { setShowDrawer } from "@/store/slices/drawerSlice";
 import CustomerEditDrawer from "../CustomerDrawer/CustomerEditDrawer";
 import CustomerDetailsModal from "../CustomerModal/CustomerDetailModal";
-import CustomerEditFooter from "../CustomerDrawer/CustomerEditFooter";
 import { CustomerType } from "@/types/Customer";
 import useMessage from "@/hooks/useMessage";
 import axiosClient from "@/utils/AxiosClient";
 import useTableFilterSearchDropDown from "@/hooks/useTableFilterSearchDropDown";
+import DrawerFooterButton from "@/components/DrawerFooterButton";
 
 interface CustomerTableProps {
   customers: CustomerType[];
@@ -43,7 +43,7 @@ const CustomerTable = ({ customers }: CustomerTableProps) => {
       setShowDrawer({
         children: <CustomerEditDrawer customer={record} />,
         title: "Edit Customer",
-        footer: <CustomerEditFooter />,
+        footer: <DrawerFooterButton formName="editCustomerForm" />,
       })
     );
   };

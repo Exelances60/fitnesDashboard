@@ -9,6 +9,7 @@ const orderRoutes = require("./routes/order");
 const customerRoutes = require("./routes/customer");
 const exercisesRoutes = require("./routes/exercises");
 const calendarActRoutes = require("./routes/calenderAct");
+const employeeRoutes = require("./routes/employees");
 const path = require("path");
 const cors = require("cors");
 
@@ -45,6 +46,7 @@ app.use("/orders", orderRoutes);
 app.use("/customers", customerRoutes);
 app.use("/exercises", exercisesRoutes);
 app.use("/calendarAct", calendarActRoutes);
+app.use("/employees", employeeRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);

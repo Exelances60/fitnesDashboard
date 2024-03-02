@@ -37,7 +37,6 @@ const CustomerEditDrawer = ({ customer }: CustomerEditDrawerProps) => {
       });
       if (response.status === 200) {
         showMessage("Customer updated successfully", "success", 2);
-
         form.resetFields();
         dispatch(setHideDrawer());
       }

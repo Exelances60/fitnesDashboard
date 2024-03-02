@@ -57,7 +57,7 @@ export const navMenu = [
         }}
       />
     ),
-    path: "/employees",
+    path: "dashboard/employees",
     key: "employees",
   },
   {

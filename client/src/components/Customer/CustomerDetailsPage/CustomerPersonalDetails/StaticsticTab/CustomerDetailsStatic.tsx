@@ -7,6 +7,7 @@ import {
   ColorPickerProps,
   Drawer,
   GetProp,
+  message,
 } from "antd";
 import type { Dayjs } from "dayjs";
 import React, { useState } from "react";
@@ -73,7 +74,7 @@ const CustomerDetailsStatic = ({ customer }: { customer: CustomerType }) => {
     planText: string;
     color: Color;
   }) => {
-    showMessage("Adding Plan", "info", 1);
+    message.loading({ content: "Adding Plan", key: "addPlan" });
     const hexString =
       typeof value.color === "string"
         ? value.color
@@ -91,11 +92,14 @@ const CustomerDetailsStatic = ({ customer }: { customer: CustomerType }) => {
         bodyValue
       );
       if (response.status === 201) {
-        showMessage("Plan Added Successfully", "success", 1);
+        message.success({ content: "Plan Added", key: "addPlan" });
+        setCustomerCalendarState((prev) => {
+          return [...prev, response.data.activity];
+        });
         setOpenDrawer(false);
       }
     } catch (error) {
-      showMessage("Something went wrong", "error", 1);
+      message.error({ content: "Failed to Add Plan", key: "addPlan" });
     }
   };
 

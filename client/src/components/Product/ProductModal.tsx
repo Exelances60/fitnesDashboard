@@ -9,6 +9,7 @@ import {
   Select,
   Divider,
   Space,
+  message,
 } from "antd";
 import { getCookie } from "cookies-next";
 import useSelectUserInfo from "@/hooks/useSelectUserInfo";
@@ -19,8 +20,8 @@ import axiosClient from "@/utils/AxiosClient";
 const ProductModal = () => {
   const showMessage = useMessage();
   const userInfo = useSelectUserInfo();
-  const [addProductModal, setAddProductModal] = useState(false);
   const [file, setFile] = useState<any>();
+  const [addProductModal, setAddProductModal] = useState(false);
   const [categoryName, setCategoryName] = useState<string>();
   const [categoryList, setCategoryList] = useState<string[]>(
     userInfo?.productCategory || []
@@ -39,6 +40,7 @@ const ProductModal = () => {
   ) => {
     e.preventDefault();
     if (categoryName === undefined) return;
+    message.loading({ content: "Adding Category", key: "category" });
     setCategoryList([...categoryList, categoryName]);
     setCategoryName("");
 
@@ -51,10 +53,10 @@ const ProductModal = () => {
         }
       );
       if (resposne.status === 201) {
-        showMessage("Category Added", "success");
+        message.success({ content: "Category Added", key: "category" });
       }
     } catch (error) {
-      showMessage("Some error pls try again", "error");
+      message.error({ content: "Some error pls try again", key: "category" });
     }
   };
 
@@ -186,6 +188,7 @@ const ProductModal = () => {
                       <Input
                         placeholder="Please enter item"
                         onKeyDown={(e) => e.stopPropagation()}
+                        value={categoryName}
                         onChange={onCategoryChange}
                       />
                       <Button

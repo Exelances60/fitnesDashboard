@@ -10,21 +10,21 @@ const useMessage = () => {
     time?: number
   ) => {
     if (type === "loading") {
-      return message[type](text, time);
+      return message[type]({ content: text, key: "hooks" });
     }
     if (type === "success") {
       console.log("router refresh");
-      message[type](text);
+      message[type]({ content: text, key: "hooks" });
       router.refresh();
     }
     if (type === "error") {
-      message[type](text);
+      message[type]({ content: text, key: "hooks" });
     }
     if (type === "info") {
-      message[type](text);
+      message[type]({ content: text, key: "hooks" });
     }
     if (type === "warning") {
-      message[type](text);
+      message[type]({ content: text, key: "hooks" });
     }
   };
   return showMessage;

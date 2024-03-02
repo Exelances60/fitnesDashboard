@@ -3,10 +3,9 @@ import React from "react";
 import { UserOutlined, UserAddOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import { useAppDispatch } from "@/store/store";
-
 import { setShowDrawer } from "@/store/slices/drawerSlice";
 import CustomerAddModal from "./CustomerModal/CustomerAddModal";
-import CustomerAddModalFooter from "./CustomerModal/CustomerAddModalFooter";
+import DrawerFooterButton from "../DrawerFooterButton";
 
 const CustomerContainerHeader = () => {
   const dispatch = useAppDispatch();
@@ -16,7 +15,7 @@ const CustomerContainerHeader = () => {
       setShowDrawer({
         children: <CustomerAddModal />,
         title: "Customer Add Modal",
-        footer: <CustomerAddModalFooter />,
+        footer: <DrawerFooterButton formName="customerAddForm" />,
       })
     );
   };

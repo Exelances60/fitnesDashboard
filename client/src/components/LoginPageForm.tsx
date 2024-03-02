@@ -8,6 +8,7 @@ import { jwtDecode } from "jwt-decode";
 import { useAppDispatch } from "@/store/store";
 import { setUser } from "@/store/slices/userSlice";
 import { jwtUserDecode } from "@/types/Auth";
+import { emailRules } from "@/utils/FormRules";
 
 const LoginPageForm = () => {
   const router = useRouter();
@@ -61,11 +62,7 @@ const LoginPageForm = () => {
         layout="vertical"
         onFinish={onFinish}
       >
-        <Form.Item
-          name="email"
-          rules={[{ required: true, message: "Please Input your email!" }]}
-          label="Email"
-        >
+        <Form.Item name="email" rules={emailRules} label="Email">
           <Input
             type="text"
             placeholder="Email"

@@ -1,4 +1,5 @@
 import React from "react";
+import { Image } from "antd";
 import { CustomerType } from "@/types/Customer";
 import DEFAULTCOACH from "@/../public/customer/defaultCoach.webp";
 import { ExerciseType } from "@/types/ExercisType";
@@ -6,7 +7,6 @@ import CustomerExerciseList from "./CustomerExersiceList";
 import CustomerExerciseTrainer from "./CustomerExerciseTrainer";
 import { capitalizeFirstLetter } from "@/utils/utils";
 import { MailOutlined, PhoneOutlined, IdcardOutlined } from "@ant-design/icons";
-import { Image } from "antd";
 
 const CustomerExersicesDetails = ({ customer }: { customer: CustomerType }) => {
   const bodyPart: { [bodyPart: string]: ExerciseType[] } = {};
@@ -36,8 +36,8 @@ const CustomerExersicesDetails = ({ customer }: { customer: CustomerType }) => {
           <Image
             src={`https://fitnesdashboard.onrender.com/${customer.coachPT?.profilePicture}`}
             alt="Profile Picture"
-            width={80}
-            height={80}
+            width={90}
+            height={90}
             typeof="image"
           />
         )}

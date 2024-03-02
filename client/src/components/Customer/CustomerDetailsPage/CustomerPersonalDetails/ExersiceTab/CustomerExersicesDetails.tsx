@@ -38,6 +38,7 @@ const CustomerExersicesDetails = ({ customer }: { customer: CustomerType }) => {
             alt="Profile Picture"
             width={80}
             height={80}
+            typeof="image"
           />
         )}
 

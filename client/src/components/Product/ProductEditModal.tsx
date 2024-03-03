@@ -8,7 +8,7 @@ import {
   selectProduct,
   setEditModalVisible,
 } from "@/store/slices/productPageSlice";
-import { justRequired, minFive } from "@/utils/FormRules";
+import { justRequired, maxPrice, minFive } from "@/utils/FormRules";
 
 const ProductEditModal = () => {
   const product = useAppSelector(selectProduct);
@@ -96,7 +96,11 @@ const ProductEditModal = () => {
         >
           <Input.TextArea placeholder="Description" />
         </Form.Item>
-        <Form.Item label="Price" name="price" rules={justRequired}>
+        <Form.Item
+          label="Price"
+          name="price"
+          rules={[...justRequired, ...maxPrice]}
+        >
           <Input placeholder="Price" type="number" />
         </Form.Item>
         <Form.Item label="Amount" name="amount" rules={justRequired}>

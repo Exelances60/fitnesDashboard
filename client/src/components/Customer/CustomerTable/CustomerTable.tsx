@@ -29,6 +29,7 @@ const CustomerTable = ({ customers }: CustomerTableProps) => {
   const showMessage = useMessage();
   const { filterDropdown, filterIcon, searchById } =
     useTableFilterSearchDropDown("Search by name");
+
   const handleOnDetails = (record: CustomerType) => {
     dispatch(
       showModal({

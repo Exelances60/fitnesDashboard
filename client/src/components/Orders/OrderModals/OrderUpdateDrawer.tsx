@@ -9,6 +9,7 @@ import useMessage from "@/hooks/useMessage";
 import { useAppDispatch } from "@/store/store";
 import { setHideDrawer } from "@/store/slices/drawerSlice";
 import { OrdersType } from "@/types/Order";
+import { justRequired, minAmount } from "@/utils/FormRules";
 
 type OrderUpdateDrawerProps = {
   selectedOrder: OrdersType | null;
@@ -24,8 +25,10 @@ type updateFormType = {
 };
 
 const OrderUpdateDrawer = ({ selectedOrder }: OrderUpdateDrawerProps) => {
+  console.log("selectedOrder", selectedOrder);
   const showMessage = useMessage();
   const dispath = useAppDispatch();
+  const [form] = Form.useForm();
   const optionRender = (item: any) => {
     return (
       <div className="flex gap-2 items-center">
@@ -44,6 +47,15 @@ const OrderUpdateDrawer = ({ selectedOrder }: OrderUpdateDrawerProps) => {
   };
   const onFinish = async (values: updateFormType) => {
     showMessage("Loading.. With Hooks", "loading", 0.3);
+
+    if (values.amount > selectedOrder?.products[0].amount) {
+      showMessage(
+        "The amount you entered is more than the amount of the product",
+        "error"
+      );
+      return;
+    }
+
     const updatedOrder = {
       ...selectedOrder,
       ...values,
@@ -74,19 +86,35 @@ const OrderUpdateDrawer = ({ selectedOrder }: OrderUpdateDrawerProps) => {
         layout="vertical"
         initialValues={selectedOrder || []}
         onFinish={onFinish}
+        form={form}
         id="updateOrderForm"
       >
-        <Form.Item label="Order Owner" name="orderOwner">
+        <Form.Item
+          label="Order Owner"
+          name="orderOwner"
+          rules={justRequired}
+          required
+        >
           <Input />
         </Form.Item>
-        <Form.Item label="Address" name="adress">
+        <Form.Item label="Address" name="adress" rules={justRequired} required>
           <Input />
         </Form.Item>
-        <Form.Item label="Order Owner Email" name="orderOwnerEmail">
+        <Form.Item
+          label="Order Owner Email"
+          name="orderOwnerEmail"
+          rules={justRequired}
+          required
+        >
           <Input />
         </Form.Item>
         <div className="flex justify-evenly">
-          <Form.Item label="Order Status" name="status">
+          <Form.Item
+            label="Order Status"
+            name="status"
+            rules={justRequired}
+            required
+          >
             <Select
               defaultValue={selectedOrder?.status}
               style={{ width: 250 }}
@@ -103,11 +131,22 @@ const OrderUpdateDrawer = ({ selectedOrder }: OrderUpdateDrawerProps) => {
               )}
             />
           </Form.Item>
-          <Form.Item label="Amount" name="amount">
-            <Input />
+          <Form.Item
+            label="Amount"
+            name="amount"
+            rules={[...justRequired, ...minAmount]}
+          >
+            <Input
+              onChange={(e) => {
+                const value = e.target.value;
+                form.setFieldsValue({
+                  totalPrice: Number(value) * selectedOrder?.products[0].price,
+                });
+              }}
+            />
           </Form.Item>
         </div>
-        <Form.Item label="Total Price" name="totalPrice">
+        <Form.Item label="Total Price" name="totalPrice" rules={justRequired}>
           <Input />
         </Form.Item>
       </Form>

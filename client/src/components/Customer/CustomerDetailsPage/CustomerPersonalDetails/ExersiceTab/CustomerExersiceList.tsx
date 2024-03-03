@@ -72,6 +72,7 @@ const CustomerExerciseList = ({
           description="No Exercise Found"
         />
       )}
+
       <motion.div
         animate={{
           opacity: 1,

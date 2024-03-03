@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import * as Icon from "@ant-design/icons";
 import { Form, Input, InputNumber } from "antd";
 import useDebounce from "@/hooks/useDebounce";
-import { renderFormItem } from "@/utils/renderForTables/Customers/renderCustomerFormItem";
 import { motion } from "framer-motion";
+import { justRequired, maxAge } from "@/utils/FormRules";
 
 const CustomerAddAge = () => {
   const [age, setAge] = useState<number | null>(null);
@@ -12,23 +12,24 @@ const CustomerAddAge = () => {
   return (
     <>
       <div className="flex gap-4">
-        {renderFormItem(
-          "Email",
-          "email",
-          "Enter Email",
-          "email",
-          <Icon.MailOutlined />
-        )}
+        <Form.Item
+          label="Email"
+          name="email"
+          className="w-full"
+          rules={[...justRequired, { type: "email" }]}
+        >
+          <Input
+            placeholder="Enter Email"
+            type="email"
+            addonBefore={<Icon.MailOutlined />}
+          />
+        </Form.Item>
+
         <Form.Item
           label="Age"
           name="age"
           className="w-full"
-          rules={[
-            {
-              required: true,
-              message: "Age is required",
-            },
-          ]}
+          rules={[...justRequired, ...maxAge]}
         >
           <InputNumber
             type="number"
@@ -48,12 +49,7 @@ const CustomerAddAge = () => {
           <Form.Item
             label="Parent Phone"
             name="parentPhone"
-            rules={[
-              {
-                required: true,
-                message: "Parent Phone is required",
-              },
-            ]}
+            rules={[...justRequired]}
           >
             <Input
               placeholder="Enter Parent Phone"

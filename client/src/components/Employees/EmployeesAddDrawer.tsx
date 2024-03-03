@@ -1,8 +1,19 @@
 import useSelectUserInfo from "@/hooks/useSelectUserInfo";
 import { allUniverstyList } from "@/mock/allUniverstyList";
 import axiosClient from "@/utils/AxiosClient";
-import { emailRules, justRequired } from "@/utils/FormRules";
+import {
+  emailRules,
+  employeeMinAge,
+  justRequired,
+  maxAge,
+  phoneRules,
+} from "@/utils/FormRules";
 import { Form, Input, Select, Upload, message } from "antd";
+import {
+  MailOutlined,
+  UserOutlined,
+  EuroCircleOutlined,
+} from "@ant-design/icons";
 import React from "react";
 
 interface EmployeesAddDrawerProps {
@@ -80,14 +91,17 @@ const EmployeesAddDrawer = ({ setEmployeeData }: EmployeesAddDrawerProps) => {
             name="name"
             required
             className="w-full"
-            rules={[
-              { required: true },
-              { min: 3, message: "Name must be at least 3 characters" },
-            ]}
+            rules={[...justRequired, { min: 3, message: "Min 3 characters" }]}
           >
-            <Input type="text" />
+            <Input type="text" addonBefore={<UserOutlined />} />
           </Form.Item>
-          <Form.Item label="Phone" name="phone" required className="w-full">
+          <Form.Item
+            label="Phone"
+            name="phone"
+            required
+            className="w-full"
+            rules={phoneRules}
+          >
             <Input type="text" addonBefore="+90" />
           </Form.Item>
         </div>
@@ -99,13 +113,13 @@ const EmployeesAddDrawer = ({ setEmployeeData }: EmployeesAddDrawerProps) => {
             rules={emailRules}
             className="w-full"
           >
-            <Input type="text" />
+            <Input type="text" addonBefore={<MailOutlined />} />
           </Form.Item>
           <Form.Item
             label="Age"
             name="age"
             required
-            rules={justRequired}
+            rules={[...justRequired, ...maxAge, ...employeeMinAge]}
             className="w-full"
           >
             <Input type="number" />
@@ -136,10 +150,14 @@ const EmployeesAddDrawer = ({ setEmployeeData }: EmployeesAddDrawerProps) => {
             label="Salary"
             name="salary"
             required
-            rules={[{ required: true }]}
+            rules={justRequired}
             className="w-full"
           >
-            <Input type="number" suffix="TL" />
+            <Input
+              type="number"
+              suffix="TL"
+              addonBefore={<EuroCircleOutlined />}
+            />
           </Form.Item>
         </div>
         <div className="flex gap-2">
@@ -148,6 +166,7 @@ const EmployeesAddDrawer = ({ setEmployeeData }: EmployeesAddDrawerProps) => {
             name="university"
             required
             className="w-full"
+            rules={justRequired}
           >
             <Select showSearch>
               <Select.Option value="">Not Select</Select.Option>

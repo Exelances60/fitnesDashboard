@@ -8,7 +8,7 @@ import CustomerMemberShipStatus from "./CustomerMemberShipStatus";
 import CustomerAddAge from "./CustomerAddAge";
 import { renderFormItem } from "@/utils/renderForTables/Customers/renderCustomerFormItem";
 import { AddCustomerFormType } from "@/types/Customer";
-import { justRequired } from "@/utils/FormRules";
+import { justRequired, maxBodyWeight, maxHeight } from "@/utils/FormRules";
 
 const CustomerAddModal = () => {
   const [form] = Form.useForm();
@@ -93,14 +93,22 @@ const CustomerAddModal = () => {
       </div>
       <CustomerAddAge />
       <div className="flex gap-4">
-        {renderFormItem(
-          "Body Weight",
-          "bodyWeight",
-          "Enter Body Weight",
-          "number",
-          "kg"
-        )}
-        {renderFormItem("Height", "height", "Enter Height", "number", "cm")}
+        <Form.Item
+          label="Body Weight"
+          name="bodyWeight"
+          className="w-full"
+          rules={[...justRequired, ...maxBodyWeight]}
+        >
+          <Input placeholder="Enter Weight" type="number" addonBefore="kg" />
+        </Form.Item>
+        <Form.Item
+          label="Height"
+          name="height"
+          className="w-full"
+          rules={[...justRequired, ...maxHeight]}
+        >
+          <Input placeholder="Enter Height" type="number" addonBefore="cm" />
+        </Form.Item>
       </div>
       {renderFormItem(
         "Address",

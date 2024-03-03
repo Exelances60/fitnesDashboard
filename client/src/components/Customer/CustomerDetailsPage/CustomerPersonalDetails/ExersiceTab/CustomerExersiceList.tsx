@@ -3,7 +3,7 @@ import React from "react";
 import { ExerciseType } from "@/types/ExercisType";
 import { capitalizeFirstLetter } from "@/utils/utils";
 import CustomerExerciseItem from "./CustomerExerciseItem";
-import { Empty, FloatButton, Tooltip } from "antd";
+import { Alert, Empty, FloatButton, Tooltip } from "antd";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import {
   FormOutlined,
@@ -18,13 +18,15 @@ import {
 import CustomerTabExerciseAddDrawer from "./CustomerTabExerciseAddDrawer";
 import { motion } from "framer-motion";
 
+interface CustomerExerciseListProps {
+  bodyPart: { [bodyPart: string]: ExerciseType[] };
+  customerId: string;
+}
+
 const CustomerExerciseList = ({
   bodyPart,
   customerId,
-}: {
-  bodyPart: { [bodyPart: string]: ExerciseType[] };
-  customerId: string;
-}) => {
+}: CustomerExerciseListProps) => {
   const dispatch = useAppDispatch();
   const deleteMood = useAppSelector(selectDeleteMood);
   const openAddExerciseModal = () => {
@@ -38,7 +40,18 @@ const CustomerExerciseList = ({
   };
 
   return (
-    <div className="p-2">
+    <div className="p-2 flex flex-col gap-2">
+      {deleteMood ? (
+        <Alert
+          message="Delete Mood"
+          description="Click on the exercise to delete"
+          type="error"
+          showIcon
+          closable
+          onClose={() => dispatch(setDeleteMood(!deleteMood))}
+        />
+      ) : null}
+
       {Object.entries(bodyPart).length > 0 ? (
         Object.entries(bodyPart).map(([part, exercises]) => (
           <div key={part}>
@@ -59,7 +72,6 @@ const CustomerExerciseList = ({
           description="No Exercise Found"
         />
       )}
-
       <motion.div
         animate={{
           opacity: 1,

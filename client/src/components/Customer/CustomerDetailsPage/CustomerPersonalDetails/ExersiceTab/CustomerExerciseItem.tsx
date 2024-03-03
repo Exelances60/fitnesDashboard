@@ -58,7 +58,7 @@ const CustomerExerciseItem = ({
       <div className="flex gap-2 items-center">
         <div className="md:w-16 h-16 w-24 relative overflow-auto hover:scale-110 transform duration-300 ease-in-out">
           <Image
-            src={`https://fitnesdashboard.onrender.com${exercise.gifUrl}`}
+            src={`http://localhost:8080${exercise.gifUrl}`}
             layout="fill"
             alt={exercise.name}
             className="rounded-md"

@@ -3,6 +3,7 @@ const Customer = require("../models/Customer");
 const throwValidationError = require("../utils/err/throwValidationError");
 const throwBadRequestError = require("../utils/err/throwBadRequestError");
 const throwNotFoundError = require("../utils/err/throwNotFoundError");
+
 exports.createEmployee = async (req, res) => {
   const profilePicture = req.files
     .filter((file) => {
@@ -40,7 +41,15 @@ exports.createEmployee = async (req, res) => {
 exports.getEmployees = async (req, res) => {
   const ownerId = req.params.ownerId;
   try {
-    const employees = await Employee.find({ ownerId: ownerId });
+    const employees = await Employee.find({ ownerId: ownerId }).populate({
+      path: "customers",
+      select: "name email phone profilePicture",
+    });
+
+    if (!employees) {
+      throwNotFoundError("Employees not found");
+    }
+
     res.status(200).json({ employees: employees });
   } catch (error) {
     res.status(500).json({ message: error.message });

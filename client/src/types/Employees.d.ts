@@ -13,4 +13,5 @@ interface IEmployee {
   education?: string;
   documents?: string[];
   ownerId: string;
+  customers?: CustomerType[];
 }

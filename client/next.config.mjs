@@ -5,7 +5,6 @@ const nextConfig = {
       "localhost",
       "react-material.fusetheme.com",
       "fitnesdashboard.onrender.com",
-      "fitnesdashboard.onrender.com/images",
     ],
   },
 };

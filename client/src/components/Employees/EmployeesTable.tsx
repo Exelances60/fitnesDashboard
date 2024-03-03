@@ -4,8 +4,11 @@ import { renderNameForEmployees } from "@/utils/renderForTables/Employees/render
 import EmployeesDetailsModal from "./EmployeesDetailsModal/EmployeesDetailsModal";
 import useTableFilterSearchDropDown from "@/hooks/useTableFilterSearchDropDown";
 import { renderForActionTable } from "@/utils/renderForTables/renderForActionTable";
+import { setShowDrawer } from "@/store/slices/drawerSlice";
 import { showModal } from "@/store/slices/modalSlice";
 import { useAppDispatch } from "@/store/store";
+import EmployeesEditModal from "./EmployeesEditModal/EmployeesEditModal";
+import DrawerFooterButton from "../DrawerFooterButton";
 
 interface EmployeesTableProps {
   employeeData: IEmployee[];
@@ -22,6 +25,16 @@ const EmployeesTable = ({ employeeData }: EmployeesTableProps) => {
       showModal({
         children: <EmployeesDetailsModal employee={record} />,
         title: "Employee Details",
+      })
+    );
+  };
+
+  const openEditDrawer = (record: IEmployee) => {
+    dispatch(
+      setShowDrawer({
+        children: <EmployeesEditModal employee={record} />,
+        title: "Edit Employee",
+        footer: <DrawerFooterButton formName="editEmployeeForm" />,
       })
     );
   };
@@ -99,7 +112,7 @@ const EmployeesTable = ({ employeeData }: EmployeesTableProps) => {
             text,
             record,
             openDetailsDrawer,
-            () => {},
+            openEditDrawer,
             () => {}
           );
         }}

@@ -3,18 +3,19 @@ import axiosClient from "@/utils/AxiosClient";
 import { Form, message } from "antd";
 import React from "react";
 import EmployeesAddForm from "./EmployeesAddForm";
+import useMessage from "@/hooks/useMessage";
 
 interface EmployeesAddDrawerProps {
   setEmployeeData: React.Dispatch<React.SetStateAction<IEmployee[]>>;
 }
-
 const EmployeesAddDrawer = ({ setEmployeeData }: EmployeesAddDrawerProps) => {
   const [form] = Form.useForm();
   const userInfo = useSelectUserInfo();
+  const showMessage = useMessage();
 
   const onFinish = async (values: any) => {
     if (!userInfo) return;
-    message.loading({ content: "Loading...", key: "addEmployee" });
+    showMessage("Adding employee", "info");
     const profilePicture = values.profilePicture.fileList[0].originFileObj;
     const documents = values.documents.fileList.map(
       (file: any) => file.originFileObj
@@ -45,11 +46,7 @@ const EmployeesAddDrawer = ({ setEmployeeData }: EmployeesAddDrawerProps) => {
         formData
       );
       if (response.status === 201) {
-        console.log(response.data);
-        message.success({
-          content: "Employee added successfully",
-          key: "addEmployee",
-        });
+        showMessage("Employee added successfully", "success");
         setEmployeeData((prev) => [...prev, response.data.savedEmployee]);
         form.resetFields();
       }
@@ -66,7 +63,7 @@ const EmployeesAddDrawer = ({ setEmployeeData }: EmployeesAddDrawerProps) => {
         form={form}
         onFinish={onFinish}
       >
-        <EmployeesAddForm />
+        <EmployeesAddForm editMode={false} />
       </Form>
     </div>
   );

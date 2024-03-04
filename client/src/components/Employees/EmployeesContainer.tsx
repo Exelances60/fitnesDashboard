@@ -33,7 +33,10 @@ const EmployeesContainer = ({ employees }: EmployeesContainerProps) => {
           Add Employee
         </Button>
       </div>
-      <EmployeesTable employeeData={employeeData} />
+      <EmployeesTable
+        employeeData={employeeData}
+        setEmployeeData={setEmployeeData}
+      />
     </Card>
   );
 };

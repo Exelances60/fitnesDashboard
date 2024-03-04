@@ -1,5 +1,5 @@
 import React from "react";
-import { Table } from "antd";
+import { Table, message } from "antd";
 import { renderNameForEmployees } from "@/utils/renderForTables/Employees/renderForName";
 import EmployeesDetailsModal from "./EmployeesDetailsModal/EmployeesDetailsModal";
 import useTableFilterSearchDropDown from "@/hooks/useTableFilterSearchDropDown";
@@ -9,13 +9,24 @@ import { showModal } from "@/store/slices/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import EmployeesEditModal from "./EmployeesEditModal/EmployeesEditModal";
 import DrawerFooterButton from "../DrawerFooterButton";
+import axiosClient from "@/utils/AxiosClient";
 
 interface EmployeesTableProps {
   employeeData: IEmployee[];
+  setEmployeeData: React.Dispatch<React.SetStateAction<IEmployee[]>>;
 }
 
-const EmployeesTable = ({ employeeData }: EmployeesTableProps) => {
-  let positionFilter: { text: string; value: string }[] = [];
+const EmployeesTable = ({
+  employeeData,
+  setEmployeeData,
+}: EmployeesTableProps) => {
+  const positionFilter = employeeData
+    .map((employee) => employee.position || "No Position")
+    .filter(
+      (position, index, self) => !!position && self.indexOf(position) === index
+    )
+    .map((position) => ({ text: position, value: position }));
+
   const dispatch = useAppDispatch();
   const { filterDropdown, filterIcon, searchById } =
     useTableFilterSearchDropDown("Search by name");
@@ -32,7 +43,12 @@ const EmployeesTable = ({ employeeData }: EmployeesTableProps) => {
   const openEditDrawer = (record: IEmployee) => {
     dispatch(
       setShowDrawer({
-        children: <EmployeesEditModal employee={record} />,
+        children: (
+          <EmployeesEditModal
+            employee={record}
+            setEmployeeData={setEmployeeData}
+          />
+        ),
         title: "Edit Employee",
         footer: <DrawerFooterButton formName="editEmployeeForm" />,
       })
@@ -45,7 +61,11 @@ const EmployeesTable = ({ employeeData }: EmployeesTableProps) => {
 
   employeeData.forEach((employee) => {
     if (
-      !positionFilter.some((position) => position.value === employee.position)
+      !positionFilter.some(
+        (position) =>
+          position.value.toLowerCase().trim() ===
+          employee.position?.toLowerCase().trim()
+      )
     ) {
       positionFilter.push({
         text: employee.position || "No Position",
@@ -53,6 +73,30 @@ const EmployeesTable = ({ employeeData }: EmployeesTableProps) => {
       });
     }
   });
+
+  const deleteEmployee = async (record: IEmployee) => {
+    message.loading({ content: "Deleting employee...", key: "deleteEmployee" });
+    try {
+      const response = await axiosClient.delete(
+        `/employees/delete-employee/${record._id}`
+      );
+      if (response.status === 200) {
+        message.success({
+          content: "Employee deleted successfully",
+          key: "deleteEmployee",
+        });
+        setEmployeeData((prev) =>
+          prev.filter((employee) => employee._id !== record._id)
+        );
+      }
+    } catch (error: any) {
+      message.error({
+        content: error.response.data.message || "Error deleting employee",
+        key: "deleteEmployee",
+      });
+    }
+  };
+
   return (
     <Table
       dataSource={filterBySearchEmployees}
@@ -113,7 +157,7 @@ const EmployeesTable = ({ employeeData }: EmployeesTableProps) => {
             record,
             openDetailsDrawer,
             openEditDrawer,
-            () => {}
+            deleteEmployee
           );
         }}
       />

@@ -39,4 +39,12 @@ router.get("/get-employees/:ownerId", isAuth, employeeController.getEmployees);
 
 router.post("/assignCustomer", isAuth, employeeController.assignCustomer);
 
+router.put("/update-employee", isAuth, employeeController.updateEmployee);
+
+router.delete(
+  "/delete-employee/:employeeId",
+  isAuth,
+  employeeController.deleteEmployee
+);
+
 module.exports = router;

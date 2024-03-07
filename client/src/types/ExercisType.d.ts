@@ -1,6 +1,4 @@
-import { Global } from "@/global";
-
-export type ExerciseType = {
+interface ExerciseType {
   _id: string;
   bodyPart: string;
   equipment: string;
@@ -8,6 +6,11 @@ export type ExerciseType = {
   name: string;
   secondaryMuscle: string[];
   instructions: string[];
-};
+}
 
-export type fetchExersiceType = Global.FetchExerciseType;
+interface fetchExersiceType {
+  exercises: ExerciseType[];
+  totalExercisesCount: number;
+  currentPage: number;
+  pageSize: number;
+}

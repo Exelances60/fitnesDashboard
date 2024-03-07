@@ -1,5 +1,4 @@
 import { Global } from "../global";
-import { ExerciseType } from "./ExercisType";
 
 export type AddCustomerFormType = {
   image: Global.FileType[];

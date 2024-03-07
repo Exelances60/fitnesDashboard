@@ -1,5 +1,4 @@
 "use server";
-import { ExerciseType } from "@/types/ExercisType";
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 

@@ -5,7 +5,6 @@ import { tagRender } from "@/utils/renderForTables/Customers/tagRenderForSelectE
 import { capitalizeFirstLetter } from "@/utils/utils";
 import { useFetchExersice } from "@/hooks/useFetchExersice";
 import useDebounce from "@/hooks/useDebounce";
-import { ExerciseType } from "@/types/ExercisType";
 
 const CustomerEditExersiceForm = () => {
   const [currentPage, setCurrentPage] = useState(1);

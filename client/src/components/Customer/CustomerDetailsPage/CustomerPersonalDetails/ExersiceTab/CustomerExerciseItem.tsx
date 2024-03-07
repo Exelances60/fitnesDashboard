@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { ExerciseType } from "@/types/ExercisType";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Popconfirm, Tag } from "antd";
 import Image from "next/image";

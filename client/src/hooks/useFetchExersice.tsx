@@ -1,4 +1,3 @@
-import { fetchExersiceType } from "@/types/ExercisType";
 import axiosClient from "@/utils/AxiosClient";
 import React, { useEffect, useState } from "react";
 

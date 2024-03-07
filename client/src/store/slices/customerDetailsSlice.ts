@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { ExerciseType } from "@/types/ExercisType";
 
 interface CustomerDetailsState {
   deleteMood: boolean;

@@ -1,7 +1,6 @@
 import React from "react";
 import { PlusCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import Image from "next/image";
-import { ExerciseType } from "@/types/ExercisType";
 import { Popconfirm, Tag, message } from "antd";
 import { useAppDispatch } from "@/store/store";
 import { setAddedCart } from "@/store/slices/customerDetailsSlice";

@@ -1,6 +1,5 @@
 import useDebounce from "@/hooks/useDebounce";
 import { useFetchExersice } from "@/hooks/useFetchExersice";
-import { ExerciseType } from "@/types/ExercisType";
 import { Button, Input, Pagination, Tooltip } from "antd";
 import { DeleteOutlined, LikeOutlined } from "@ant-design/icons";
 import React, { useState } from "react";

@@ -85,4 +85,10 @@ router.post(
   customerController.addCustomerActivity
 );
 
+router.delete(
+  "/remove-customer-coach",
+  isAuth,
+  customerController.deleteCustomerCoach
+);
+
 module.exports = router;

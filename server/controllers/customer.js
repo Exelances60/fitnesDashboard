@@ -196,6 +196,9 @@ exports.findCustomer = async (req, res, next) => {
       status: 200,
     });
   } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
     next(error);
   }
 };
@@ -203,44 +206,57 @@ exports.findCustomer = async (req, res, next) => {
 exports.deleteCustomerExercisePlan = async (req, res, next) => {
   const { customerId, exerciseName } = req.body;
   if (!customerId) throwBadRequestError("Customer not found.");
-
-  const fetchedCustomer = await Customer.findById(customerId);
-  if (!fetchedCustomer) {
-    throwBadRequestError("Customer not found.");
+  try {
+    const fetchedCustomer = await Customer.findById(customerId);
+    if (!fetchedCustomer) {
+      throwBadRequestError("Customer not found.");
+    }
+    const deleteExersice = fetchedCustomer.exercisePlan.filter(
+      (exersice) => exersice !== exerciseName
+    );
+    fetchedCustomer.exercisePlan = deleteExersice;
+    const updatedCustomer = await fetchedCustomer.save();
+    res.status(200).json({
+      message: "Customer exercise plan deleted successfully!",
+      customer: updatedCustomer,
+      status: 200,
+    });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
-  const deleteExersice = fetchedCustomer.exercisePlan.filter(
-    (exersice) => exersice !== exerciseName
-  );
-  fetchedCustomer.exercisePlan = deleteExersice;
-  const updatedCustomer = await fetchedCustomer.save();
-  res.status(200).json({
-    message: "Customer exercise plan deleted successfully!",
-    customer: updatedCustomer,
-    status: 200,
-  });
 };
 
 exports.updateCustomerPlan = async (req, res, next) => {
   const { customerId, exerciseName } = req.body;
   if (!customerId) throwBadRequestError("Customer not found.");
-  const fetchedCustomer = await Customer.findById(customerId);
-  if (!fetchedCustomer) {
-    throwBadRequestError("Customer not found.");
-  }
-  const newExersice = exerciseName.filter((exersice) => {
-    if (!fetchedCustomer.exercisePlan.includes(exersice)) {
-      return exersice;
+  try {
+    const fetchedCustomer = await Customer.findById(customerId);
+    if (!fetchedCustomer) {
+      throwBadRequestError("Customer not found.");
     }
-  });
-  fetchedCustomer.exercisePlan = [
-    ...fetchedCustomer.exercisePlan,
-    ...newExersice,
-  ];
-  await fetchedCustomer.save();
-  res.status(200).json({
-    message: "Customer exercise plan updated successfully!",
-    status: 200,
-  });
+    const newExersice = exerciseName.filter((exersice) => {
+      if (!fetchedCustomer.exercisePlan.includes(exersice)) {
+        return exersice;
+      }
+    });
+    fetchedCustomer.exercisePlan = [
+      ...fetchedCustomer.exercisePlan,
+      ...newExersice,
+    ];
+    await fetchedCustomer.save();
+    res.status(200).json({
+      message: "Customer exercise plan updated successfully!",
+      status: 200,
+    });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
 };
 
 exports.addCustomerActivity = async (req, res, next) => {
@@ -267,4 +283,32 @@ exports.addCustomerActivity = async (req, res, next) => {
     activity: savedActivity,
     status: 201,
   });
+};
+
+exports.deleteCustomerCoach = async (req, res, next) => {
+  const { customerId } = req.body;
+  if (!customerId) throwBadRequestError("Customer not found.");
+  try {
+    const fetchedCustomer = await Customer.findById(customerId);
+    if (!fetchedCustomer) {
+      throwBadRequestError("Customer not found.");
+    }
+    const fetchedEmployee = await Employee.findById(fetchedCustomer.coachPT);
+    if (!fetchedEmployee) {
+      throwBadRequestError("Employee not found.");
+    }
+    fetchedEmployee.customers.pull(customerId);
+    await fetchedEmployee.save();
+    fetchedCustomer.coachPT = null;
+    await fetchedCustomer.save();
+    res.status(200).json({
+      message: "Customer coach deleted successfully!",
+      status: 200,
+    });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
 };

@@ -55,7 +55,7 @@ const CustomerExerciseTrainer = ({
 
   return (
     <div className="flex flex-col gap-2">
-      <Button type="primary" onClick={getTrainers}>
+      <Button type="primary" onClick={getTrainers} size="small">
         Assign Trainer
       </Button>
       <Drawer

@@ -7,6 +7,7 @@ import CustomerExerciseList from "./CustomerExersiceList";
 import CustomerExerciseTrainer from "./CustomerExerciseTrainer";
 import { capitalizeFirstLetter } from "@/utils/utils";
 import { MailOutlined, PhoneOutlined, IdcardOutlined } from "@ant-design/icons";
+import CustomerExersiceRemoveCoachButton from "./CustomerExersiceRemoveCoachButton";
 
 const CustomerExersicesDetails = ({ customer }: { customer: CustomerType }) => {
   const bodyPart: { [bodyPart: string]: ExerciseType[] } = {};
@@ -36,7 +37,7 @@ const CustomerExersicesDetails = ({ customer }: { customer: CustomerType }) => {
           <Image
             src={`http://localhost:8080/${customer.coachPT?.profilePicture}`}
             alt="Profile Picture"
-            width={80}
+            width={90}
             height={100}
           />
         )}
@@ -65,6 +66,13 @@ const CustomerExersicesDetails = ({ customer }: { customer: CustomerType }) => {
               {customer.coachPT?.email}
             </p>
           )}
+          {customer.coachPT ? (
+            typeof customer.coachPT === "string" ? null : (
+              <p className="text-sm text-gray-400">
+                <CustomerExersiceRemoveCoachButton customerId={customer._id} />
+              </p>
+            )
+          ) : null}
 
           {!customer.coachPT ? (
             <CustomerExerciseTrainer customerId={customer._id} />

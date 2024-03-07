@@ -3,7 +3,7 @@ import React from "react";
 import { ExerciseType } from "@/types/ExercisType";
 import { capitalizeFirstLetter } from "@/utils/utils";
 import CustomerExerciseItem from "./CustomerExerciseItem";
-import { Alert, Empty, FloatButton, Tooltip } from "antd";
+import { Alert, Empty, FloatButton, Tooltip, message } from "antd";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import {
   FormOutlined,
@@ -41,17 +41,6 @@ const CustomerExerciseList = ({
 
   return (
     <div className="p-2 flex flex-col gap-2">
-      {deleteMood ? (
-        <Alert
-          message="Delete Mood"
-          description="Click on the exercise to delete"
-          type="error"
-          showIcon
-          closable
-          onClose={() => dispatch(setDeleteMood(!deleteMood))}
-        />
-      ) : null}
-
       {Object.entries(bodyPart).length > 0 ? (
         Object.entries(bodyPart).map(([part, exercises]) => (
           <div key={part}>
@@ -99,6 +88,18 @@ const CustomerExerciseList = ({
             <FloatButton
               icon={<DeleteOutlined />}
               onClick={() => {
+                if (!deleteMood) {
+                  message.success({
+                    content: "Delete mode ON 🗑",
+                    key: "deleteMode",
+                  });
+                } else {
+                  message.error({
+                    content: "Delete mode OFF 🗑",
+                    key: "deleteMode",
+                  });
+                }
+
                 dispatch(setDeleteMood(!deleteMood));
               }}
             />

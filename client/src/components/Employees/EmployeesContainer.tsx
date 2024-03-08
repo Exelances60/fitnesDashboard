@@ -27,17 +27,24 @@ const EmployeesContainer = ({ employees }: EmployeesContainerProps) => {
   };
 
   return (
-    <Card className="flex flex-col gap-2 overflow-auto" title="Employees">
-      <div className="w-full flex justify-end">
-        <Button type="default" color="blue" onClick={openAddDrawer}>
-          Add Employee
-        </Button>
+    <div className="flex flex-col gap-4">
+      <div className="flex gap-2 w-full">
+        <Card> </Card>
+        <Card> </Card>
+        <Card> </Card>
       </div>
-      <EmployeesTable
-        employeeData={employeeData}
-        setEmployeeData={setEmployeeData}
-      />
-    </Card>
+      <Card className="flex flex-col gap-2 overflow-auto" title="Employees">
+        <div className="w-full flex justify-end">
+          <Button type="default" color="blue" onClick={openAddDrawer}>
+            Add Employee
+          </Button>
+        </div>
+        <EmployeesTable
+          employeeData={employeeData}
+          setEmployeeData={setEmployeeData}
+        />
+      </Card>
+    </div>
   );
 };
 

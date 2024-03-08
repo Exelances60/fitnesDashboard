@@ -136,11 +136,22 @@ const CustomerTable = ({ customers }: CustomerTableProps) => {
       />
       <Table.Column
         title="Coach"
-        dataIndex="coach"
+        dataIndex="coachPT"
         key="coach"
         render={(data) => {
           if (data) {
-            return <p className="text-blue-500 underline">{data}</p>;
+            return (
+              <div className="flex gap-2" key={data._id}>
+                <Image
+                  src={`http://localhost:8080/${data.profilePicture}`}
+                  width={40}
+                  height={40}
+                  className="object-cover rounded-md"
+                  alt="profilePicture"
+                />
+                <p>{data.name}</p>
+              </div>
+            );
           }
           return <p className="text-red-500">Have not assigned yet</p>;
         }}
@@ -149,6 +160,9 @@ const CustomerTable = ({ customers }: CustomerTableProps) => {
         title="Membership Months"
         dataIndex="membershipType"
         key="membershipType"
+        sorter={(a: CustomerType, b: CustomerType) =>
+          +a.membershipType - +b.membershipType
+        }
         width={180}
         render={(text) => {
           return <p className="text-blue-500">{text} Months</p>;
@@ -158,6 +172,10 @@ const CustomerTable = ({ customers }: CustomerTableProps) => {
         title="Membership Start Date"
         dataIndex="membershipStartDate"
         key="membershipStartDate"
+        sorter={(a: CustomerType, b: CustomerType) =>
+          new Date(a.membershipStartDate).getTime() -
+          new Date(b.membershipStartDate).getTime()
+        }
         render={(text) => {
           return (
             <div className="flex items-center justify-center">
@@ -170,6 +188,10 @@ const CustomerTable = ({ customers }: CustomerTableProps) => {
         title="Membership End Date"
         dataIndex="membershipEndDate"
         key="membershipEndDate"
+        sorter={(a: CustomerType, b: CustomerType) =>
+          new Date(a.membershipEndDate).getTime() -
+          new Date(b.membershipEndDate).getTime()
+        }
         render={(text) => {
           return (
             <div className="flex items-center justify-center">

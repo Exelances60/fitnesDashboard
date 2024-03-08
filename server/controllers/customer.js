@@ -77,13 +77,16 @@ exports.addCustomer = async (req, res, next) => {
 exports.getCustomer = async (req, res, next) => {
   try {
     const ownerId = req.params.ownerId;
-    const fetchedOwner = await Owner.findById(ownerId).populate("customer");
-    if (!fetchedOwner) {
+    const fetchedCustomer = await Customer.find({ ownerId: ownerId }).populate({
+      path: "coachPT",
+      select: "name email phone profilePicture",
+    });
+    if (!fetchedCustomer) {
       throwBadRequestError("Owner not found.");
     }
     res.status(200).json({
       message: "Fetched customers successfully!",
-      customers: fetchedOwner.customer,
+      customers: fetchedCustomer,
       status: 200,
     });
   } catch (error) {

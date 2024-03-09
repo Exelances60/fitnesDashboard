@@ -7,6 +7,7 @@ import { setShowDrawer } from "@/store/slices/drawerSlice";
 import DrawerFooterButton from "../DrawerFooterButton";
 import EmployeesAddDrawer from "./EmployeesAddDrawer";
 import EmployeesTable from "./EmployeesTable";
+import EmployeesStatsCard from "./EmployeesStatsCard/EmployeesStatsCard";
 
 interface EmployeesContainerProps {
   employees: IEmployee[];
@@ -28,11 +29,7 @@ const EmployeesContainer = ({ employees }: EmployeesContainerProps) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex gap-2 w-full">
-        <Card> </Card>
-        <Card> </Card>
-        <Card> </Card>
-      </div>
+      <EmployeesStatsCard totalEmployees={employeeData.length} />
       <Card className="flex flex-col gap-2 overflow-auto" title="Employees">
         <div className="w-full flex justify-end">
           <Button type="default" color="blue" onClick={openAddDrawer}>

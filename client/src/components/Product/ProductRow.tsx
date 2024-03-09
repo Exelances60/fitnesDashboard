@@ -32,7 +32,6 @@ const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
   const handleClickOrderButton = () => {
     dispatch(setProduct(product));
     dispatch(setOrderModalVisible(true));
-    /*     setOrderModalVisible(true); */
   };
 
   return (
@@ -47,7 +46,12 @@ const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
         />
       </TableCell>
       <TableCell>{product.name}</TableCell>
-      <TableCell>{product.price} &#8378;</TableCell>
+      <TableCell>
+        {new Intl.NumberFormat("tr-TR", {
+          style: "currency",
+          currency: "TRY",
+        }).format(product.price)}
+      </TableCell>
       <TableCell>{product.amount} pcs</TableCell>
       <TableCell>{product.category}</TableCell>
       <TableCell className="md:w-[200px] ">

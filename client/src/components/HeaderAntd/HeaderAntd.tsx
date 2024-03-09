@@ -75,7 +75,7 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
           style={{ margin: "0px 5px 0", backgroundColor: "#F5F6FA" }}
           className="shadow  rounded-md"
         >
-          <div className="w-full p-4 box-border min-h-[92vh] overflow-y-auto mt-[10px] ">
+          <div className="w-full p-4 box-border min-h-[92vh] overflow-y-auto mt-[10px] max-h-[92vh]">
             {children}
             <GlobalModal />
             <GlobalDrawer />

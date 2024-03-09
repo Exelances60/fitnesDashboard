@@ -1,8 +1,6 @@
 import { CardDataType } from "@/types/Order";
 import { Badge, Card, Grid } from "@tremor/react";
-import ORDERIMAGE from "@/../public/orders/custom-order-numbers-e1438361586475.png";
 import React from "react";
-import Image from "next/image";
 
 interface OrdersCardsProps {
   cardData: CardDataType;
@@ -46,7 +44,10 @@ const OrdersCards = ({ cardData }: OrdersCardsProps) => {
           </Badge>
         </div>
         <p className="text-tremor-metric font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">
-          {cardData.totalSalesPrice} TL
+          {new Intl.NumberFormat("tr-TR", {
+            style: "currency",
+            currency: "TRY",
+          }).format(cardData.totalSalesPrice)}
         </p>
       </Card>
       <Card>
@@ -65,7 +66,10 @@ const OrdersCards = ({ cardData }: OrdersCardsProps) => {
           </Badge>
         </div>
         <p className="text-tremor-metric font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">
-          {cardData.totalSalesCompleted} TL
+          {new Intl.NumberFormat("tr-TR", {
+            style: "currency",
+            currency: "TRY",
+          }).format(cardData.totalSalesCompleted)}
         </p>
       </Card>
     </Grid>

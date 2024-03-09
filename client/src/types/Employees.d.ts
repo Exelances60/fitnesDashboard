@@ -4,7 +4,7 @@ interface IEmployee {
   name: string;
   phone?: string;
   email?: string;
-  age?: number;
+  age: number;
   position?: string;
   address?: string;
   hireDate?: Date;

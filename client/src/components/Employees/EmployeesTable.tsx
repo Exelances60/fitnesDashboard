@@ -142,6 +142,7 @@ const EmployeesTable = ({
         title="Age"
         dataIndex="age"
         key="age"
+        sorter={(a: IEmployee, b: IEmployee) => a.age - b.age}
         render={(age) => {
           return <p className=" cursor-pointer">{age}</p>;
         }}

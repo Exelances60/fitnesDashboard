@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Form, Input, message } from "antd";
+import { Button, Form, Input, message } from "antd";
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import axiosClient from "@/utils/AxiosClient";
@@ -13,6 +13,7 @@ import { emailRules } from "@/utils/FormRules";
 const LoginPageForm = () => {
   const router = useRouter();
   const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
   const calculateMaxAge = (expirationTime: number) => {
@@ -43,6 +44,7 @@ const LoginPageForm = () => {
 
   const onFinish = async (values: { email: string; password: string }) => {
     message.loading({ content: "Loading...", key: "login" });
+    setLoading(true);
     try {
       const { data, status } = await axiosClient.post("/auth/login", values);
       if (status === 200) {
@@ -52,6 +54,8 @@ const LoginPageForm = () => {
       message.destroy("login");
       message.error(error.response?.data.message || "Something went wrong");
       setError(error.response?.data.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -83,12 +87,15 @@ const LoginPageForm = () => {
             className="w-[300px] md:w-[500px] h-[50px] px-[20px] bg-[#F0F2F5] rounded-[10px]"
           />
         </Form.Item>
-        <button
-          type="submit"
+        <Button
+          htmlType="submit"
+          type="primary"
+          size="large"
+          loading={loading}
           className="w-[300px] md:w-[500px] h-[50px] bg-[#4880FF] rounded-[10px] text-white font-bold"
         >
           Login
-        </button>
+        </Button>
         {error ? <p className="text-red-500">{error}</p> : null}
       </Form>
     </div>

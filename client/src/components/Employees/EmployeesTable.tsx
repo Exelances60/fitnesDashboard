@@ -148,6 +148,14 @@ const EmployeesTable = ({
         }}
       />
       <Table.Column
+        title="Hire Date"
+        dataIndex="hireDate"
+        key="hireDate"
+        render={(hireDate) => {
+          return <p>{new Date(hireDate).toLocaleDateString()}</p>;
+        }}
+      />
+      <Table.Column
         title="Actions"
         dataIndex="actions"
         key="actions"

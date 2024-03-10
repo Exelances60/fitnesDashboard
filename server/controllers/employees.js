@@ -4,6 +4,10 @@ const throwValidationError = require("../utils/err/throwValidationError");
 const throwBadRequestError = require("../utils/err/throwBadRequestError");
 const throwNotFoundError = require("../utils/err/throwNotFoundError");
 const clearImage = require("../utils/clearImage");
+const {
+  currentMonthEmployeesSalary,
+  currentMonthEmployeesCountIncarese,
+} = require("../services/businessLogic/calculateEmployessIncares");
 
 exports.createEmployee = async (req, res) => {
   const profilePicture = req.files
@@ -50,8 +54,14 @@ exports.getEmployees = async (req, res, next) => {
     if (!employees) {
       throwNotFoundError("Employees not found");
     }
+    /*  const totalSalaryIncrease = currentMonthEmployeesSalary(employees); */
+    const totalEmployeesCountIncarese =
+      currentMonthEmployeesCountIncarese(employees);
 
-    res.status(200).json({ employees: employees });
+    res.status(200).json({
+      employees: employees,
+      totalEmployeesCountIncarese,
+    });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;

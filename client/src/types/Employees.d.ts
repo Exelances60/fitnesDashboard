@@ -7,11 +7,17 @@ interface IEmployee {
   age: number;
   position?: string;
   address?: string;
-  hireDate?: Date;
-  salary?: number;
+  hireDate: Date;
+  salary: number;
   university?: string;
   education?: string;
   documents?: string[];
   ownerId: string;
   customers?: CustomerType[];
+}
+
+interface IEmployeeFetchResponse {
+  employees: IEmployee[];
+  totalSalaryIncrease: number;
+  totalEmployeesCountIncarese: number;
 }

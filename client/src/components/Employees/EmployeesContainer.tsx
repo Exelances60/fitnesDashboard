@@ -11,9 +11,13 @@ import EmployeesStatsCard from "./EmployeesStatsCard/EmployeesStatsCard";
 
 interface EmployeesContainerProps {
   employees: IEmployee[];
+  totalEmployeesCountIncarese: number;
 }
 
-const EmployeesContainer = ({ employees }: EmployeesContainerProps) => {
+const EmployeesContainer = ({
+  employees,
+  totalEmployeesCountIncarese,
+}: EmployeesContainerProps) => {
   const [employeeData, setEmployeeData] = useState<IEmployee[]>(employees);
   const dispatch = useAppDispatch();
 
@@ -29,7 +33,11 @@ const EmployeesContainer = ({ employees }: EmployeesContainerProps) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <EmployeesStatsCard totalEmployees={employeeData.length} />
+      <EmployeesStatsCard
+        totalEmployees={employeeData.length}
+        employees={employeeData}
+        totalEmployeesCountIncarese={totalEmployeesCountIncarese}
+      />
       <Card className="flex flex-col gap-2 overflow-auto" title="Employees">
         <div className="w-full flex justify-end">
           <Button type="default" color="blue" onClick={openAddDrawer}>

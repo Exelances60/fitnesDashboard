@@ -1,7 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Form, Input, message } from "antd";
-import { setCookie } from "cookies-next";
+import { getCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import axiosClient from "@/utils/AxiosClient";
 import { jwtDecode } from "jwt-decode";
@@ -15,6 +15,14 @@ const LoginPageForm = () => {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const token = getCookie("token");
+    if (token) {
+      message.info({ content: "You are already logged in", key: "login" });
+      router.push("/dashboard");
+    }
+  }, [router]);
 
   const calculateMaxAge = (expirationTime: number) => {
     const currentTime = new Date().getTime();

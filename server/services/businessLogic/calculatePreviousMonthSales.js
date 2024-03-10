@@ -10,12 +10,15 @@ const calculateCurrentMonthSales = (ordersWithProducts) => {
 
 const calculatePreviousMonthSales = (ordersWithProducts) => {
   const currentDate = new Date();
-  const previousMonthSales = ordersWithProducts
+  let previousMonthSales = ordersWithProducts
     .filter((order) => {
       const orderDate = new Date(order.createdAt);
       return orderDate.getMonth() < currentDate.getMonth();
     })
     .reduce((acc, order) => acc + order.totalPrice, 0);
+
+  previousMonthSales = previousMonthSales === 0 ? 1 : previousMonthSales;
+
   const currentMonthSales = calculateCurrentMonthSales(ordersWithProducts);
   return ((currentMonthSales - previousMonthSales) / previousMonthSales) * 100;
 };
@@ -47,7 +50,7 @@ const calculateCurrentComplateSales = (ordersWithProducts) => {
 
 const calculatePreviosMonthComplateSales = (ordersWithProducts) => {
   const currentDate = new Date();
-  const previousMonthCompletedSales = ordersWithProducts
+  let previousMonthCompletedSales = ordersWithProducts
     .filter((order) => {
       const orderDate = new Date(order.createdAt);
       return (
@@ -58,6 +61,9 @@ const calculatePreviosMonthComplateSales = (ordersWithProducts) => {
     .reduce((acc, order) => acc + order.totalPrice, 0);
   const currentMonthCompletedSales =
     calculateCurrentComplateSales(ordersWithProducts);
+
+  previousMonthCompletedSales =
+    previousMonthCompletedSales === 0 ? 1 : previousMonthCompletedSales;
 
   return currentMonthCompletedSales === 0
     ? 0

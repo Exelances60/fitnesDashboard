@@ -36,7 +36,8 @@ const CustomerExersicesDetails = ({ customer }: { customer: CustomerType }) => {
           <Image
             src={`http://localhost:8080/${customer.coachPT?.profilePicture}`}
             alt="Profile Picture"
-            width={90}
+            width={100}
+            className="rounded-md"
             height={100}
           />
         )}

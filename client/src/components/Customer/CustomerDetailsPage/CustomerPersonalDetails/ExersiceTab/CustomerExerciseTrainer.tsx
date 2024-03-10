@@ -25,8 +25,8 @@ const CustomerExerciseTrainer = ({
     message.loading({ content: "Loading Trainers", key: "trainer" });
     setOpen(true);
     try {
-      const data = await fetchEmplooyes();
-      setData(data);
+      const { employees } = await fetchEmplooyes();
+      setData(employees);
       message.success({ content: "Trainers Loaded", key: "trainer" });
     } catch (error) {
       message.error({ content: "Failed to load Trainers", key: "trainer" });
@@ -85,7 +85,7 @@ const CustomerExerciseTrainer = ({
                       src={`http://localhost:8080/${trainer.profilePicture}`}
                       width={50}
                       height={50}
-                      className="rounded-full"
+                      className="rounded-md"
                       alt="trainer"
                     />
                     <div>

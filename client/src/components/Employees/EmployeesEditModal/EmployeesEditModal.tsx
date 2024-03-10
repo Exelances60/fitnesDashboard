@@ -31,7 +31,7 @@ const EmployeesEditModal = ({
         setEmployeeData((prev) => {
           return prev.map((emp) => {
             if (emp._id === employee._id) {
-              return { ...emp, ...values };
+              return { ...emp, ...values, salary: +values.salary };
             }
             return emp;
           });

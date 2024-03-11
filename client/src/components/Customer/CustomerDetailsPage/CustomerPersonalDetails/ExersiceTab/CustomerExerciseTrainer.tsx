@@ -1,5 +1,5 @@
 "use client";
-import { Button, Drawer, Image, Popconfirm, message } from "antd";
+import { Button, Drawer, Popconfirm, message } from "antd";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { fetchEmplooyes } from "@/actions/fetchEmployees";
@@ -8,6 +8,7 @@ import { capitalizeFirstLetter } from "@/utils/utils";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import axiosClient from "@/utils/AxiosClient";
 import useMessage from "@/hooks/useMessage";
+import Image from "next/image";
 
 interface CustomerExerciseTrainerProps {
   customerId: string;
@@ -81,7 +82,7 @@ const CustomerExerciseTrainer = ({
                 return (
                   <div key={trainer._id} className="flex gap-2 items-center">
                     <Image
-                      src={`https://fitnesdashboard.onrender.com/${trainer.profilePicture}`}
+                      src={`https://fitnesdashboard.onrender.com/$${trainer.profilePicture}`}
                       width={50}
                       height={50}
                       className="rounded-md"

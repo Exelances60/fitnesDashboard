@@ -1,9 +1,8 @@
 "use client";
-import { Button, Drawer, Popconfirm, message } from "antd";
+import { Button, Drawer, Image, Popconfirm, message } from "antd";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { fetchEmplooyes } from "@/actions/fetchEmployees";
-import Image from "next/image";
 import { ProgressCircle } from "@tremor/react";
 import { capitalizeFirstLetter } from "@/utils/utils";
 import { PlusCircleOutlined } from "@ant-design/icons";
@@ -82,7 +81,7 @@ const CustomerExerciseTrainer = ({
                 return (
                   <div key={trainer._id} className="flex gap-2 items-center">
                     <Image
-                      src={`https://fitnesdashboard.onrender.com${trainer.profilePicture}`}
+                      src={`https://fitnesdashboard.onrender.com/${trainer.profilePicture}`}
                       width={50}
                       height={50}
                       className="rounded-md"

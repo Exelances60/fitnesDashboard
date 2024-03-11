@@ -15,7 +15,7 @@ export const fetchEmplooyes = async (): Promise<IEmployeeFetchResponse> => {
   const decodedToken = jwtDecode(token) as { _id: string };
   try {
     const response = await fetch(
-      `http://localhost:8080/employees/get-employees/${decodedToken._id}`,
+      `https://fitnesdashboard.onrender.com/employees/get-employees/${decodedToken._id}`,
       {
         method: "GET",
         headers: {

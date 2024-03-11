@@ -19,7 +19,7 @@ const CustomerDetailsModal = ({ customer }: CustomerEditModalProps) => {
         <div className=" w-40 h-40 rounded-md relative">
           {customer.profilePicture ? (
             <Image
-              src={`http://localhost:8080/${customer.profilePicture}`}
+              src={`https://fitnesdashboard.onrender.com/${customer.profilePicture}`}
               layout="fill"
               className="object-cover rounded-md"
               alt="profilePicture"

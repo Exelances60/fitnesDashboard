@@ -88,7 +88,7 @@ const ProductOrderModal = () => {
         <Form.Item label="Product Name" name="productName">
           <div className="flex items-center gap-2">
             <Image
-              src={`http://localhost:8080/${product.imageUrl}`}
+              src={`https://fitnesdashboard.onrender.com/${product.imageUrl}`}
               width={90}
               height={90}
               alt={product.name}

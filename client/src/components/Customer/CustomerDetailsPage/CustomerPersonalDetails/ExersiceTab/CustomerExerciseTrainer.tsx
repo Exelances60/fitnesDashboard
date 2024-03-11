@@ -82,7 +82,7 @@ const CustomerExerciseTrainer = ({
                 return (
                   <div key={trainer._id} className="flex gap-2 items-center">
                     <Image
-                      src={`https://fitnesdashboard.onrender.com/$${trainer.profilePicture}`}
+                      src={`https://fitnesdashboard.onrender.com/${trainer.profilePicture}`}
                       width={50}
                       height={50}
                       className="rounded-md"

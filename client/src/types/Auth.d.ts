@@ -1,6 +1,4 @@
-import { Global } from "@/global";
-
-export type jwtUserDecode = {
+interface jwtUserDecode {
   email: string;
   ownerId: string;
   companyName: string;
@@ -8,4 +6,4 @@ export type jwtUserDecode = {
   exp: number;
   productCategory: string[];
   _id: string;
-};
+}

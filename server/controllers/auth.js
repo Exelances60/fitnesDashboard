@@ -81,3 +81,20 @@ exports.signup = (req, res, next) => {
       next(err);
     });
 };
+
+exports.getOwnerInfo = async (req, res, next) => {
+  console.log(req.params);
+  const ownerId = req.params.ownerId;
+  try {
+    const owner = await Owner.findById(ownerId);
+    if (!owner) {
+      throwNotFoundError("Could not find owner.");
+    }
+    res.status(200).json({ message: "Owner fetched.", owner: owner });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};

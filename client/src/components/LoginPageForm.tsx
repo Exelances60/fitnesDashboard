@@ -7,7 +7,6 @@ import axiosClient from "@/utils/AxiosClient";
 import { jwtDecode } from "jwt-decode";
 import { useAppDispatch } from "@/store/store";
 import { setUser } from "@/store/slices/userSlice";
-import { jwtUserDecode } from "@/types/Auth";
 import { emailRules } from "@/utils/FormRules";
 
 const LoginPageForm = () => {

@@ -57,7 +57,11 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
           {menuItems}
           <hr className="my-5" />
           <Menu.Item key="profile" icon={<SettingOutlined />}>
-            <div className="flex items-center gap-5">Settings</div>
+            <div className="flex items-center gap-5">
+              <Link href="http://localhost:3000/dashboard/settings">
+                Settings
+              </Link>
+            </div>
           </Menu.Item>
 
           <Menu.Item

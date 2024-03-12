@@ -48,7 +48,10 @@ const OrderUpdateDrawer = ({ selectedOrder }: OrderUpdateDrawerProps) => {
   const onFinish = async (values: updateFormType) => {
     showMessage("Loading.. With Hooks", "loading", 0.3);
 
-    if (values.amount > selectedOrder?.products[0].amount) {
+    if (
+      values.amount > selectedOrder?.products[0]?.amount ||
+      !selectedOrder?.products
+    ) {
       showMessage(
         "The amount you entered is more than the amount of the product",
         "error"

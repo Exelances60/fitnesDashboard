@@ -1,10 +1,13 @@
 const express = require("express");
 const { body } = require("express-validator");
 const orderController = require("../controllers/order");
-
+const schedule = require("node-schedule");
 const isAuth = require("../middleware/isAuth");
+const { scheduleJobs } = require("../controllers/scheduleJobs");
 
 const router = express.Router();
+
+const sendInformantion = schedule.scheduleJob("0 0 * * *", scheduleJobs);
 
 router.post(
   "/create-order",

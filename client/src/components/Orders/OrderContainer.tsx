@@ -9,6 +9,7 @@ import OrderTableDetailsCol from "./OrderTableDetailsCol";
 import { statusFilter, statusRender } from "@/mock/orderStatusFilter";
 import { OrdersType } from "@/types/Order";
 import useTableFilterSearchDropDown from "@/hooks/useTableFilterSearchDropDown";
+import useTableSearchOrderOwner from "@/hooks/useOrderTableOrderOwner";
 
 const { RangePicker } = DatePicker;
 
@@ -18,6 +19,8 @@ type OrderContainerProps = {
 const OrderContainer = ({ orders }: OrderContainerProps) => {
   const { filterDropdown, filterIcon, searchById } =
     useTableFilterSearchDropDown("Search by order id");
+  const { filterDropdownOrderOwner, searchByOrderOwner } =
+    useTableSearchOrderOwner("Search by order owner");
   const [rangePickerValue, setRangePickerValue] = useState([null, null]);
   const userInfo = useSelectUserInfo();
   const showMessage = useMessage();
@@ -48,6 +51,12 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
     return order._id.toLowerCase().includes(searchById.toLowerCase());
   });
 
+  const filteredOrdersByOrderOwner = filteredOrdersById.filter((order) => {
+    return order.orderOwner
+      .toLowerCase()
+      .includes(searchByOrderOwner.toLowerCase());
+  });
+
   const handleCompleteOrder = async (orderId: string) => {
     showMessage("Loading", "loading", 0.2);
     try {
@@ -72,7 +81,7 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
         />
       </div>
       <Table
-        dataSource={filteredOrdersById}
+        dataSource={filteredOrdersByOrderOwner}
         rowKey="_id"
         pagination={{ pageSize: 10 }}
         className="overflow-x-auto"
@@ -90,7 +99,12 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
           title="Order Owner"
           dataIndex="orderOwner"
           key="orderOwner"
+          filterDropdown={filterDropdownOrderOwner}
+          filterIcon={filterIcon}
           render={(text) => <p className="text-blue-500 underline">{text}</p>}
+          onFilter={(value, record: any) =>
+            record.orderOwner.indexOf(value) === 0
+          }
         />
         <Table.Column title="Address" dataIndex="adress" key="adress" />
         <Table.Column
@@ -116,12 +130,15 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
         />
         <Table.Column
           title="Category"
-          dataIndex="category"
+          dataIndex="orderCategory"
           key="category"
           render={(text, record: any) => {
-            return record.products.map((product: any, index: number) => (
-              <p key={index}>{product.category}</p>
-            ));
+            if (record.products.length) {
+              return record.products.map((product: any) => (
+                <p key={product._id}>{product.category}</p>
+              ));
+            }
+            return <p>{text}</p>;
           }}
           filters={categoryFilter}
           onFilter={(value, record: any) => {

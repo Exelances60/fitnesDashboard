@@ -27,11 +27,6 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-/* const sendInformantion = schedule.scheduleJob("* * * * *", () => {
-  console.log("Sending information to the owner");
-  jobsController.sendInformantion();
-}); */
-
 router.post(
   "/add-product",
   isAuth,

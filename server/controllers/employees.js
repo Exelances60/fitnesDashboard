@@ -1,5 +1,6 @@
 const Employee = require("../models/Employees");
 const Customer = require("../models/Customer");
+const Owner = require("../models/owner");
 const throwValidationError = require("../utils/err/throwValidationError");
 const throwBadRequestError = require("../utils/err/throwBadRequestError");
 const throwNotFoundError = require("../utils/err/throwNotFoundError");
@@ -27,6 +28,7 @@ exports.createEmployee = async (req, res) => {
     })
     .map((file) => file.path);
 
+  const ownerId = req.body.ownerId;
   const employee = new Employee({
     ...req.body,
     profilePicture: profilePicture[0],
@@ -35,6 +37,9 @@ exports.createEmployee = async (req, res) => {
   });
   try {
     const savedEmployee = await employee.save();
+    const owner = await Owner.findById(ownerId);
+    owner.employees.push(savedEmployee);
+    await owner.save();
     res
       .status(201)
       .json({ message: "Employee created successfully", savedEmployee });
@@ -54,7 +59,6 @@ exports.getEmployees = async (req, res, next) => {
     if (!employees) {
       throwNotFoundError("Employees not found");
     }
-    /*  const totalSalaryIncrease = currentMonthEmployeesSalary(employees); */
     const totalEmployeesCountIncarese =
       currentMonthEmployeesCountIncarese(employees);
 

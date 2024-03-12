@@ -7,6 +7,7 @@ const throwValidationError = require("../utils/err/throwValidationError");
 const throwBadRequestError = require("../utils/err/throwBadRequestError");
 const throwNotFoundError = require("../utils/err/throwNotFoundError");
 const sendMailInfoForProduct = require("../utils/sendMail");
+const Order = require("../models/Order");
 
 exports.addProduct = (req, res, next) => {
   const errors = validationResult(req);
@@ -71,45 +72,49 @@ exports.getProducts = (req, res, next) => {
     });
 };
 
-exports.deleteProduct = (req, res, next) => {
-  const productId = req.params.productId;
-  let ownerId;
+exports.deleteProduct = async (req, res, next) => {
+  try {
+    const productId = req.params.productId;
+    let ownerId;
 
-  Product.findById(productId)
-    .then((product) => {
-      if (!product) {
-        throwNotFoundError("Product not found.");
-      }
-      ownerId = product.ownerId;
+    const product = await Product.findById(productId);
+    if (!product) {
+      throwNotFoundError("Product not found.");
+    }
+    ownerId = product.ownerId;
 
-      return Product.findByIdAndDelete(productId);
-    })
-    .then((result) => {
-      if (!result) {
-        throwNotFoundError("Product not found.");
-      }
+    const fetchedOrders = await Order.find({ productsId: productId });
+
+    const ordersHaveProductImage = fetchedOrders.filter(
+      (order) => order.orderImage === product.imageUrl
+    );
+
+    const result = await Product.findByIdAndDelete(productId);
+    if (!result) {
+      throwNotFoundError("Product not found.");
+    }
+
+    if (!ordersHaveProductImage.length) {
       clearImage(result.imageUrl);
-      return Owner.findById(ownerId);
-    })
-    .then((owner) => {
-      if (!owner) {
-        throwNotFoundError("Owner not found.");
-      }
-      if (!owner.product.includes(productId)) {
-        throwNotFoundError("Product not found in owner.");
-      }
-      owner.product.pull(productId);
-      return owner.save();
-    })
-    .then((result) => {
-      res.status(200).json({ message: "Deleted product.", status: 200 });
-    })
-    .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
-    });
+    }
+
+    const owner = await Owner.findById(ownerId);
+    if (!owner) {
+      throwNotFoundError("Owner not found.");
+    }
+    if (!owner.product.includes(productId)) {
+      throwNotFoundError("Product not found in owner.");
+    }
+    owner.product.pull(productId);
+    await owner.save();
+
+    res.status(200).json({ message: "Deleted product.", status: 200 });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
 };
 
 exports.updateProduct = (req, res, next) => {

@@ -34,7 +34,7 @@ const CustomerExersicesDetails = ({ customer }: { customer: CustomerType }) => {
           />
         ) : (
           <Image
-            src={`https://fitnesdashboard.onrender.com/${customer.coachPT?.profilePicture}`}
+            src={`http://localhost:8080/${customer.coachPT?.profilePicture}`}
             alt="Profile Picture"
             width={100}
             className="rounded-md"

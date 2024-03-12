@@ -85,6 +85,9 @@ exports.deleteProduct = (req, res, next) => {
       return Product.findByIdAndDelete(productId);
     })
     .then((result) => {
+      if (!result) {
+        throwNotFoundError("Product not found.");
+      }
       clearImage(result.imageUrl);
       return Owner.findById(ownerId);
     })

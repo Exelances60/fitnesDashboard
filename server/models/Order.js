@@ -44,6 +44,9 @@ const orderSchema = new Schema(
       type: Number,
       required: true,
     },
+    orderImage: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

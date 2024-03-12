@@ -42,7 +42,7 @@ const ProductEditModal = () => {
     }
     try {
       const response = await axiosClient.put(
-        `https://fitnesdashboard.onrender.com/products/update-product/${product._id}`,
+        `http://localhost:8080/products/update-product/${product._id}`,
         formData,
         {
           headers: {

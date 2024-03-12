@@ -67,6 +67,7 @@ exports.createOrder = (req, res, next) => {
         orderOwner: orderOwner,
         status: "Preparing",
         creator,
+        orderImage: result.imageUrl,
       });
       return order.save();
     })

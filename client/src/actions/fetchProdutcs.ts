@@ -12,7 +12,7 @@ export const fetchProducts = async (): Promise<productsType[]> => {
   const decodedToken = jwtDecode(token) as { _id: string };
   try {
     const response = await fetch(
-      `https://fitnesdashboard.onrender.com/products/get-products/${decodedToken._id}`,
+      `http://localhost:8080/products/get-products/${decodedToken._id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

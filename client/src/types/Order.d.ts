@@ -23,6 +23,7 @@ export type OrdersType = {
   updatedAt: string;
   creator: string;
   orderOwnerEmail: string;
+  orderImage: string;
 };
 
 export type orderDonutChartType = Global.OrderDonutChartType;

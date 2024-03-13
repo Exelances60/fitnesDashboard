@@ -12,7 +12,7 @@ const SettingPage = async () => {
 
   return (
     <div>
-      <Card className="min-h-[810px] h-full max-h-[810px]">
+      <Card className="min-h-[810px] h-full max-h-[810px] overflow-y-auto">
         <SettingContainer ownerInfo={ownerInfo.owner} />
       </Card>
     </div>

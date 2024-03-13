@@ -60,6 +60,7 @@ mongoose
   .connect(MONGODB_URI)
   .then(() => {
     app.listen(process.env.PORT || 3000);
+    console.log("Connected!");
   })
   .catch(() => {
     console.log("Connection failed!");

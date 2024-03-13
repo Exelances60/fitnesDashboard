@@ -26,4 +26,10 @@ router.post(
 
 router.get("/ownerInfo/:ownerId", isAuth, authController.getOwnerInfo);
 
+router.post(
+  "/add-owner-membershipList",
+  isAuth,
+  authController.addMembershipList
+);
+
 module.exports = router;

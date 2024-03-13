@@ -1,9 +1,20 @@
-import React, { useState } from "react";
-import * as Icon from "@ant-design/icons";
-import { Form, Select, Input, Divider, Space, Button } from "antd";
+import React, { useEffect, useState } from "react";
+import { Form, Select } from "antd";
+import { fetchOwnerInfo } from "@/actions/fetchOwnerInfo";
+import { ProgressCircle } from "@tremor/react";
 
 const CustomerMemberShipStatus = () => {
-  const [vipStatus, setVipStatus] = useState(false);
+  const [userInfo, setUserInfo] = useState<OwnerType | null>(null);
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const response = await fetchOwnerInfo();
+      setUserInfo(response.owner);
+    };
+    fetchUserInfo();
+  }, []);
+
+  if (!userInfo) return <ProgressCircle />;
+
   return (
     <>
       <Form.Item
@@ -16,49 +27,14 @@ const CustomerMemberShipStatus = () => {
           },
         ]}
       >
-        <Select
-          placeholder="Select a membership status"
-          dropdownRender={(menu) => {
-            return (
-              <div>
-                {menu}
-                <Divider style={{ margin: "8px 0" }} />
-                <Space style={{ padding: "0 8px 4px" }}>
-                  <Input
-                    placeholder="Please enter item"
-                    onKeyDown={(e) => e.stopPropagation()}
-                  />
-                  <Button type="text" icon={<Icon.PlusOutlined />}>
-                    Add item
-                  </Button>
-                </Space>
-              </div>
-            );
-          }}
-          onChange={(value) => {
-            if (value !== "vip") {
-              return setVipStatus(false);
-            }
-            return setVipStatus(true);
-          }}
-        >
-          <Select.Option value="standart">Standart</Select.Option>
-          <Select.Option value="passive">Passive</Select.Option>
-          <Select.Option value="vip">VIP</Select.Option>
+        <Select placeholder="Select a membership status">
+          {userInfo?.memberShipList?.map((memberShip, index) => (
+            <Select.Option key={index} value={memberShip}>
+              {memberShip}
+            </Select.Option>
+          ))}
         </Select>
       </Form.Item>
-
-      {vipStatus ? (
-        <Form.Item label="Coach" name="coach">
-          <Select placeholder="Select a coach">
-            {["coach1", "coach2", "coach3"].map((coachNumber) => (
-              <Select.Option key={coachNumber} value={coachNumber}>
-                {coachNumber}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-      ) : null}
     </>
   );
 };

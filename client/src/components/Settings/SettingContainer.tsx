@@ -3,13 +3,13 @@ import React from "react";
 import NOUSERIMAGE from "@/../public/customer/noUser.webp";
 import { Grid } from "@tremor/react";
 import { Button, Upload } from "antd";
+import SettingsUpdateForm from "./SettingsUpdateForm";
 
 interface SettingContainerProps {
   ownerInfo: OwnerType;
 }
 
 const SettingContainer = ({ ownerInfo }: SettingContainerProps) => {
-  console.log(ownerInfo);
   return (
     <Grid
       numItems={1}
@@ -30,14 +30,19 @@ const SettingContainer = ({ ownerInfo }: SettingContainerProps) => {
           className="rounded-full"
         />
         {!ownerInfo.ownerImage ? (
-          <Upload name="ownerImage" listType="picture">
-            <Button>Upload</Button>
-          </Upload>
+          <div className="flex gap-2">
+            <Upload name="ownerImage" listType="picture">
+              <Button>Upload</Button>
+            </Upload>
+            <Button type="primary">Save</Button>
+          </div>
         ) : null}
         <h1>🏢 {ownerInfo.companyName}</h1>
         <h2>📧 {ownerInfo.email}</h2>
       </div>
-      <div className=" bg-blue-500 flex flex-col">Right</div>
+      <div className="flex flex-col items-center justify-center">
+        <SettingsUpdateForm ownerInfo={ownerInfo} />
+      </div>
     </Grid>
   );
 };

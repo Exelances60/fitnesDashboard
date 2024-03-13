@@ -59,6 +59,11 @@ const ownerSchema = new Schema({
   ownerImage: {
     type: String,
   },
+  memberShipList: [
+    {
+      type: String,
+    },
+  ],
 });
 
 module.exports = mongoose.model("Owner", ownerSchema);

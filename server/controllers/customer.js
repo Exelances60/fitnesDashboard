@@ -137,7 +137,6 @@ exports.updateCustomer = async (req, res, next) => {
     customer.membershipPrice = membershipPrice;
     customer.membershipStatus = membershipStatus;
     customer.exercisePlan = exercisePlan || customer.exercisePlan;
-    customer.coachPT = coach || null;
     const updatedCustomer = await customer.save();
     res.status(200).json({
       message: "Customer updated successfully!",

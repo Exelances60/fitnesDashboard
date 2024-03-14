@@ -82,14 +82,19 @@ exports.assignCustomer = async (req, res, next) => {
     if (!employee) {
       throwNotFoundError("Employee not found");
     }
-    if (!employee) {
-      throwNotFoundError("Employee not found");
+    if (!customer) {
+      throwNotFoundError("Customer not found");
     }
+
+    if (!employee.customers) {
+      employee.customers = [];
+    }
+
     if (employee.customers.includes(customerId)) {
       throwValidationError("Customer already assigned to this employee");
     }
     employee.customers.push(customerId);
-    -(await employee.save());
+    await employee.save();
     customer.coachPT = employeeId;
     await customer.save();
     res.status(200).json({ message: "Customer assigned successfully" });

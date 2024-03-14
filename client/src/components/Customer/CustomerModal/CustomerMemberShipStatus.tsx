@@ -1,25 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { Form, Select } from "antd";
 import { fetchOwnerInfo } from "@/actions/fetchOwnerInfo";
-import { ProgressCircle } from "@tremor/react";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { selectUserInfo, setUserInfoRedux } from "@/store/slices/userSlice";
 
-const CustomerMemberShipStatus = () => {
+interface ICustomerMemberShipStatus {
+  editMode?: boolean;
+}
+
+const CustomerMemberShipStatus = ({ editMode }: ICustomerMemberShipStatus) => {
   const [userInfo, setUserInfo] = useState<OwnerType | null>(null);
+  const dispatch = useAppDispatch();
+  const userInfoRedux = useAppSelector(selectUserInfo);
+
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const response = await fetchOwnerInfo();
-      setUserInfo(response.owner);
+      if (userInfoRedux) {
+        return setUserInfo(userInfoRedux);
+      } else {
+        const response = await fetchOwnerInfo();
+        setUserInfo(response?.owner);
+        dispatch(setUserInfoRedux(response?.owner));
+      }
     };
     fetchUserInfo();
-  }, []);
-
-  if (!userInfo) return <ProgressCircle />;
+  }, [userInfoRedux, dispatch]);
 
   return (
     <>
       <Form.Item
         label="Membership Status"
         name="membershipStatus"
+        className={editMode ? "w-full" : ""}
         rules={[
           {
             required: true,

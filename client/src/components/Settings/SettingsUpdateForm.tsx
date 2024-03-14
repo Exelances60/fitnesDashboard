@@ -5,7 +5,14 @@ import { Divider } from "@tremor/react";
 import { motion } from "framer-motion";
 import { formDisableAnimation } from "@/utils/utils";
 import SelectCategoryDropDown from "../SelectCategoryDropDown";
-import SelectMemberShipDropDown from "../SelectMemberShipDropDown";
+import SelectDropDownAddItem from "../SelectMemberShipDropDown";
+import {
+  emailRules,
+  justRequired,
+  maxPrice,
+  minAmount,
+  phoneRules,
+} from "@/utils/FormRules";
 
 interface SettingUpdateFormProps {
   ownerInfo: OwnerType;
@@ -20,8 +27,7 @@ const SettingsUpdateForm = ({ ownerInfo }: SettingUpdateFormProps) => {
   const [memberShipList, setMemberShipList] = useState<string[]>(
     ownerInfo.memberShipList || []
   );
-
-  console.log("ownerInfo", ownerInfo);
+  const [membershipMonths, setMembershipMonths] = useState<number[]>([]);
 
   return (
     <>
@@ -50,7 +56,11 @@ const SettingsUpdateForm = ({ ownerInfo }: SettingUpdateFormProps) => {
       <Form
         layout="vertical"
         className="w-1/2 items-center justify-center"
-        initialValues={ownerInfo}
+        initialValues={{
+          ...ownerInfo,
+          productCategory: categoryList,
+          memberShipList: memberShipList,
+        }}
         form={form}
         disabled={activeUpdate}
       >
@@ -59,13 +69,17 @@ const SettingsUpdateForm = ({ ownerInfo }: SettingUpdateFormProps) => {
           variants={formDisableAnimation}
           animate={activeUpdate ? "hidden" : "visible"}
         >
-          <Form.Item name="companyName" label="Company Name">
+          <Form.Item
+            name="companyName"
+            label="Company Name"
+            rules={[...justRequired]}
+          >
             <Input type="text" />
           </Form.Item>
-          <Form.Item label="Email" name="email">
+          <Form.Item label="Email" name="email" rules={[...emailRules]}>
             <Input type="email" />
           </Form.Item>
-          <Form.Item label="Phone" name="phone">
+          <Form.Item label="Phone" name="phone" rules={[...phoneRules]}>
             <Input type="tel" />
           </Form.Item>
           <Form.Item label="Address" name="address">
@@ -74,7 +88,6 @@ const SettingsUpdateForm = ({ ownerInfo }: SettingUpdateFormProps) => {
           <Form.Item label="Product Category" name="productCategory">
             <Select
               placeholder="Select a category"
-              allowClear
               mode="multiple"
               style={{ width: "100%" }}
               dropdownRender={(menu) => (
@@ -92,17 +105,22 @@ const SettingsUpdateForm = ({ ownerInfo }: SettingUpdateFormProps) => {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item label="Memembership Type" name="memberShipList">
+          <Form.Item
+            label="Memembership Type"
+            name="memberShipList"
+            rules={[...justRequired]}
+          >
             <Select
               placeholder="Enter the membership"
               allowClear
               style={{ width: "100%" }}
               mode="multiple"
+              value={memberShipList}
               dropdownRender={(menu) => (
-                <SelectMemberShipDropDown
+                <SelectDropDownAddItem
                   menu={menu}
-                  setMemberShipList={setMemberShipList}
-                  memberShipList={memberShipList}
+                  setState={setMemberShipList}
+                  sendedState={memberShipList}
                   settingPage={true}
                 />
               )}
@@ -110,6 +128,38 @@ const SettingsUpdateForm = ({ ownerInfo }: SettingUpdateFormProps) => {
               {memberShipList.map((memberShip) => (
                 <Select.Option key={memberShip} value={memberShip}>
                   {memberShip}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="Membership Price a one month"
+            name="memberShipPrice"
+            rules={[...minAmount, ...maxPrice, ...justRequired]}
+          >
+            <Input type="number" />
+          </Form.Item>
+          <Form.Item
+            label="Membership Months,just enter the number "
+            name="membershipMonths"
+          >
+            <Select
+              placeholder="Select a membership price"
+              showSearch
+              style={{ width: "100%" }}
+              mode="multiple"
+              dropdownRender={(menu) => (
+                <SelectDropDownAddItem
+                  menu={menu}
+                  setState={setMembershipMonths}
+                  sendedState={membershipMonths}
+                  settingPage={true}
+                />
+              )}
+            >
+              {membershipMonths.map((month) => (
+                <Select.Option key={month} value={month}>
+                  {month} Months
                 </Select.Option>
               ))}
             </Select>

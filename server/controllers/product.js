@@ -55,7 +55,7 @@ exports.addProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  const ownerId = req.params.ownerId;
+  const ownerId = req.userId;
   Product.find({ ownerId: ownerId })
     .then((products) => {
       res.status(200).json({

@@ -6,9 +6,6 @@ import {
   ShoppingCartOutlined,
 } from "@ant-design/icons";
 import { motion } from "framer-motion";
-import { useState } from "react";
-import ProductEditModal from "./ProductEditModal";
-import ProductOrderModal from "./ProductOrderModal";
 import { useAppDispatch } from "@/store/store";
 import {
   setEditModalVisible,

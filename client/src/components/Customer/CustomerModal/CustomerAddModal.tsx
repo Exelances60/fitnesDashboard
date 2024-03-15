@@ -7,7 +7,6 @@ import axiosClient from "@/utils/AxiosClient";
 import CustomerMemberShipStatus from "./CustomerMemberShipStatus";
 import CustomerAddAge from "./CustomerAddAge";
 import { renderFormItem } from "@/utils/renderForTables/Customers/renderCustomerFormItem";
-import { AddCustomerFormType } from "@/types/Customer";
 import { justRequired, maxBodyWeight, maxHeight } from "@/utils/FormRules";
 
 const CustomerAddModal = () => {

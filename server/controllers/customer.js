@@ -76,7 +76,7 @@ exports.addCustomer = async (req, res, next) => {
 
 exports.getCustomer = async (req, res, next) => {
   try {
-    const ownerId = req.params.ownerId;
+    const ownerId = req.userId;
     const fetchedCustomer = await Customer.find({ ownerId: ownerId }).populate({
       path: "coachPT",
       select: "name email phone profilePicture",

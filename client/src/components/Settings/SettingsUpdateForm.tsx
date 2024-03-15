@@ -13,12 +13,17 @@ import {
   minAmount,
   phoneRules,
 } from "@/utils/FormRules";
+import axiosClient from "@/utils/AxiosClient";
 
 interface SettingUpdateFormProps {
   ownerInfo: OwnerType;
+  setOwnerInfoState: React.Dispatch<React.SetStateAction<OwnerType>>;
 }
 
-const SettingsUpdateForm = ({ ownerInfo }: SettingUpdateFormProps) => {
+const SettingsUpdateForm = ({
+  ownerInfo,
+  setOwnerInfoState,
+}: SettingUpdateFormProps) => {
   const [form] = Form.useForm();
   const [activeUpdate, setActiveUpdate] = useState(true);
   const [categoryList, setCategoryList] = useState<string[]>(
@@ -28,6 +33,29 @@ const SettingsUpdateForm = ({ ownerInfo }: SettingUpdateFormProps) => {
     ownerInfo.memberShipList || []
   );
   const [membershipMonths, setMembershipMonths] = useState<number[]>([]);
+
+  const onFinish = async (values: OwnerType) => {
+    try {
+      const newValues = {
+        ...values,
+        productCategory: [...categoryList],
+        memberShipPrice: parseFloat(values.memberShipPrice as string),
+      };
+      const response = await axiosClient.put("/auth/update-owner", newValues);
+      if (response.status === 200) {
+        message.success({
+          key: "updateSuccess",
+          content: "Settings updated successfully",
+        });
+        setOwnerInfoState({ ...values });
+      }
+    } catch (error) {
+      message.error({
+        key: "updateError",
+        content: "Error while updating the settings",
+      });
+    }
+  };
 
   return (
     <>
@@ -62,6 +90,7 @@ const SettingsUpdateForm = ({ ownerInfo }: SettingUpdateFormProps) => {
           memberShipList: memberShipList,
         }}
         form={form}
+        onFinish={onFinish}
         disabled={activeUpdate}
       >
         <motion.div
@@ -141,11 +170,13 @@ const SettingsUpdateForm = ({ ownerInfo }: SettingUpdateFormProps) => {
           </Form.Item>
           <Form.Item
             label="Membership Months,just enter the number "
-            name="membershipMonths"
+            name="memberShipMonths"
+            normalize={(value) => {
+              return value.map((month: string) => parseInt(month));
+            }}
           >
             <Select
               placeholder="Select a membership price"
-              showSearch
               style={{ width: "100%" }}
               mode="multiple"
               dropdownRender={(menu) => (
@@ -164,6 +195,10 @@ const SettingsUpdateForm = ({ ownerInfo }: SettingUpdateFormProps) => {
               ))}
             </Select>
           </Form.Item>
+
+          <Button type="primary" htmlType="submit">
+            Save Settings
+          </Button>
         </motion.div>
       </Form>
     </>

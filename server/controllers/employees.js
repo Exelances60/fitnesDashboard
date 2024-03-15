@@ -49,7 +49,7 @@ exports.createEmployee = async (req, res) => {
 };
 
 exports.getEmployees = async (req, res, next) => {
-  const ownerId = req.params.ownerId;
+  const ownerId = req.userId;
   try {
     const employees = await Employee.find({ ownerId: ownerId }).populate({
       path: "customers",

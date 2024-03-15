@@ -67,6 +67,11 @@ const ownerSchema = new Schema({
   memberShipPrice: {
     type: Number,
   },
+  memberShipMonths: [
+    {
+      type: Number,
+    },
+  ],
 });
 
 module.exports = mongoose.model("Owner", ownerSchema);

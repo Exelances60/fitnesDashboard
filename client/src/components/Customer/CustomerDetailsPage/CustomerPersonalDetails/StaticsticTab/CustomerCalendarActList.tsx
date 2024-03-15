@@ -2,7 +2,6 @@ import React from "react";
 import { DeleteOutlined } from "@ant-design/icons";
 import { Badge, Popconfirm, message } from "antd";
 import type { Dayjs } from "dayjs";
-import { CustomerActivityType } from "@/types/Customer";
 import axiosClient from "@/utils/AxiosClient";
 
 interface CustomerCalendarActListProps {

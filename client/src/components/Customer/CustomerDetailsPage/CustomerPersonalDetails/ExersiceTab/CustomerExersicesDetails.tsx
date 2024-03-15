@@ -1,6 +1,5 @@
 import React from "react";
 import { Image } from "antd";
-import { CustomerType } from "@/types/Customer";
 import DEFAULTCOACH from "@/../public/customer/defaultCoach.webp";
 import CustomerExerciseList from "./CustomerExersiceList";
 import CustomerExerciseTrainer from "./CustomerExerciseTrainer";

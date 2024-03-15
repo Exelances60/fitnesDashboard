@@ -1,5 +1,4 @@
 "use server";
-import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 
 export const fetchEmplooyes = async (): Promise<IEmployeeFetchResponse> => {
@@ -12,10 +11,9 @@ export const fetchEmplooyes = async (): Promise<IEmployeeFetchResponse> => {
       totalEmployeesCountIncarese: 0,
     };
   }
-  const decodedToken = jwtDecode(token) as { _id: string };
   try {
     const response = await fetch(
-      `http://localhost:8080/employees/get-employees/${decodedToken._id}`,
+      `http://localhost:8080/employees/get-employees`,
       {
         method: "GET",
         headers: {

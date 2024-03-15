@@ -1,5 +1,4 @@
 "use server";
-import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 
 export const fetchExersice = async (): Promise<ExerciseType[] | []> => {
@@ -8,7 +7,6 @@ export const fetchExersice = async (): Promise<ExerciseType[] | []> => {
   if (!token) {
     return [];
   }
-  const decodedToken = jwtDecode(token) as { _id: string };
   try {
     const response = await fetch(
       `http://localhost:8080/exercises/getExercises`,

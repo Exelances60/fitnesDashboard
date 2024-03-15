@@ -1,5 +1,4 @@
 "use server";
-import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 
 export const fetchOwnerInfo = async () => {
@@ -8,17 +7,13 @@ export const fetchOwnerInfo = async () => {
   if (!token) {
     return [];
   }
-  const decodedToken = jwtDecode(token) as { _id: string };
   try {
-    const response = await fetch(
-      `http://localhost:8080/auth/ownerInfo/${decodedToken._id}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch(`http://localhost:8080/auth/ownerInfo`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (!response.ok) {
       throw new Error("Failed to fetch customer");

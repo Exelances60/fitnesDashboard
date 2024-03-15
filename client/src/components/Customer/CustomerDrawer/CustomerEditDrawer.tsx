@@ -7,7 +7,6 @@ import axiosClient from "@/utils/AxiosClient";
 import useMessage from "@/hooks/useMessage";
 import { useAppDispatch } from "@/store/store";
 import { setHideDrawer } from "@/store/slices/drawerSlice";
-import { CustomerType, UpdateCustomerFormType } from "@/types/Customer";
 import CustomerMemberShipStatus from "../CustomerModal/CustomerMemberShipStatus";
 
 interface CustomerEditDrawerProps {

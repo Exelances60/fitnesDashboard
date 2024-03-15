@@ -35,7 +35,7 @@ router.post(
   employeeController.createEmployee
 );
 
-router.get("/get-employees/:ownerId", isAuth, employeeController.getEmployees);
+router.get("/get-employees", isAuth, employeeController.getEmployees);
 
 router.post("/assignCustomer", isAuth, employeeController.assignCustomer);
 

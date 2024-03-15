@@ -83,7 +83,7 @@ exports.signup = (req, res, next) => {
 };
 
 exports.getOwnerInfo = async (req, res, next) => {
-  const ownerId = req.params.ownerId;
+  const ownerId = req.userId;
   try {
     const owner = await Owner.findById(ownerId).select(
       "email companyName address phone ownerImage productCategory memberShipList"
@@ -116,5 +116,28 @@ exports.addMembershipList = async (req, res, next) => {
       err.statusCode = 500;
     }
     next(err);
+  }
+};
+
+exports.updateOwner = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    throwValidationError("Validation failed, entered data is incorrect.");
+  }
+  const ownerId = req.userId;
+  try {
+    const fetchedOwner = await Owner.findByIdAndUpdate(ownerId, req.body, {
+      new: true,
+    });
+    if (!fetchedOwner) {
+      throwNotFoundError("Could not find owner.");
+    }
+
+    res.status(200).json({ message: "Owner updated!", owner: fetchedOwner });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
 };

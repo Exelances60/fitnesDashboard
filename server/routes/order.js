@@ -22,7 +22,7 @@ router.post(
   orderController.createOrder
 );
 
-router.get("/get-orders/:ownerId", isAuth, orderController.getOrders);
+router.get("/get-orders", isAuth, orderController.getOrders);
 
 router.put("/update-order", isAuth, orderController.updateOrder);
 

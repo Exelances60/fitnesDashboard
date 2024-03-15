@@ -34,7 +34,7 @@ router.post(
   productController.addProduct
 );
 
-router.get("/get-products/:ownerId", isAuth, productController.getProducts);
+router.get("/get-products", isAuth, productController.getProducts);
 
 router.delete(
   "/delete-product/:productId",

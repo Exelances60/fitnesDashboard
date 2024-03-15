@@ -2,7 +2,6 @@ import React from "react";
 import { Button } from "antd";
 import Image from "next/image";
 import { MailOutlined, PhoneOutlined } from "@ant-design/icons";
-import { CustomerType } from "@/types/Customer";
 import { MobileOutlined } from "@ant-design/icons";
 
 const CustomerDetailsShort = ({ customer }: { customer: CustomerType }) => {

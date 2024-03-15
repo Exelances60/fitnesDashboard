@@ -1,5 +1,6 @@
+"use client";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import NOUSERIMAGE from "@/../public/customer/noUser.webp";
 import { Grid } from "@tremor/react";
 import { Button, Upload } from "antd";
@@ -10,6 +11,7 @@ interface SettingContainerProps {
 }
 
 const SettingContainer = ({ ownerInfo }: SettingContainerProps) => {
+  const [ownerInfoState, setOwnerInfoState] = useState<OwnerType>(ownerInfo);
   return (
     <Grid
       numItems={1}
@@ -41,7 +43,10 @@ const SettingContainer = ({ ownerInfo }: SettingContainerProps) => {
         <h2>📧 {ownerInfo.email}</h2>
       </div>
       <div className="flex flex-col items-center justify-center">
-        <SettingsUpdateForm ownerInfo={ownerInfo} />
+        <SettingsUpdateForm
+          ownerInfo={ownerInfoState}
+          setOwnerInfoState={setOwnerInfoState}
+        />
       </div>
     </Grid>
   );

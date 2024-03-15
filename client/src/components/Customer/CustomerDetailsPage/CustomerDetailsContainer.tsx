@@ -2,7 +2,6 @@ import { Card, Grid } from "@tremor/react";
 import { Tabs, TabsProps } from "antd";
 import React from "react";
 import CustomerPersonalDetails from "./CustomerPersonalDetails/PersonalInfoTab/CustomerPersonalDetails";
-import { CustomerType } from "@/types/Customer";
 import CustomerDetailsShort from "./CustomerPersonalDetails/PersonalInfoTab/CustomerDetailsShort";
 import CustomerExersicesDetails from "./CustomerPersonalDetails/ExersiceTab/CustomerExersicesDetails";
 import {

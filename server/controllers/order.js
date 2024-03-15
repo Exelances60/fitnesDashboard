@@ -107,7 +107,7 @@ exports.createOrder = (req, res, next) => {
 
 exports.getOrders = async (req, res, next) => {
   try {
-    const ownerId = req.params.ownerId;
+    const ownerId = req.userId;
     if (!ownerId) {
       throwNotFoundError("Owner not found.");
     }
@@ -140,8 +140,6 @@ exports.getOrders = async (req, res, next) => {
         amountOrder: order.amount,
         orderId: order._id,
       };
-
-      return [];
     });
 
     const increasePercentageForSales =

@@ -37,7 +37,7 @@ router.post(
   customerController.addCustomer
 );
 
-router.get("/get-customer/:ownerId", isAuth, customerController.getCustomer);
+router.get("/get-customer", isAuth, customerController.getCustomer);
 
 router.put(
   "/update-customer",

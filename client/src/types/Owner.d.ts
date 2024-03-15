@@ -11,5 +11,7 @@ interface OwnerType {
   orders: string[];
   productCategory: string[];
   ownerImage?: string;
-  memberShipList: string[];
+  memberShipList?: string[];
+  memberShipPrice: number | string;
+  memberShipMonths: number[];
 }

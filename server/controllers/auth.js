@@ -86,7 +86,7 @@ exports.getOwnerInfo = async (req, res, next) => {
   const ownerId = req.userId;
   try {
     const owner = await Owner.findById(ownerId).select(
-      "email companyName address phone ownerImage productCategory memberShipList"
+      "email companyName address phone ownerImage productCategory memberShipList memberShipPrice memberShipMonths"
     );
     if (!owner) {
       throwNotFoundError("Could not find owner.");

@@ -119,6 +119,7 @@ const ProductModal = () => {
                   categoryList={categoryList}
                   setCategoryList={setCategoryList}
                   key={categoryList.length}
+                  editable={false}
                 />
               )}
             >

@@ -124,6 +124,7 @@ const SettingsUpdateForm = ({
                   menu={menu}
                   setCategoryList={setCategoryList}
                   categoryList={categoryList}
+                  editable={true}
                 />
               )}
             >

@@ -40,6 +40,7 @@ const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
           height={90}
           alt={product.name}
           priority={true}
+          quality={100}
           className="rounded-md"
         />
       </TableCell>

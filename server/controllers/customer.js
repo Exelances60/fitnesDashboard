@@ -62,7 +62,7 @@ exports.addCustomer = async (req, res, next) => {
       membershipType: membershipMonths,
       membershipStatus: membershipStatus,
       gender: gender,
-      exercisePlan: null,
+      exercisePlan: [],
       ownerId,
       profilePicture: downloadURL,
       address,

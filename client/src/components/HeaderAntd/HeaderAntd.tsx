@@ -43,7 +43,6 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
         theme="light"
         collapsedWidth="0"
         className="shadow-lg z-50"
-        onCollapse={(collapsed: any, type: any) => {}}
       >
         <div className="p-5 box-border flex flex-col items-center">
           <div className="flex items-center justify-center h-20 relative w-20  bg-white">

@@ -13,7 +13,7 @@ import useTableSearchOrderOwner from "@/hooks/useOrderTableOrderOwner";
 const { RangePicker } = DatePicker;
 
 type OrderContainerProps = {
-  orders: OrdersType[];
+  orders: OrdersType[] | [];
 };
 const OrderContainer = ({ orders }: OrderContainerProps) => {
   const { filterDropdown, filterIcon, searchById } =

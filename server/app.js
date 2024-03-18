@@ -53,6 +53,7 @@ app.use((error, req, res, next) => {
   const status = error.statusCode || 500; // eğer status kodu yoksa 500 döndürür
   const message = error.message;
   const data = error.data;
+
   res.status(status).json({ message: message, data: data });
 });
 

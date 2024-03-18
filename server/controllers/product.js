@@ -8,50 +8,58 @@ const throwBadRequestError = require("../utils/err/throwBadRequestError");
 const throwNotFoundError = require("../utils/err/throwNotFoundError");
 const sendMailInfoForProduct = require("../utils/sendMail");
 const Order = require("../models/Order");
+const {
+  uploadImageToStorage,
+  deleteImageFromStorage,
+} = require("../utils/firebase/firebase.utils");
 
-exports.addProduct = (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    throwValidationError("Validation failed, entered data is incorrect.");
-  }
-  const { productName, price, description, amount, ownerId, category } =
-    req.body;
-  if (!req.file) {
-    throwBadRequestError("No image provided.");
-  }
-  const imageUrl = req.file.path.replace(/\\/g, "/");
+exports.addProduct = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      throwValidationError("Validation failed, entered data is incorrect.");
+    }
 
-  const product = new Product({
-    name: productName,
-    price: +price,
-    description: description,
-    imageUrl: imageUrl,
-    amount: +amount,
-    ownerId: ownerId,
-    category: category,
-  });
-  product
-    .save()
-    .then((result) => {
-      return Owner.findById(ownerId);
-    })
-    .then((owner) => {
-      owner.product.push(product);
-      return owner.save();
-    })
-    .then((result) => {
-      res.status(201).json({
-        message: "Product created successfully!",
-        product: product,
-        status: 201,
-      });
-    })
-    .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
+    const { productName, price, description, amount, ownerId, category } =
+      req.body;
+    if (!req.file) {
+      throwBadRequestError("No image provided.");
+    }
+
+    const imageUrl = req.file.originalname + "-" + Date.now();
+
+    const downloadURL = await uploadImageToStorage(
+      req.file,
+      "products/" + imageUrl
+    );
+
+    const product = new Product({
+      name: productName,
+      price: +price,
+      description: description,
+      imageUrl: downloadURL,
+      amount: +amount,
+      ownerId: ownerId,
+      category: category,
     });
+
+    const result = await product.save();
+
+    const owner = await Owner.findById(ownerId);
+    owner.product.push(product);
+    await owner.save();
+
+    res.status(201).json({
+      message: "Product created successfully!",
+      product: product,
+      status: 201,
+    });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
 };
 
 exports.getProducts = (req, res, next) => {
@@ -117,45 +125,53 @@ exports.deleteProduct = async (req, res, next) => {
   }
 };
 
-exports.updateProduct = (req, res, next) => {
-  const productId = req.params.productId;
-  const { name, price, description, amount } = req.body;
-  const imageUrl = req.file ? req.file.path.replace(/\\/g, "/") : null;
+exports.updateProduct = async (req, res, next) => {
+  try {
+    const productId = req.params.productId;
+    const { name, price, description, amount } = req.body;
+    const imageUrl = req.file ? req.file.originalname + "-" + Date.now() : null;
+    let downloadURL;
 
-  if (!name || !price || !description || !amount) {
-    throwValidationError("All fields must be filled.");
+    if (req.file && imageUrl) {
+      downloadURL = await uploadImageToStorage(
+        req.file,
+        "products/" + imageUrl
+      );
+    }
+
+    if (!name || !price || !description || !amount) {
+      throwValidationError("All fields must be filled.");
+    }
+
+    if (Number.isNaN(+price) || Number.isNaN(+amount)) {
+      throwValidationError("Price and amount must be a number.");
+    }
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      throwNotFoundError("Product not found.");
+    }
+
+    if (imageUrl !== product.imageUrl && imageUrl && product.imageUrl) {
+      deleteImageFromStorage(product.imageUrl);
+    }
+
+    product.imageUrl = imageUrl ? downloadURL : product.imageUrl;
+    product.name = name;
+    product.price = +price;
+    product.description = description;
+    product.amount = +amount;
+    product.category = product.category;
+
+    const result = await product.save();
+
+    res.status(200).json({ message: "Product updated!", status: 200 });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   }
-
-  if (Number.isNaN(+price) || Number.isNaN(+amount)) {
-    throwValidationError("Price and amount must be a number.");
-  }
-
-  Product.findById(productId)
-    .then((product) => {
-      if (!product) {
-        throwNotFoundError("Product not found.");
-      }
-
-      if (imageUrl !== product.imageUrl && imageUrl) {
-        clearImage(product.imageUrl);
-      }
-      product.imageUrl = imageUrl ? imageUrl : product.imageUrl;
-      product.name = name;
-      product.price = +price;
-      product.description = description;
-      product.amount = +amount;
-      product.category = product.category;
-      return product.save();
-    })
-    .then((result) => {
-      res.status(200).json({ message: "Product updated!", status: 200 });
-    })
-    .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
-    });
 };
 
 exports.addProductCategory = (req, res, next) => {

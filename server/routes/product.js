@@ -5,15 +5,6 @@ const isAuth = require("../middleware/isAuth");
 const router = express.Router();
 const multer = require("multer");
 
-const fileStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "images");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
-
 const fileFilter = (req, file, cb) => {
   if (
     file.mimetype === "image/png" ||
@@ -30,7 +21,9 @@ const fileFilter = (req, file, cb) => {
 router.post(
   "/add-product",
   isAuth,
-  multer({ storage: fileStorage, fileFilter: fileFilter }).single("image"),
+  multer({ storage: multer.memoryStorage(), fileFilter: fileFilter }).single(
+    "image"
+  ),
   productController.addProduct
 );
 
@@ -45,7 +38,9 @@ router.delete(
 router.put(
   "/update-product/:productId",
   isAuth,
-  multer({ storage: fileStorage, fileFilter: fileFilter }).single("image"),
+  multer({ storage: multer.memoryStorage(), fileFilter: fileFilter }).single(
+    "image"
+  ),
   productController.updateProduct
 );
 

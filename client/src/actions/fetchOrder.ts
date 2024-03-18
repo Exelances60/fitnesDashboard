@@ -28,7 +28,6 @@ const fetchOrder = async (): Promise<getOrdersType> => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error(error);
     return {
       orders: [],
       chartsData: [],

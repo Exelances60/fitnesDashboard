@@ -17,7 +17,6 @@ const ProductEditModal = () => {
   const editModalVisible = useAppSelector(selectEditModalVisible);
   const dispatch = useAppDispatch();
   const [file, setFile] = useState<any>();
-
   useEffect(() => {
     form.setFieldsValue({
       name: product.name,
@@ -32,6 +31,7 @@ const ProductEditModal = () => {
   };
 
   const handleFinish = async (values: any) => {
+    message.loading({ content: "Loading...", key: "loading" });
     const formData = new FormData();
     formData.append("name", values.name);
     formData.append("description", values.description);
@@ -51,12 +51,12 @@ const ProductEditModal = () => {
         }
       );
       if (response.status === 200) {
-        message.success("Product updated successfully");
+        message.success({ content: "Product Updated", key: "loading" });
         closeModal();
         router.refresh();
       }
-    } catch (error) {
-      message.error("An error occurred");
+    } catch (error: any) {
+      message.error({ content: error.response.data.message, key: "loading" });
     }
   };
 

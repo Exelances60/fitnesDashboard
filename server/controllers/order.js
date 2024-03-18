@@ -113,14 +113,20 @@ exports.getOrders = async (req, res, next) => {
     }
 
     const orders = await Order.find({ creator: ownerId });
-    if (!orders || !orders.length) {
-      throwNotFoundError("Orders not found.");
+    if (!orders) {
+      return res.status(400).json({
+        message: "Orders not found.",
+        status: 400,
+      });
     }
 
     const productIds = orders.flatMap((order) => order.productsId);
     const products = await Product.find({ _id: { $in: productIds } });
-    if (!products || !products.length) {
-      throwNotFoundError("Products not found.");
+    if (!products) {
+      return res.status(400).json({
+        message: "Products not found.",
+        status: 400,
+      });
     }
 
     const ordersWithProducts = orders.map((order) => {

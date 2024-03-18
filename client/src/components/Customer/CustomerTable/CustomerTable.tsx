@@ -75,7 +75,7 @@ const CustomerTable = ({ customers }: CustomerTableProps) => {
         render={(text) => {
           return (
             <Image
-              src={`http://localhost:8080/${text}`}
+              src={`${text}`}
               width={60}
               height={60}
               className="object-cover rounded-md"
@@ -137,7 +137,7 @@ const CustomerTable = ({ customers }: CustomerTableProps) => {
             return (
               <div className="flex gap-2" key={data._id}>
                 <Image
-                  src={`http://localhost:8080/${data.profilePicture}`}
+                  src={`${data.profilePicture}`}
                   width={40}
                   height={40}
                   className="object-cover rounded-md"

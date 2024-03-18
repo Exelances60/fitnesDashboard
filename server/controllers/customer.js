@@ -7,6 +7,10 @@ const Exersice = require("../models/Exercise");
 const CalenderAcv = require("../models/CalenderAcv");
 const Employee = require("../models/Employees");
 const clearImage = require("../utils/clearImage");
+const {
+  uploadImageToStorage,
+  deleteImageFromStorage,
+} = require("../utils/firebase/firebase.utils");
 
 exports.addCustomer = async (req, res, next) => {
   const errors = validationResult(req);
@@ -36,7 +40,12 @@ exports.addCustomer = async (req, res, next) => {
     if (!fetchedOwner) {
       throwBadRequestError("Owner not found.");
     }
-    const profilePicture = req.file.path.replace(/\\/g, "/");
+    const profilePicture = req.file.originalname + "-" + Date.now();
+    const downloadURL = await uploadImageToStorage(
+      req.file,
+      "customers/" + profilePicture
+    );
+
     const customer = new Customer({
       name,
       phone,
@@ -55,7 +64,7 @@ exports.addCustomer = async (req, res, next) => {
       gender: gender,
       exercisePlan: null,
       ownerId,
-      profilePicture: profilePicture,
+      profilePicture: downloadURL,
       address,
       bloodGroup,
       parentPhone: parentPhone ? parentPhone : null,
@@ -163,7 +172,7 @@ exports.deleteCustomer = async (req, res, next) => {
     }
     fetchedOwner.customer.pull(customerId);
     await fetchedOwner.save();
-    clearImage(customer.profilePicture);
+    deleteImageFromStorage(customer.profilePicture);
     await customer.deleteOne();
     res.status(200).json({
       message: "Customer deleted successfully!",

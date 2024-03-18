@@ -6,7 +6,7 @@ export const renderNameForEmployees = (text: string, record: IEmployee) => {
   return (
     <div className="flex gap-2 items-center">
       <Image
-        src={`http://localhost:8080/${record.profilePicture}`}
+        src={`${record.profilePicture}`}
         width={45}
         height={45}
         className="object-cover rounded-md"

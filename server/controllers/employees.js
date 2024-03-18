@@ -9,30 +9,59 @@ const {
   currentMonthEmployeesSalary,
   currentMonthEmployeesCountIncarese,
 } = require("../services/businessLogic/calculateEmployessIncares");
+const {
+  uploadImageToStorage,
+  deleteImageFromStorage,
+} = require("../utils/firebase/firebase.utils");
 
 exports.createEmployee = async (req, res) => {
-  const profilePicture = req.files
-    .filter((file) => {
-      if (file.fieldname === "profilePicture") {
-        file.path.replace(/\\/g, "/");
-        return file.path;
-      }
-    })
-    .map((file) => file.path);
+  const profilePicture =
+    req.files
+      .filter((file) => {
+        if (file.fieldname === "profilePicture") {
+          return file.originalname;
+        }
+      })
+      .map((file) => file.originalname) +
+    "-" +
+    Date.now();
 
   const documents = req.files
     .filter((file) => {
       if (file.fieldname === "documents") {
-        return file.path.replace(/\\/g, "/");
+        return file.originalname;
       }
     })
-    .map((file) => file.path);
+    .map((file) => file.originalname);
 
+  let dowlandsDocuments = [];
+
+  const downloadURLProfilePicture = await uploadImageToStorage(
+    req.files[0],
+    "employees/" + profilePicture
+  );
+
+  if (req.files.length > 1) {
+    dowlandsDocuments = await Promise.all(
+      req.files
+        .filter((file) => {
+          if (file.fieldname === "documents") {
+            return file.originalname;
+          }
+        })
+        .map(async (file) => {
+          return await uploadImageToStorage(
+            file,
+            "empDocument/" + documents + file.originalname + "-" + Date.now()
+          );
+        })
+    );
+  }
   const ownerId = req.body.ownerId;
   const employee = new Employee({
     ...req.body,
-    profilePicture: profilePicture[0],
-    documents: documents,
+    profilePicture: downloadURLProfilePicture,
+    documents: dowlandsDocuments,
     customers: [],
   });
   try {
@@ -148,9 +177,11 @@ exports.deleteEmployee = async (req, res, next) => {
         await customer.save();
       });
     }
-    clearImage(employee.profilePicture);
+    if (employee.profilePicture) {
+      deleteImageFromStorage(employee.profilePicture);
+    }
     employee.documents.forEach((document) => {
-      clearImage(document);
+      deleteImageFromStorage(document);
     });
     await Employee.findByIdAndDelete(employeeId);
     res.status(200).json({ message: "Employee deleted successfully" });

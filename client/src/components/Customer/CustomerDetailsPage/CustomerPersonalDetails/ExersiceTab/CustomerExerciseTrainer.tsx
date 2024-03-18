@@ -78,11 +78,15 @@ const CustomerExerciseTrainer = ({
         >
           {data.length > 0 ? (
             data.map((trainer) => {
-              if (trainer.position === "Tranier") {
+              if (
+                trainer.position === "Tranier" ||
+                trainer.position === "Trainer" ||
+                trainer.position === "PT"
+              ) {
                 return (
                   <div key={trainer._id} className="flex gap-2 items-center">
                     <Image
-                      src={`http://localhost:8080/${trainer.profilePicture}`}
+                      src={`${trainer.profilePicture}`}
                       width={50}
                       height={50}
                       className="rounded-md"

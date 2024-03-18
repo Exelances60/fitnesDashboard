@@ -6,15 +6,6 @@ const customerController = require("../controllers/customer");
 
 const multer = require("multer");
 
-const customerStorange = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "images/customer");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
-
 const fileFilter = (req, file, cb) => {
   if (
     file.mimetype === "image/png" ||
@@ -31,7 +22,7 @@ const fileFilter = (req, file, cb) => {
 router.post(
   "/add-customer",
   isAuth,
-  multer({ storage: customerStorange, fileFilter: fileFilter }).single(
+  multer({ storage: multer.memoryStorage(), fileFilter: fileFilter }).single(
     "profilePicture"
   ),
   customerController.addCustomer

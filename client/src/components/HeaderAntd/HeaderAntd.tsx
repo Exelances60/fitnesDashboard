@@ -59,7 +59,6 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold">{userInfo?.companyName}</div>
-            <div className="text-sm">{userInfo?.email}</div>
           </div>
         </div>
         <Menu theme="light" mode="inline" defaultSelectedKeys={[menuKeys]}>

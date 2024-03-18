@@ -1,5 +1,5 @@
 import { TableRow, TableCell } from "@tremor/react";
-import { Popconfirm, Button, Image } from "antd";
+import { Popconfirm, Button } from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -12,6 +12,7 @@ import {
   setOrderModalVisible,
   setProduct,
 } from "@/store/slices/productPageSlice";
+import Image from "next/image";
 
 type productsRowType = {
   product: productsType;
@@ -38,6 +39,7 @@ const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
           width={90}
           height={90}
           alt={product.name}
+          priority={true}
           className="rounded-md"
         />
       </TableCell>

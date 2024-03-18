@@ -11,7 +11,7 @@ import { setHideDrawer } from "@/store/slices/drawerSlice";
 import { justRequired, minAmount } from "@/utils/FormRules";
 
 type OrderUpdateDrawerProps = {
-  selectedOrder: OrdersType | null;
+  selectedOrder: OrdersType;
 };
 
 type updateFormType = {
@@ -48,7 +48,7 @@ const OrderUpdateDrawer = ({ selectedOrder }: OrderUpdateDrawerProps) => {
     showMessage("Loading.. With Hooks", "loading", 0.3);
 
     if (
-      values.amount > selectedOrder?.products[0]?.amount ||
+      ((values.amount > selectedOrder?.products[0]?.amount) as any) ||
       !selectedOrder?.products
     ) {
       showMessage(

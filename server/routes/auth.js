@@ -5,15 +5,6 @@ const isAuth = require("../middleware/isAuth");
 const multer = require("multer");
 const router = express.Router();
 
-const ownerStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "images/owner");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
-
 const fileFilter = (req, file, cb) => {
   if (
     file.mimetype === "image/png" ||
@@ -82,7 +73,7 @@ router.put(
 router.put(
   "/uploadOwnerImage",
   isAuth,
-  multer({ storage: ownerStorage, fileFilter: fileFilter }).single(
+  multer({ storage: multer.memoryStorage(), fileFilter: fileFilter }).single(
     "ownerImage"
   ),
   authController.uploadOwnerImage

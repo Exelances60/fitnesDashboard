@@ -6,7 +6,10 @@ const jwt = require("jsonwebtoken");
 const throwNotFoundError = require("../utils/err/throwNotFoundError");
 const throwValidationError = require("../utils/err/throwValidationError");
 const throwBadRequestError = require("../utils/err/throwBadRequestError");
-const clearImage = require("../utils/clearImage");
+const {
+  deleteImageFromStorage,
+  uploadImageToStorage,
+} = require("../utils/firebase/firebase.utils");
 
 exports.login = (req, res, next) => {
   const errors = validationResult(req);
@@ -147,17 +150,22 @@ exports.updateOwner = async (req, res, next) => {
 exports.uploadOwnerImage = async (req, res, next) => {
   try {
     const ownerId = req.userId;
-    const ownerImage = req.file.path.replace(/\\/g, "/");
+    const ownerImage = req.file.originalname + "-" + Date.now();
+    const dowlandURLOwnerImage = await uploadImageToStorage(
+      req.file,
+      "owner/" + ownerImage
+    );
+
     const owner = await Owner.findById(ownerId);
     if (!owner) {
       throwNotFoundError("Could not find owner.");
     }
 
     if (owner.ownerImage) {
-      clearImage(owner.ownerImage);
+      deleteImageFromStorage(owner.ownerImage);
     }
 
-    owner.ownerImage = ownerImage;
+    owner.ownerImage = dowlandURLOwnerImage;
     await owner.save();
     res
       .status(201)

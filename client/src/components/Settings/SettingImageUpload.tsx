@@ -56,11 +56,7 @@ const SettingImageUpload = ({
   return (
     <>
       <Image
-        src={
-          ownerInfo?.ownerImage
-            ? `http://localhost:8080/${ownerInfo.ownerImage}`
-            : NOUSERIMAGE
-        }
+        src={ownerInfo?.ownerImage ? `${ownerInfo.ownerImage}` : NOUSERIMAGE}
         alt={ownerInfo.companyName}
         width={100}
         height={100}

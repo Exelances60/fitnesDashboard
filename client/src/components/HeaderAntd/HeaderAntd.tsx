@@ -47,7 +47,7 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
         <div className="p-5 box-border flex flex-col items-center">
           <div className="flex items-center justify-center h-20 relative w-20  bg-white">
             <Image
-              src={`http://localhost:8080/${userInfo?.ownerImage}`}
+              src={`${userInfo?.ownerImage}`}
               alt={userInfo?.companyName}
               fill
               priority={true}

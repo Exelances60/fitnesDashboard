@@ -39,7 +39,7 @@ const ProductModal = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/products/add-product",
+        `${process.env.BACK_END_SERVICES}/products/add-product`,
         {
           method: "POST",
           headers: {

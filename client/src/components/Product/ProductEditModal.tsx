@@ -42,7 +42,7 @@ const ProductEditModal = () => {
     }
     try {
       const response = await axiosClient.put(
-        `http://localhost:8080/products/update-product/${product._id}`,
+        `${process.env.BACK_END_SERVICES}/products/update-product/${product._id}`,
         formData,
         {
           headers: {

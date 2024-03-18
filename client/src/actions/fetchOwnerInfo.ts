@@ -8,12 +8,15 @@ export const fetchOwnerInfo = async () => {
     return [];
   }
   try {
-    const response = await fetch(`http://localhost:8080/auth/ownerInfo`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `${process.env.BACK_END_SERVICES}/auth/ownerInfo`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to fetch customer");

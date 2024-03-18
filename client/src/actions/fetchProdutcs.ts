@@ -1,6 +1,5 @@
 "use server";
 import { cookies } from "next/headers";
-import { productsType } from "@/types/Product";
 
 export const fetchProducts = async (): Promise<productsType[]> => {
   const cookiesStore = cookies();

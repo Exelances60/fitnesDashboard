@@ -8,14 +8,12 @@ import CustomerMemberShipStatus from "./CustomerMemberShipStatus";
 import CustomerAddAge from "./CustomerAddAge";
 import { renderFormItem } from "@/utils/renderForTables/Customers/renderCustomerFormItem";
 import { justRequired, maxBodyWeight, maxHeight } from "@/utils/FormRules";
-import useGetUserInfo from "@/hooks/useGetUserInfo";
 
 const CustomerAddModal = () => {
   const [form] = Form.useForm();
   const [image, setImage] = useState<any>(null);
   const userInfo = useSelectUserInfo();
   const showMessage = useMessage();
-  const userGetInfo = useGetUserInfo();
 
   const onFinish = async (values: AddCustomerFormType) => {
     if (!userInfo) return;
@@ -140,8 +138,8 @@ const CustomerAddModal = () => {
       >
         <Select
           onChange={(value) => {
-            const membershipPrice = userGetInfo?.memberShipPrice
-              ? userGetInfo.memberShipPrice
+            const membershipPrice = userInfo?.memberShipPrice
+              ? userInfo.memberShipPrice
               : 0;
             form.setFieldsValue({
               membershipPrice: +value * +membershipPrice,
@@ -150,7 +148,7 @@ const CustomerAddModal = () => {
           placeholder="Select a membership price"
           showSearch
         >
-          {userGetInfo?.memberShipMonths?.map((memberShip, index) => (
+          {userInfo?.memberShipMonths?.map((memberShip, index) => (
             <Select.Option key={index} value={memberShip}>
               {memberShip} Month
             </Select.Option>

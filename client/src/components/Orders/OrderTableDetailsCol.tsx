@@ -7,7 +7,6 @@ import OrderUpdateDrawer from "./OrderModals/OrderUpdateDrawer";
 import OrderUpdateDrawerFooter from "./OrderModals/OrderUpdateDrawerFooter";
 import OrderDetailModal from "./OrderModals/OrderDetailModal";
 import { CheckOutlined } from "@ant-design/icons";
-import { OrdersType } from "@/types/Order";
 
 type OrderTableDetailsColProps = {
   record: OrdersType;

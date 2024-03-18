@@ -6,4 +6,5 @@ interface jwtUserDecode {
   exp: number;
   productCategory: string[];
   _id: string;
+  ownerImage: string;
 }

@@ -7,7 +7,6 @@ import axiosClient from "@/utils/AxiosClient";
 import useMessage from "@/hooks/useMessage";
 import OrderTableDetailsCol from "./OrderTableDetailsCol";
 import { statusFilter, statusRender } from "@/mock/orderStatusFilter";
-import { OrdersType } from "@/types/Order";
 import useTableFilterSearchDropDown from "@/hooks/useTableFilterSearchDropDown";
 import useTableSearchOrderOwner from "@/hooks/useOrderTableOrderOwner";
 

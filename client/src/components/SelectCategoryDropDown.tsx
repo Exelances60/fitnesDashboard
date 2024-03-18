@@ -1,7 +1,6 @@
 import React from "react";
 import { Button, Input, Divider, Space, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import useSelectUserInfo from "@/hooks/useSelectUserInfo";
 
 interface SelectCategoryDropDownProps {
   menu: JSX.Element | string;

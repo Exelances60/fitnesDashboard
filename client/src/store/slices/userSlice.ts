@@ -1,15 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 interface UserState {
-  user: jwtUserDecode | null;
+  user: OwnerType | null;
   menuKeys: "dashboard" | "users" | "products" | "orders" | "settings";
-  userInfo: OwnerType | null;
 }
 
 const initialState: UserState = {
   user: null,
   menuKeys: "dashboard",
-  userInfo: null,
 };
 
 export const userSlice = createSlice({
@@ -22,14 +20,10 @@ export const userSlice = createSlice({
     setMenuKeys: (state, action) => {
       state.menuKeys = action.payload;
     },
-    setUserInfoRedux: (state, action) => {
-      state.userInfo = action.payload;
-    },
   },
 });
 
-export const { setUser, setMenuKeys, setUserInfoRedux } = userSlice.actions;
+export const { setUser, setMenuKeys } = userSlice.actions;
 export const selectUser = (state: RootState) => state.user.user;
 export const selectMenuKeys = (state: RootState) => state.user.menuKeys;
-export const selectUserInfo = (state: RootState) => state.user.userInfo;
 export const userReducer = userSlice.reducer;

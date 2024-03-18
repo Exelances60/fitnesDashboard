@@ -5,13 +5,14 @@ import { Menu } from "antd";
 import { useAppSelector } from "@/store/store";
 import { selectMenuKeys, selectUser } from "@/store/slices/userSlice";
 import { LogoutOutlined, SettingOutlined } from "@ant-design/icons";
-import useSetUserFromToken from "@/hooks/useSetUserFromToken";
 import { navMenu } from "@/mock/navMenu";
 import useSetMenuKeys from "@/hooks/useSetMenuKeys";
 import Loading from "@/app/loading";
 import Link from "next/link";
 import GlobalModal from "../GlobalModal/GlobalModal";
 import GlobalDrawer from "../GlobalDrawer/GlobalDrawer";
+import Image from "next/image";
+import useGetUserInfo from "@/hooks/useGetUserInfo";
 
 const { Content, Header } = Layout;
 
@@ -19,7 +20,7 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
   const { handleChangeMenuKeys } = useSetMenuKeys();
   const menuKeys = useAppSelector(selectMenuKeys);
   const userInfo = useAppSelector(selectUser);
-  useSetUserFromToken();
+  useGetUserInfo();
 
   const menuItems = useMemo(() => {
     return navMenu.map((item) => (
@@ -44,9 +45,17 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
         className="shadow-lg z-50"
         onCollapse={(collapsed: any, type: any) => {}}
       >
-        <div className="p-5 box-border">
-          <div className="flex items-center justify-center h-20 bg-white">
-            <div className="text-2xl font-bold">Logo</div>
+        <div className="p-5 box-border flex flex-col items-center">
+          <div className="flex items-center justify-center h-20 relative w-20  bg-white">
+            <Image
+              src={`http://localhost:8080/${userInfo?.ownerImage}`}
+              alt={userInfo?.companyName}
+              fill
+              priority={true}
+              style={{ objectFit: "cover" }}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="rounded-full"
+            />
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold">{userInfo?.companyName}</div>

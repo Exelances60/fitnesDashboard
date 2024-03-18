@@ -2,8 +2,30 @@ const express = require("express");
 const { body } = require("express-validator");
 const authController = require("../controllers/auth");
 const isAuth = require("../middleware/isAuth");
-
+const multer = require("multer");
 const router = express.Router();
+
+const ownerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images/owner");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/jpeg" ||
+    file.mimetype === "image/webp"
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
 
 router.post(
   "/login",
@@ -42,12 +64,10 @@ router.put(
       .normalizeEmail(),
     body("companyName")
       .trim()
-      .not()
       .isEmpty()
       .withMessage("Please enter a valid company name."),
     body("address")
       .trim()
-      .not()
       .isEmpty()
       .withMessage("Please enter a valid address."),
     body("phone")
@@ -57,6 +77,15 @@ router.put(
     body("memberShipPrice").isInt().withMessage("Please enter a valid price."),
   ],
   authController.updateOwner
+);
+
+router.put(
+  "/uploadOwnerImage",
+  isAuth,
+  multer({ storage: ownerStorage, fileFilter: fileFilter }).single(
+    "ownerImage"
+  ),
+  authController.uploadOwnerImage
 );
 
 module.exports = router;

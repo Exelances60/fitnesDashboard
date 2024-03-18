@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import axiosClient from "@/utils/AxiosClient";
-import { productsType } from "@/types/Product";
 
 const useFetchProducts = (userId: string | undefined) => {
   const [products, setProducts] = useState<productsType[]>([]);

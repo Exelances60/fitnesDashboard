@@ -1,3 +1,1 @@
-import { Global } from "@/global";
-
-export type productsType = Global.ProductsType;
+type productsType = Global.ProductsType;

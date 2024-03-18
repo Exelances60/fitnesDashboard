@@ -1,6 +1,4 @@
-import { Global } from "../global";
-
-export type AddOrderFormType = {
+type AddOrderFormType = {
   product: string;
   quantity: number;
   price: number;
@@ -10,7 +8,7 @@ export type AddOrderFormType = {
   status: string;
 };
 
-export type OrdersType = {
+type OrdersType = {
   _id: string;
   amount: number;
   products: productsType[];
@@ -27,9 +25,9 @@ export type OrdersType = {
   orderCategory: string;
 };
 
-export type orderDonutChartType = Global.OrderDonutChartType;
+type orderDonutChartType = Global.OrderDonutChartType;
 
-export type CardDataType = {
+type CardDataType = {
   totalOrders: number;
   totalSalesPrice: number;
   increasePercentageForSales: number;
@@ -38,7 +36,7 @@ export type CardDataType = {
   increasePercentageForCompletedSales: number;
 };
 
-export type getOrdersType = {
+type getOrdersType = {
   orders: Global.ordersType[];
   chartsData: orderDonutChartType[];
   cardData: CardDataType;

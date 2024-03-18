@@ -1,5 +1,4 @@
 "use server";
-import { getOrdersType } from "@/types/Order";
 import { cookies } from "next/headers";
 
 const fetchOrder = async (): Promise<getOrdersType> => {

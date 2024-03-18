@@ -1,13 +1,13 @@
 import React from "react";
 import { Form, Select } from "antd";
-import useGetUserInfo from "@/hooks/useGetUserInfo";
+import useSelectUserInfo from "@/hooks/useSelectUserInfo";
 
 interface ICustomerMemberShipStatus {
   editMode?: boolean;
 }
 
 const CustomerMemberShipStatus = ({ editMode }: ICustomerMemberShipStatus) => {
-  const userInfo = useGetUserInfo();
+  const userInfo = useSelectUserInfo();
   return (
     <>
       <Form.Item

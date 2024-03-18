@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const throwNotFoundError = require("../utils/err/throwNotFoundError");
 const throwValidationError = require("../utils/err/throwValidationError");
 const throwBadRequestError = require("../utils/err/throwBadRequestError");
+const clearImage = require("../utils/clearImage");
 
 exports.login = (req, res, next) => {
   const errors = validationResult(req);
@@ -33,6 +34,7 @@ exports.login = (req, res, next) => {
           ownerId: loadedOwner._id.toString(),
           productCategory: loadedOwner.productCategory,
           _id: loadedOwner._id.toString(),
+          ownerImage: loadedOwner.ownerImage,
         },
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
@@ -134,6 +136,32 @@ exports.updateOwner = async (req, res, next) => {
     }
 
     res.status(200).json({ message: "Owner updated!", owner: fetchedOwner });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};
+
+exports.uploadOwnerImage = async (req, res, next) => {
+  try {
+    const ownerId = req.userId;
+    const ownerImage = req.file.path.replace(/\\/g, "/");
+    const owner = await Owner.findById(ownerId);
+    if (!owner) {
+      throwNotFoundError("Could not find owner.");
+    }
+
+    if (owner.ownerImage) {
+      clearImage(owner.ownerImage);
+    }
+
+    owner.ownerImage = ownerImage;
+    await owner.save();
+    res
+      .status(201)
+      .json({ message: "Owner Image uploaded.", ownerImage: owner.ownerImage });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;

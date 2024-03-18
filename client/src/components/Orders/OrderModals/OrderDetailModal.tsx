@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import { OrdersType } from "@/types/Order";
 
 type OrderDetailModalProps = {
   selectedOrder: OrdersType;

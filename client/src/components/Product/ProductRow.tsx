@@ -12,7 +12,6 @@ import {
   setOrderModalVisible,
   setProduct,
 } from "@/store/slices/productPageSlice";
-import { productsType } from "@/types/Product";
 
 type productsRowType = {
   product: productsType;

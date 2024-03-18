@@ -8,7 +8,6 @@ import axiosClient from "@/utils/AxiosClient";
 import useMessage from "@/hooks/useMessage";
 import { useAppDispatch } from "@/store/store";
 import { setHideDrawer } from "@/store/slices/drawerSlice";
-import { OrdersType } from "@/types/Order";
 import { justRequired, minAmount } from "@/utils/FormRules";
 
 type OrderUpdateDrawerProps = {

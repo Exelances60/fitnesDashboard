@@ -9,7 +9,7 @@ export const fetchExersice = async (): Promise<ExerciseType[] | []> => {
   }
   try {
     const response = await fetch(
-      `http://localhost:8080/exercises/getExercises`,
+      `https://fitnesdashboard.onrender.com/exercises/getExercises`,
       {
         method: "GET",
         headers: {

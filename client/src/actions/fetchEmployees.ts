@@ -13,7 +13,7 @@ export const fetchEmplooyes = async (): Promise<IEmployeeFetchResponse> => {
   }
   try {
     const response = await fetch(
-      `http://localhost:8080/employees/get-employees`,
+      `https://fitnesdashboard.onrender.com/employees/get-employees`,
       {
         method: "GET",
         headers: {

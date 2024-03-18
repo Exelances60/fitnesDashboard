@@ -9,7 +9,7 @@ export const fetchProducts = async (): Promise<productsType[]> => {
   }
   try {
     const response = await fetch(
-      `http://localhost:8080/products/get-products`,
+      `https://fitnesdashboard.onrender.com/products/get-products`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

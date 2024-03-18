@@ -44,7 +44,7 @@ const OrderDetailModal = ({ selectedOrder }: OrderDetailModalProps) => {
             ))
           ) : (
             <Image
-              src={`http://localhost:8080/${selectedOrder.orderImage}`}
+              src={`https://fitnesdashboard.onrender.com/${selectedOrder.orderImage}`}
               alt={selectedOrder?.orderOwner}
               width={150}
               height={150}

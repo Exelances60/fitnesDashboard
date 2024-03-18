@@ -9,7 +9,7 @@ export const fetchCustomer = async (): Promise<CustomerType[] | []> => {
   }
   try {
     const response = await fetch(
-      `http://localhost:8080/customers/get-customer`,
+      `https://fitnesdashboard.onrender.com/customers/get-customer`,
       {
         method: "GET",
         headers: {

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Form, Input, Divider, InputNumber, Select } from "antd";
+import React from "react";
+import { Form, Input, Divider, InputNumber } from "antd";
 import { MailOutlined } from "@ant-design/icons";
 import CustomerEditExersiceForm from "./CustomerEditExersiceForm";
 import useSelectUserInfo from "@/hooks/useSelectUserInfo";
@@ -7,7 +7,7 @@ import axiosClient from "@/utils/AxiosClient";
 import useMessage from "@/hooks/useMessage";
 import { useAppDispatch } from "@/store/store";
 import { setHideDrawer } from "@/store/slices/drawerSlice";
-import { CustomerType, UpdateCustomerFormType } from "@/types/Customer";
+import CustomerMemberShipStatus from "../CustomerModal/CustomerMemberShipStatus";
 
 interface CustomerEditDrawerProps {
   customer: CustomerType;
@@ -15,7 +15,6 @@ interface CustomerEditDrawerProps {
 
 const CustomerEditDrawer = ({ customer }: CustomerEditDrawerProps) => {
   const userInfo = useSelectUserInfo();
-  const [selectedMembershipStatus, setSelectedMembershipStatus] = useState();
   const [form] = Form.useForm();
   const showMessage = useMessage();
   const dispatch = useAppDispatch();
@@ -100,31 +99,8 @@ const CustomerEditDrawer = ({ customer }: CustomerEditDrawerProps) => {
           >
             <InputNumber />
           </Form.Item>
-          <Form.Item
-            label="Membership Status"
-            name="membershipStatus"
-            className="w-full"
-          >
-            <Select
-              placeholder="Select a membership status"
-              onChange={(value) => setSelectedMembershipStatus(value)}
-            >
-              <Select.Option value="standart">Standart </Select.Option>
-              <Select.Option value="active">Active</Select.Option>
-              <Select.Option value="passive">Passive</Select.Option>
-              <Select.Option value="vip">VIP</Select.Option>
-            </Select>
-          </Form.Item>
+          <CustomerMemberShipStatus editMode={true} />
         </div>
-        {selectedMembershipStatus === "vip" ? (
-          <Form.Item label="Coach" name="coach">
-            <Select placeholder="Select a coach">
-              <Select.Option value="coach1">Coach1</Select.Option>
-              <Select.Option value="coach2">Coach2</Select.Option>
-              <Select.Option value="coach3">Coach3</Select.Option>
-            </Select>
-          </Form.Item>
-        ) : null}
 
         <CustomerEditExersiceForm />
       </Form>

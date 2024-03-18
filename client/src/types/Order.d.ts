@@ -1,6 +1,4 @@
-import { Global } from "../global";
-
-export type AddOrderFormType = {
+type AddOrderFormType = {
   product: string;
   quantity: number;
   price: number;
@@ -10,7 +8,34 @@ export type AddOrderFormType = {
   status: string;
 };
 
-export type OrdersType = {
+type OrdersType = {
+  _id: string;
+  amount: number;
+  products: productsType[];
+  adress: string;
+  totalPrice: number;
+  status: "Pending" | "Completed" | "Cancelled" | "Preparing";
+  orderOwner: string;
+  phone: number;
+  createdAt: string;
+  updatedAt: string;
+  creator: string;
+  orderOwnerEmail: string;
+  orderImage: string;
+  orderCategory: string;
+};
+
+type orderDonutChartType = Global.OrderDonutChartType;
+
+type CardDataType = {
+  totalOrders: number;
+  totalSalesPrice: number;
+  increasePercentageForSales: number;
+  totalSalesCompleted: number;
+  increasePercentageForAmount: number;
+  increasePercentageForCompletedSales: number;
+};
+type ordersType = {
   _id: string;
   amount: number;
   products: productsType[];
@@ -25,19 +50,8 @@ export type OrdersType = {
   orderOwnerEmail: string;
 };
 
-export type orderDonutChartType = Global.OrderDonutChartType;
-
-export type CardDataType = {
-  totalOrders: number;
-  totalSalesPrice: number;
-  increasePercentageForSales: number;
-  totalSalesCompleted: number;
-  increasePercentageForAmount: number;
-  increasePercentageForCompletedSales: number;
-};
-
-export type getOrdersType = {
-  orders: Global.ordersType[];
+type getOrdersType = {
+  orders: ordersType[] | [];
   chartsData: orderDonutChartType[];
   cardData: CardDataType;
 };

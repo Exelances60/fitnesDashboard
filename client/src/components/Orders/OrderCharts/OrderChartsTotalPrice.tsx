@@ -4,7 +4,6 @@ import { Card, DonutChart, List, ListItem } from "@tremor/react";
 import OrderChartsSelectedDetails from "./OrderChartsSelectedDetails";
 import OrderChartsList from "./OrderChartsList";
 import { currencyFormatter } from "@/utils/utils";
-import { orderDonutChartType } from "@/types/Order";
 
 type OrderChartsTotalPriceProps = {
   chartsDonutData: orderDonutChartType[];

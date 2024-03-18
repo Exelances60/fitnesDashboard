@@ -1,4 +1,3 @@
-import { CardDataType } from "@/types/Order";
 import { Badge, Card, Grid } from "@tremor/react";
 import React from "react";
 
@@ -21,7 +20,7 @@ const OrdersCards = ({ cardData }: OrdersCardsProps) => {
             }`}
             className="text-tremor-content-strong dark:text-dark-tremor-content-strong text-lg"
           >
-            {cardData.increasePercentageForAmount.toFixed(2)}%
+            {cardData.increasePercentageForAmount?.toFixed(2)}%
           </Badge>
         </div>
         <p className="text-tremor-metric font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">
@@ -40,7 +39,7 @@ const OrdersCards = ({ cardData }: OrdersCardsProps) => {
             }`}
             className="text-tremor-content-strong dark:text-dark-tremor-content-strong text-lg"
           >
-            {cardData.increasePercentageForSales.toFixed(2)}%
+            {cardData.increasePercentageForSales?.toFixed(2)}%
           </Badge>
         </div>
         <p className="text-tremor-metric font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">

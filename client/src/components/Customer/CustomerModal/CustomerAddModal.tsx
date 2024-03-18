@@ -7,7 +7,6 @@ import axiosClient from "@/utils/AxiosClient";
 import CustomerMemberShipStatus from "./CustomerMemberShipStatus";
 import CustomerAddAge from "./CustomerAddAge";
 import { renderFormItem } from "@/utils/renderForTables/Customers/renderCustomerFormItem";
-import { AddCustomerFormType } from "@/types/Customer";
 import { justRequired, maxBodyWeight, maxHeight } from "@/utils/FormRules";
 
 const CustomerAddModal = () => {
@@ -139,28 +138,22 @@ const CustomerAddModal = () => {
       >
         <Select
           onChange={(value) => {
-            if (value === "1") {
-              form.setFieldsValue({ membershipPrice: 700 });
-            }
-            if (value === "3") {
-              form.setFieldsValue({ membershipPrice: 1800 });
-            }
-            if (value === "6") {
-              form.setFieldsValue({ membershipPrice: 3400 });
-            }
-            if (value === "12") {
-              form.setFieldsValue({ membershipPrice: 6000 });
-            }
+            const membershipPrice = userInfo?.memberShipPrice
+              ? userInfo.memberShipPrice
+              : 0;
+            form.setFieldsValue({
+              membershipPrice: +value * +membershipPrice,
+            });
           }}
           placeholder="Select a membership price"
           showSearch
-          options={[
-            { label: "1 Month", value: "1" },
-            { label: "3 Months", value: "3" },
-            { label: "6 Months", value: "6" },
-            { label: "12 Months", value: "12" },
-          ]}
-        />
+        >
+          {userInfo?.memberShipMonths?.map((memberShip, index) => (
+            <Select.Option key={index} value={memberShip}>
+              {memberShip} Month
+            </Select.Option>
+          ))}
+        </Select>
       </Form.Item>
       <Form.Item label="Membership Price" name="membershipPrice">
         <Input placeholder="Enter Price" addonBefore="₺" />

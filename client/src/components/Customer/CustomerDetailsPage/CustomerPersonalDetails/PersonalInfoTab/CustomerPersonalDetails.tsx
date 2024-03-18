@@ -1,5 +1,4 @@
 import Map from "@/components/Map";
-import { CustomerType } from "@/types/Customer";
 import { capitalizeFirstLetter } from "@/utils/utils";
 import { Descriptions, Badge, DescriptionsProps } from "antd";
 import React from "react";

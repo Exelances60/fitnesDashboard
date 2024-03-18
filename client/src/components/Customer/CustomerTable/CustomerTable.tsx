@@ -1,19 +1,13 @@
 "use client";
 import React from "react";
-import { Table, Image, Button, Popconfirm } from "antd";
+import { Table, Image } from "antd";
 import { renderMembershipStatus } from "@/utils/renderForTables/Customers/renderMembershipStatus";
 import { renderCustomerEmailRender } from "@/utils/renderForTables/Customers/renderCustomerEmailRender";
-import {
-  HighlightOutlined,
-  DeleteOutlined,
-  FolderOutlined,
-} from "@ant-design/icons";
 import { useAppDispatch } from "@/store/store";
 import { showModal } from "@/store/slices/modalSlice";
 import { setShowDrawer } from "@/store/slices/drawerSlice";
 import CustomerEditDrawer from "../CustomerDrawer/CustomerEditDrawer";
 import CustomerDetailsModal from "../CustomerModal/CustomerDetailModal";
-import { CustomerType } from "@/types/Customer";
 import useMessage from "@/hooks/useMessage";
 import axiosClient from "@/utils/AxiosClient";
 import useTableFilterSearchDropDown from "@/hooks/useTableFilterSearchDropDown";
@@ -81,7 +75,7 @@ const CustomerTable = ({ customers }: CustomerTableProps) => {
         render={(text) => {
           return (
             <Image
-              src={`https://fitnesdashboard.onrender.com/${text}`}
+              src={`${text}`}
               width={60}
               height={60}
               className="object-cover rounded-md"
@@ -143,7 +137,7 @@ const CustomerTable = ({ customers }: CustomerTableProps) => {
             return (
               <div className="flex gap-2" key={data._id}>
                 <Image
-                  src={`https://fitnesdashboard.onrender.com/${data.profilePicture}`}
+                  src={`${data.profilePicture}`}
                   width={40}
                   height={40}
                   className="object-cover rounded-md"

@@ -13,7 +13,6 @@ import type { Dayjs } from "dayjs";
 import React, { useState } from "react";
 import axiosClient from "@/utils/AxiosClient";
 import useMessage from "@/hooks/useMessage";
-import { CustomerType } from "@/types/Customer";
 import CustomerDetailsStaticForm from "./CustomerDetailsStaticForm";
 import { SelectInfo } from "antd/es/calendar/generateCalendar";
 import CustomerCalendarActList from "./CustomerCalendarActList";

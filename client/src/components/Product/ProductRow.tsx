@@ -1,21 +1,18 @@
 import { TableRow, TableCell } from "@tremor/react";
-import { Popconfirm, Button, Image } from "antd";
+import { Popconfirm, Button } from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
   ShoppingCartOutlined,
 } from "@ant-design/icons";
 import { motion } from "framer-motion";
-import { useState } from "react";
-import ProductEditModal from "./ProductEditModal";
-import ProductOrderModal from "./ProductOrderModal";
 import { useAppDispatch } from "@/store/store";
 import {
   setEditModalVisible,
   setOrderModalVisible,
   setProduct,
 } from "@/store/slices/productPageSlice";
-import { productsType } from "@/types/Product";
+import Image from "next/image";
 
 type productsRowType = {
   product: productsType;
@@ -38,10 +35,12 @@ const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
     <TableRow key={product._id} className="text-black ">
       <TableCell>
         <Image
-          src={`https://fitnesdashboard.onrender.com/${product.imageUrl}`}
+          src={`${product.imageUrl}`}
           width={90}
           height={90}
           alt={product.name}
+          priority={true}
+          quality={100}
           className="rounded-md"
         />
       </TableCell>

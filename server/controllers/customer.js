@@ -7,6 +7,10 @@ const Exersice = require("../models/Exercise");
 const CalenderAcv = require("../models/CalenderAcv");
 const Employee = require("../models/Employees");
 const clearImage = require("../utils/clearImage");
+const {
+  uploadImageToStorage,
+  deleteImageFromStorage,
+} = require("../utils/firebase/firebase.utils");
 
 exports.addCustomer = async (req, res, next) => {
   const errors = validationResult(req);
@@ -36,7 +40,12 @@ exports.addCustomer = async (req, res, next) => {
     if (!fetchedOwner) {
       throwBadRequestError("Owner not found.");
     }
-    const profilePicture = req.file.path.replace(/\\/g, "/");
+    const profilePicture = req.file.originalname + "-" + Date.now();
+    const downloadURL = await uploadImageToStorage(
+      req.file,
+      "customers/" + profilePicture
+    );
+
     const customer = new Customer({
       name,
       phone,
@@ -53,9 +62,9 @@ exports.addCustomer = async (req, res, next) => {
       membershipType: membershipMonths,
       membershipStatus: membershipStatus,
       gender: gender,
-      exercisePlan: null,
+      exercisePlan: [],
       ownerId,
-      profilePicture: profilePicture,
+      profilePicture: downloadURL,
       address,
       bloodGroup,
       parentPhone: parentPhone ? parentPhone : null,
@@ -76,7 +85,7 @@ exports.addCustomer = async (req, res, next) => {
 
 exports.getCustomer = async (req, res, next) => {
   try {
-    const ownerId = req.params.ownerId;
+    const ownerId = req.userId;
     const fetchedCustomer = await Customer.find({ ownerId: ownerId }).populate({
       path: "coachPT",
       select: "name email phone profilePicture",
@@ -137,7 +146,6 @@ exports.updateCustomer = async (req, res, next) => {
     customer.membershipPrice = membershipPrice;
     customer.membershipStatus = membershipStatus;
     customer.exercisePlan = exercisePlan || customer.exercisePlan;
-    customer.coachPT = coach || null;
     const updatedCustomer = await customer.save();
     res.status(200).json({
       message: "Customer updated successfully!",
@@ -164,7 +172,7 @@ exports.deleteCustomer = async (req, res, next) => {
     }
     fetchedOwner.customer.pull(customerId);
     await fetchedOwner.save();
-    clearImage(customer.profilePicture);
+    deleteImageFromStorage(customer.profilePicture);
     await customer.deleteOne();
     res.status(200).json({
       message: "Customer deleted successfully!",

@@ -1,7 +1,5 @@
 "use server";
-import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
-import { CustomerType } from "@/types/Customer";
 
 export const fetchCustomer = async (): Promise<CustomerType[] | []> => {
   const cookiesStore = cookies();
@@ -9,10 +7,9 @@ export const fetchCustomer = async (): Promise<CustomerType[] | []> => {
   if (!token) {
     return [];
   }
-  const decodedToken = jwtDecode(token) as { _id: string };
   try {
     const response = await fetch(
-      `https://fitnesdashboard.onrender.com/customers/get-customer/${decodedToken._id}`,
+      `http://localhost:8080/customers/get-customer`,
       {
         method: "GET",
         headers: {

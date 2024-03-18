@@ -1,5 +1,6 @@
 const Employee = require("../models/Employees");
 const Customer = require("../models/Customer");
+const Owner = require("../models/owner");
 const throwValidationError = require("../utils/err/throwValidationError");
 const throwBadRequestError = require("../utils/err/throwBadRequestError");
 const throwNotFoundError = require("../utils/err/throwNotFoundError");
@@ -8,33 +9,66 @@ const {
   currentMonthEmployeesSalary,
   currentMonthEmployeesCountIncarese,
 } = require("../services/businessLogic/calculateEmployessIncares");
+const {
+  uploadImageToStorage,
+  deleteImageFromStorage,
+} = require("../utils/firebase/firebase.utils");
 
 exports.createEmployee = async (req, res) => {
-  const profilePicture = req.files
-    .filter((file) => {
-      if (file.fieldname === "profilePicture") {
-        file.path.replace(/\\/g, "/");
-        return file.path;
-      }
-    })
-    .map((file) => file.path);
+  const profilePicture =
+    req.files
+      .filter((file) => {
+        if (file.fieldname === "profilePicture") {
+          return file.originalname;
+        }
+      })
+      .map((file) => file.originalname) +
+    "-" +
+    Date.now();
 
   const documents = req.files
     .filter((file) => {
       if (file.fieldname === "documents") {
-        return file.path.replace(/\\/g, "/");
+        return file.originalname;
       }
     })
-    .map((file) => file.path);
+    .map((file) => file.originalname);
 
+  let dowlandsDocuments = [];
+
+  const downloadURLProfilePicture = await uploadImageToStorage(
+    req.files[0],
+    "employees/" + profilePicture
+  );
+
+  if (req.files.length > 1) {
+    dowlandsDocuments = await Promise.all(
+      req.files
+        .filter((file) => {
+          if (file.fieldname === "documents") {
+            return file.originalname;
+          }
+        })
+        .map(async (file) => {
+          return await uploadImageToStorage(
+            file,
+            "empDocument/" + documents + file.originalname + "-" + Date.now()
+          );
+        })
+    );
+  }
+  const ownerId = req.body.ownerId;
   const employee = new Employee({
     ...req.body,
-    profilePicture: profilePicture[0],
-    documents: documents,
+    profilePicture: downloadURLProfilePicture,
+    documents: dowlandsDocuments,
     customers: [],
   });
   try {
     const savedEmployee = await employee.save();
+    const owner = await Owner.findById(ownerId);
+    owner.employees.push(savedEmployee);
+    await owner.save();
     res
       .status(201)
       .json({ message: "Employee created successfully", savedEmployee });
@@ -44,7 +78,7 @@ exports.createEmployee = async (req, res) => {
 };
 
 exports.getEmployees = async (req, res, next) => {
-  const ownerId = req.params.ownerId;
+  const ownerId = req.userId;
   try {
     const employees = await Employee.find({ ownerId: ownerId }).populate({
       path: "customers",
@@ -54,7 +88,6 @@ exports.getEmployees = async (req, res, next) => {
     if (!employees) {
       throwNotFoundError("Employees not found");
     }
-    /*  const totalSalaryIncrease = currentMonthEmployeesSalary(employees); */
     const totalEmployeesCountIncarese =
       currentMonthEmployeesCountIncarese(employees);
 
@@ -78,14 +111,19 @@ exports.assignCustomer = async (req, res, next) => {
     if (!employee) {
       throwNotFoundError("Employee not found");
     }
-    if (!employee) {
-      throwNotFoundError("Employee not found");
+    if (!customer) {
+      throwNotFoundError("Customer not found");
     }
+
+    if (!employee.customers) {
+      employee.customers = [];
+    }
+
     if (employee.customers.includes(customerId)) {
       throwValidationError("Customer already assigned to this employee");
     }
     employee.customers.push(customerId);
-    -(await employee.save());
+    await employee.save();
     customer.coachPT = employeeId;
     await customer.save();
     res.status(200).json({ message: "Customer assigned successfully" });
@@ -139,9 +177,11 @@ exports.deleteEmployee = async (req, res, next) => {
         await customer.save();
       });
     }
-    clearImage(employee.profilePicture);
+    if (employee.profilePicture) {
+      deleteImageFromStorage(employee.profilePicture);
+    }
     employee.documents.forEach((document) => {
-      clearImage(document);
+      deleteImageFromStorage(document);
     });
     await Employee.findByIdAndDelete(employeeId);
     res.status(200).json({ message: "Employee deleted successfully" });

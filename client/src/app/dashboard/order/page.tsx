@@ -10,7 +10,7 @@ const Order = async () => {
   return (
     <div className="flex flex-col gap-2">
       <OrdersCards cardData={cardData} />
-      <OrderContainer orders={orders} />
+      <OrderContainer orders={orders as any} />
       <OrderChats chartsDonutData={chartsData} />
     </div>
   );

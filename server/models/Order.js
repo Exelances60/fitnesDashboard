@@ -44,6 +44,12 @@ const orderSchema = new Schema(
       type: Number,
       required: true,
     },
+    orderImage: {
+      type: String,
+    },
+    orderCategory: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

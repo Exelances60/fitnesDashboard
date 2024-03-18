@@ -45,6 +45,8 @@ const EmployeesStatsCard = ({
     return ((currentSalary - previousSalary) / previousSalary) * 100;
   };
 
+  console.log("totalSalary", totalEmployeesCountIncarese);
+
   return (
     <Grid numItems={1} numItemsSm={1} numItemsLg={2} className="gap-2">
       <Card>
@@ -57,7 +59,10 @@ const EmployeesStatsCard = ({
             color={totalEmployeesCountIncarese > 0 ? "green" : "red"}
             className="text-tremor-content-strong dark:text-dark-tremor-content-strong text-lg"
           >
-            {totalEmployeesCountIncarese.toFixed(2)}%
+            {totalEmployeesCountIncarese
+              ? totalEmployeesCountIncarese.toFixed(2)
+              : 0}
+            %
           </Badge>
         </div>
         <p className="text-tremor-metric font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">

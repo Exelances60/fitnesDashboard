@@ -2,7 +2,6 @@ import React from "react";
 import { Button } from "antd";
 import Image from "next/image";
 import { MailOutlined, PhoneOutlined } from "@ant-design/icons";
-import { CustomerType } from "@/types/Customer";
 import { MobileOutlined } from "@ant-design/icons";
 
 const CustomerDetailsShort = ({ customer }: { customer: CustomerType }) => {
@@ -20,7 +19,7 @@ const CustomerDetailsShort = ({ customer }: { customer: CustomerType }) => {
         </div>
         <div className="relative md:bottom-20 bottom-[80px] md:h-32 h-28 rounded-full md:w-32 w-28 border-4 border-white ">
           <Image
-            src={`https://fitnesdashboard.onrender.com/${customer.profilePicture}`}
+            src={`${customer.profilePicture}`}
             layout="fill"
             objectFit="cover"
             alt="Customer Image"

@@ -1,6 +1,4 @@
-import { Global } from "../global";
-
-export type AddCustomerFormType = {
+type AddCustomerFormType = {
   image: Global.FileType[];
   phone: string;
   email: string;
@@ -43,7 +41,7 @@ interface CustomerType {
   __v: number;
 }
 
-export type UpdateCustomerFormType = {
+type UpdateCustomerFormType = {
   age: number;
   bodyWeight: number;
   coach: string;
@@ -57,7 +55,7 @@ export type UpdateCustomerFormType = {
   phone: string;
 };
 
-export type CustomerActivityType = {
+type CustomerActivityType = {
   _id: string;
   date: string;
   type: string;

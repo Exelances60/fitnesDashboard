@@ -8,7 +8,6 @@ import ProductTable from "./ProductTable";
 import ProductSeacrh from "./ProductSearch";
 import ProductEditModal from "./ProductEditModal";
 import ProductOrderModal from "./ProductOrderModal";
-import { productsType } from "@/types/Product";
 
 type ProductPreviewProps = {
   products: productsType[];

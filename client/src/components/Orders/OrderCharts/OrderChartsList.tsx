@@ -1,4 +1,3 @@
-import { orderDonutChartType } from "@/types/Order";
 import { currencyFormatter } from "@/utils/utils";
 import React from "react";
 

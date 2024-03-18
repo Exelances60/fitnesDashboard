@@ -6,6 +6,10 @@ const jwt = require("jsonwebtoken");
 const throwNotFoundError = require("../utils/err/throwNotFoundError");
 const throwValidationError = require("../utils/err/throwValidationError");
 const throwBadRequestError = require("../utils/err/throwBadRequestError");
+const {
+  deleteImageFromStorage,
+  uploadImageToStorage,
+} = require("../utils/firebase/firebase.utils");
 
 exports.login = (req, res, next) => {
   const errors = validationResult(req);
@@ -33,6 +37,7 @@ exports.login = (req, res, next) => {
           ownerId: loadedOwner._id.toString(),
           productCategory: loadedOwner.productCategory,
           _id: loadedOwner._id.toString(),
+          ownerImage: loadedOwner.ownerImage,
         },
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
@@ -80,4 +85,95 @@ exports.signup = (req, res, next) => {
       }
       next(err);
     });
+};
+
+exports.getOwnerInfo = async (req, res, next) => {
+  const ownerId = req.userId;
+  try {
+    const owner = await Owner.findById(ownerId).select(
+      "email companyName address phone ownerImage productCategory memberShipList memberShipPrice memberShipMonths"
+    );
+    if (!owner) {
+      throwNotFoundError("Could not find owner.");
+    }
+    res.status(200).json({ message: "Owner fetched.", owner: owner });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+exports.addMembershipList = async (req, res, next) => {
+  const ownerId = req.userId;
+  const { memberShipList } = req.body;
+  try {
+    const owner = await Owner.findById(ownerId);
+    if (!owner) {
+      throwNotFoundError("Could not find owner.");
+    }
+    owner.memberShipList = memberShipList;
+    await owner.save();
+    res.status(201).json({ message: "Membership List added." });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+exports.updateOwner = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    throwValidationError("Validation failed, entered data is incorrect.");
+  }
+  const ownerId = req.userId;
+  try {
+    const fetchedOwner = await Owner.findByIdAndUpdate(ownerId, req.body, {
+      new: true,
+    });
+    if (!fetchedOwner) {
+      throwNotFoundError("Could not find owner.");
+    }
+
+    res.status(200).json({ message: "Owner updated!", owner: fetchedOwner });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};
+
+exports.uploadOwnerImage = async (req, res, next) => {
+  try {
+    const ownerId = req.userId;
+    const ownerImage = req.file.originalname + "-" + Date.now();
+    const dowlandURLOwnerImage = await uploadImageToStorage(
+      req.file,
+      "owner/" + ownerImage
+    );
+
+    const owner = await Owner.findById(ownerId);
+    if (!owner) {
+      throwNotFoundError("Could not find owner.");
+    }
+
+    if (owner.ownerImage) {
+      deleteImageFromStorage(owner.ownerImage);
+    }
+
+    owner.ownerImage = dowlandURLOwnerImage;
+    await owner.save();
+    res
+      .status(201)
+      .json({ message: "Owner Image uploaded.", ownerImage: owner.ownerImage });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
 };

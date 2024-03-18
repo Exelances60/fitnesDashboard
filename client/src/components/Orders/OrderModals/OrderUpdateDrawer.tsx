@@ -8,11 +8,10 @@ import axiosClient from "@/utils/AxiosClient";
 import useMessage from "@/hooks/useMessage";
 import { useAppDispatch } from "@/store/store";
 import { setHideDrawer } from "@/store/slices/drawerSlice";
-import { OrdersType } from "@/types/Order";
 import { justRequired, minAmount } from "@/utils/FormRules";
 
 type OrderUpdateDrawerProps = {
-  selectedOrder: OrdersType | null;
+  selectedOrder: OrdersType;
 };
 
 type updateFormType = {
@@ -48,7 +47,10 @@ const OrderUpdateDrawer = ({ selectedOrder }: OrderUpdateDrawerProps) => {
   const onFinish = async (values: updateFormType) => {
     showMessage("Loading.. With Hooks", "loading", 0.3);
 
-    if (values.amount > selectedOrder?.products[0].amount) {
+    if (
+      ((values.amount > selectedOrder?.products[0]?.amount) as any) ||
+      !selectedOrder?.products
+    ) {
       showMessage(
         "The amount you entered is more than the amount of the product",
         "error"

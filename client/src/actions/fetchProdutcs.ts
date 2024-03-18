@@ -1,7 +1,5 @@
 "use server";
-import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
-import { productsType } from "@/types/Product";
 
 export const fetchProducts = async (): Promise<productsType[]> => {
   const cookiesStore = cookies();
@@ -9,10 +7,9 @@ export const fetchProducts = async (): Promise<productsType[]> => {
   if (!token) {
     return [];
   }
-  const decodedToken = jwtDecode(token) as { _id: string };
   try {
     const response = await fetch(
-      `https://fitnesdashboard.onrender.com/products/get-products/${decodedToken._id}`,
+      `http://localhost:8080/products/get-products`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

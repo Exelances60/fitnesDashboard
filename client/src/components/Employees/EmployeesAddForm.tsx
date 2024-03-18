@@ -46,13 +46,13 @@ const CustomerCard = ({
       className="flex flex-col items-center relative w-16 h-16"
     >
       <Image
-        src={`https://fitnesdashboard.onrender.com/${customer.profilePicture}`}
+        src={`${customer.profilePicture}`}
         fill
         className="object-cover rounded-md"
         alt="profilePicture"
       />
     </Card>
-    <p>{customer.name}</p>
+    <p className="font-bold">{customer.name}</p>
   </div>
 );
 
@@ -67,9 +67,7 @@ const EmployeesAddForm = ({ editMode, employee }: EmployeesAddFormProps) => {
       {!editMode ? (
         <ProfilePictureUpload />
       ) : (
-        <ProfileImage
-          src={`https://fitnesdashboard.onrender.com/${employee?.profilePicture}`}
-        />
+        <ProfileImage src={`${employee?.profilePicture}`} />
       )}
       <div className="flex gap-2">
         <Form.Item

@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { productsType } from "@/types/Product";
 
 interface ProductPageState {
   product: productsType;

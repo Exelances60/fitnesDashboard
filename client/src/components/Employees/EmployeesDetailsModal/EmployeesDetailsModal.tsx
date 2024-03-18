@@ -10,7 +10,7 @@ const EmployeesDetailsModal = ({ employee }: EmployeesDetailsModalProps) => {
     <div className="w-96 flex flex-col gap-2">
       <div className="flex gap-2 items-center">
         <Image
-          src={`https://fitnesdashboard.onrender.com/${employee.profilePicture}`}
+          src={`${employee.profilePicture}`}
           width={100}
           height={100}
           className="object-cover rounded-md"
@@ -35,7 +35,7 @@ const EmployeesDetailsModal = ({ employee }: EmployeesDetailsModalProps) => {
           ? employee.documents.map((doc, index) => (
               <Image
                 key={index}
-                src={`https://fitnesdashboard.onrender.com/${doc}`}
+                src={`${doc}`}
                 width={90}
                 height={90}
                 alt="document"

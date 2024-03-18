@@ -9,7 +9,7 @@ export const fetchCustomer = async (): Promise<CustomerType[] | []> => {
   }
   try {
     const response = await fetch(
-      `http://localhost:8080/customers/get-customer`,
+      `${process.env.BACK_END_SERVICES}/customers/get-customer`,
       {
         method: "GET",
         headers: {

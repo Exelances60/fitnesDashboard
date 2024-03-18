@@ -20,11 +20,14 @@ const fetchOrder = async (): Promise<getOrdersType> => {
   }
 
   try {
-    const response = await fetch(`http://localhost:8080/orders/get-orders`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `${process.env.BACK_END_SERVICES}/orders/get-orders`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     const data = await response.json();
     return data;
   } catch (error) {

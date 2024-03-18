@@ -9,7 +9,7 @@ export const fetchFindCustomer = async (customerId: string) => {
   }
   try {
     const response = await fetch(
-      `${process.env.BACK_END_SERVICES}/customers/findcustomer/${customerId}`,
+      `http://localhost:8080/customers/findcustomer/${customerId}`,
       {
         method: "GET",
         headers: {

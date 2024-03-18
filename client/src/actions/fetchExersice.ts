@@ -9,7 +9,7 @@ export const fetchExersice = async (): Promise<ExerciseType[] | []> => {
   }
   try {
     const response = await fetch(
-      `${process.env.BACK_END_SERVICES}/exercises/getExercises`,
+      `http://localhost:8080/exercises/getExercises`,
       {
         method: "GET",
         headers: {

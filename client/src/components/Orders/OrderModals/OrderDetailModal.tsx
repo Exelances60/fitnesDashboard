@@ -44,7 +44,7 @@ const OrderDetailModal = ({ selectedOrder }: OrderDetailModalProps) => {
             ))
           ) : (
             <Image
-              src={`${process.env.BACK_END_SERVICES}/${selectedOrder.orderImage}`}
+              src={`http://localhost:8080/${selectedOrder.orderImage}`}
               alt={selectedOrder?.orderOwner}
               width={150}
               height={150}

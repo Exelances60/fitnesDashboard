@@ -9,7 +9,7 @@ export const fetchProducts = async (): Promise<productsType[]> => {
   }
   try {
     const response = await fetch(
-      `${process.env.BACK_END_SERVICES}/products/get-products`,
+      `http://localhost:8080/products/get-products`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

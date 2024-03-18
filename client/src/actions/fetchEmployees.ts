@@ -13,7 +13,7 @@ export const fetchEmplooyes = async (): Promise<IEmployeeFetchResponse> => {
   }
   try {
     const response = await fetch(
-      `${process.env.BACK_END_SERVICES}/employees/get-employees`,
+      `http://localhost:8080/employees/get-employees`,
       {
         method: "GET",
         headers: {

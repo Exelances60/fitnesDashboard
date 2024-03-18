@@ -68,7 +68,7 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
           <hr className="my-5" />
           <Menu.Item key="profile" icon={<SettingOutlined />}>
             <div className="flex items-center gap-5">
-              <Link href="http://localhost:3000/dashboard/settings">
+              <Link href="https://fitnes-dashboard-azba.vercel.app/dashboard/settings">
                 Settings
               </Link>
             </div>

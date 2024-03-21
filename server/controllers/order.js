@@ -18,16 +18,8 @@ exports.createOrder = (req, res, next) => {
   if (!errors.isEmpty()) {
     throwValidationError("Validation failed, entered data is incorrect.");
   }
-  const {
-    price,
-    amount,
-    email,
-    address,
-    phone,
-    productId,
-    creator,
-    orderOwner,
-  } = req.body;
+  const { price, amount, email, address, productId, creator, orderOwner } =
+    req.body;
 
   if (!productId) {
     throwNotFoundError("Product not  matched.");
@@ -59,14 +51,11 @@ exports.createOrder = (req, res, next) => {
       const totalPrice = price * amount;
       const order = new Order({
         totalPrice,
-        amount,
         orderOwnerEmail: email,
         adress: address,
-        phone,
         productsId: productId,
         orderOwner: orderOwner,
         status: "Preparing",
-        creator,
         orderImage: result.imageUrl,
         orderCategory: result.category,
       });
@@ -136,18 +125,15 @@ exports.getOrders = async (req, res, next) => {
       return { ...order.toObject(), products: orderProducts };
     });
 
-    const chartsData = ordersWithProducts.flatMap((order) => {
-      return {
-        name: order.products.map((product) => product.name).join(", "),
-        category: order.products.map((product) => product.category).join(", "),
-        price: +order.products.map((product) => product.price).join(", "),
-        amount: +order.products.map((product) => product.amount).join(", "),
-        totalPrice: order.totalPrice,
-        amountOrder: order.amount,
-        orderId: order._id,
-      };
-    });
-
+    const chartsData = ordersWithProducts.flatMap((order) => ({
+      name: order.products.map((product) => product.name).join(", "),
+      category: order.products.map((product) => product.category).join(", "),
+      price: order.products.reduce((acc, product) => acc + product.price, 0),
+      amount: order.products.reduce((acc, product) => acc + product.amount, 0),
+      totalPrice: order.totalPrice,
+      amountOrder: order.amount,
+      orderId: order._id,
+    }));
     const increasePercentageForSales =
       calculatePreviousMonthSales(ordersWithProducts);
     const previousMonthAmount =

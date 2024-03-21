@@ -1,59 +1,53 @@
 const Owner = require("../models/owner");
 require("dotenv").config();
 const { validationResult } = require("express-validator");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const throwNotFoundError = require("../utils/err/throwNotFoundError");
 const throwValidationError = require("../utils/err/throwValidationError");
-const throwBadRequestError = require("../utils/err/throwBadRequestError");
 const {
   deleteImageFromStorage,
   uploadImageToStorage,
 } = require("../utils/firebase/firebase.utils");
+const jwtServices = require("../services/jwtServices");
+const userServices = require("../services/userService");
 
-exports.login = (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    throwValidationError("Validation failed, entered data is incorrect.");
-  }
-  const { email, password } = req.body;
-  let loadedOwner;
-  Owner.findOne({ email })
-    .then((owner) => {
-      if (!owner) {
-        throwNotFoundError("A owner with this email could not be found.");
-      }
-      loadedOwner = owner;
-      return bcrypt.compare(password, owner.password);
-    })
-    .then((isEqual) => {
-      if (!isEqual) {
-        throwBadRequestError("Wrong password!");
-      }
-      const token = jwt.sign(
-        {
-          email: loadedOwner.email,
-          companyName: loadedOwner.companyName,
-          ownerId: loadedOwner._id.toString(),
-          productCategory: loadedOwner.productCategory,
-          _id: loadedOwner._id.toString(),
-          ownerImage: loadedOwner.ownerImage,
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" }
-      );
-      res.status(200).json({
-        token: token,
-        ownerId: loadedOwner._id.toString(),
-        message: "Login successful!",
-      });
-    })
-    .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
+exports.login = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      throw new Error("Validation failed, entered data is incorrect.");
+    }
+    const { email, password } = req.body;
+    const owner = await Owner.findOne({ email });
+    if (!owner) {
+      throw new Error("A owner with this email could not be found.");
+    }
+    const isPasswordMatch = await jwtServices.comparePassword(
+      password,
+      owner.password
+    );
+
+    if (!isPasswordMatch) {
+      throw new Error("Wrong password!");
+    }
+
+    // Generate JWT token
+    const token = jwtServices.signToken({
+      email: owner.email,
+      ownerId: owner._id.toString(),
+      _id: owner._id.toString(),
     });
+
+    res.status(200).json({
+      token,
+      ownerId: owner._id.toString(),
+      message: "Login successful!",
+    });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500; // Set default status code if not provided
+    }
+    next(err); // Pass the error to the error handling middleware
+  }
 };
 
 exports.signup = (req, res, next) => {
@@ -105,25 +99,6 @@ exports.getOwnerInfo = async (req, res, next) => {
   }
 };
 
-exports.addMembershipList = async (req, res, next) => {
-  const ownerId = req.userId;
-  const { memberShipList } = req.body;
-  try {
-    const owner = await Owner.findById(ownerId);
-    if (!owner) {
-      throwNotFoundError("Could not find owner.");
-    }
-    owner.memberShipList = memberShipList;
-    await owner.save();
-    res.status(201).json({ message: "Membership List added." });
-  } catch (err) {
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-  }
-};
-
 exports.updateOwner = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -131,9 +106,12 @@ exports.updateOwner = async (req, res, next) => {
   }
   const ownerId = req.userId;
   try {
-    const fetchedOwner = await Owner.findByIdAndUpdate(ownerId, req.body, {
-      new: true,
-    });
+    const fetchedOwner = await userServices.findByIdUpdate(
+      ownerId,
+      req.body,
+      Owner
+    );
+
     if (!fetchedOwner) {
       throwNotFoundError("Could not find owner.");
     }
@@ -160,11 +138,9 @@ exports.uploadOwnerImage = async (req, res, next) => {
     if (!owner) {
       throwNotFoundError("Could not find owner.");
     }
-
     if (owner.ownerImage) {
       deleteImageFromStorage(owner.ownerImage);
     }
-
     owner.ownerImage = dowlandURLOwnerImage;
     await owner.save();
     res

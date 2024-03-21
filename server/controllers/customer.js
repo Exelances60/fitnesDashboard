@@ -6,11 +6,11 @@ const Customer = require("../models/Customer");
 const Exersice = require("../models/Exercise");
 const CalenderAcv = require("../models/CalenderAcv");
 const Employee = require("../models/Employees");
-const clearImage = require("../utils/clearImage");
 const {
   uploadImageToStorage,
   deleteImageFromStorage,
 } = require("../utils/firebase/firebase.utils");
+const customerServices = require("../services/customerService");
 
 exports.addCustomer = async (req, res, next) => {
   const errors = validationResult(req);
@@ -19,20 +19,13 @@ exports.addCustomer = async (req, res, next) => {
   }
   try {
     const {
-      name,
-      phone,
-      email,
       age,
       bodyWeight,
       height,
       membershipMonths,
       membershipPrice,
-      membershipStatus,
       coach,
       ownerId,
-      gender,
-      address,
-      bloodGroup,
       parentPhone,
     } = req.body;
 
@@ -47,9 +40,7 @@ exports.addCustomer = async (req, res, next) => {
     );
 
     const customer = new Customer({
-      name,
-      phone,
-      email,
+      ...req.body,
       coachPT: coach || null,
       age: +age,
       bodyWeight: +bodyWeight,
@@ -60,13 +51,8 @@ exports.addCustomer = async (req, res, next) => {
         new Date().setMonth(new Date().getMonth() + +membershipMonths)
       ),
       membershipType: membershipMonths,
-      membershipStatus: membershipStatus,
-      gender: gender,
       exercisePlan: [],
-      ownerId,
       profilePicture: downloadURL,
-      address,
-      bloodGroup,
       parentPhone: parentPhone ? parentPhone : null,
     });
 
@@ -86,13 +72,9 @@ exports.addCustomer = async (req, res, next) => {
 exports.getCustomer = async (req, res, next) => {
   try {
     const ownerId = req.userId;
-    const fetchedCustomer = await Customer.find({ ownerId: ownerId }).populate({
-      path: "coachPT",
-      select: "name email phone profilePicture",
-    });
-    if (!fetchedCustomer) {
-      throwBadRequestError("Owner not found.");
-    }
+    const fetchedCustomer = await customerServices.getCustomerByOwnerId(
+      ownerId
+    );
     res.status(200).json({
       message: "Fetched customers successfully!",
       customers: fetchedCustomer,
@@ -108,21 +90,7 @@ exports.updateCustomer = async (req, res, next) => {
   if (!errors.isEmpty()) {
     throwValidationError("Validation failed, entered data is incorrect.");
   }
-  const {
-    name,
-    email,
-    phone,
-    age,
-    bodyWeight,
-    height,
-    membershipMonths,
-    membershipPrice,
-    membershipStatus,
-    exercisePlan,
-    coach,
-    _id,
-    ownerId,
-  } = req.body;
+  const { _id, ownerId } = req.body;
   try {
     const fetchedOwner = await Owner.findById(ownerId);
     if (!fetchedOwner) {
@@ -136,16 +104,14 @@ exports.updateCustomer = async (req, res, next) => {
       throwBadRequestError("Customer not found.");
     }
 
-    customer.name = name;
-    customer.email = email;
-    customer.phone = phone;
-    customer.age = age;
-    customer.bodyWeight = bodyWeight;
-    customer.height = height;
-    customer.membershipType = membershipMonths;
-    customer.membershipPrice = membershipPrice;
-    customer.membershipStatus = membershipStatus;
-    customer.exercisePlan = exercisePlan || customer.exercisePlan;
+    customer = {
+      ...req.body,
+      membershipType: req.body.membershipMonths,
+      membershipPrice: req.body.membershipPrice,
+      membershipStatus: req.body.membershipStatus,
+      exercisePlan: req.body.exercisePlan || customer.exercisePlan,
+    };
+
     const updatedCustomer = await customer.save();
     res.status(200).json({
       message: "Customer updated successfully!",
@@ -187,19 +153,20 @@ exports.findCustomer = async (req, res, next) => {
   try {
     const customerId = req.params.customerId;
     if (!customerId) throwBadRequestError("Customer not found.");
-    const fetchedCustomer = await Customer.findById(customerId).populate(
-      "calendarAcv"
-    );
+    const fetchedCustomer = await Customer.findById(customerId)
+      .populate("calendarAcv")
+      .populate({
+        path: "coachPT",
+        select: "name email phone profilePicture position",
+      });
+    if (!fetchedCustomer) {
+      throwBadRequestError("Customer not found.");
+    }
 
     const fetchedExersice = await Exersice.find({
       name: fetchedCustomer.exercisePlan,
     });
-    const fetchedEmployee = await Employee.findById(fetchedCustomer.coachPT);
-    fetchedCustomer.coachPT = fetchedEmployee;
     fetchedCustomer.exercisePlan = fetchedExersice;
-    if (!fetchedCustomer) {
-      throwBadRequestError("Customer not found.");
-    }
 
     res.status(200).json({
       message: "Fetched customer successfully!",

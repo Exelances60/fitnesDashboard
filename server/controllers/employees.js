@@ -4,9 +4,7 @@ const Owner = require("../models/owner");
 const throwValidationError = require("../utils/err/throwValidationError");
 const throwBadRequestError = require("../utils/err/throwBadRequestError");
 const throwNotFoundError = require("../utils/err/throwNotFoundError");
-const clearImage = require("../utils/clearImage");
 const {
-  currentMonthEmployeesSalary,
   currentMonthEmployeesCountIncarese,
 } = require("../services/businessLogic/calculateEmployessIncares");
 const {

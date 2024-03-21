@@ -39,12 +39,6 @@ router.post(
 
 router.get("/ownerInfo", isAuth, authController.getOwnerInfo);
 
-router.post(
-  "/add-owner-membershipList",
-  isAuth,
-  authController.addMembershipList
-);
-
 router.put(
   "/update-owner",
   isAuth,
@@ -53,14 +47,6 @@ router.put(
       .isEmail()
       .withMessage("Please enter a valid email address.")
       .normalizeEmail(),
-    body("companyName")
-      .trim()
-      .isEmpty()
-      .withMessage("Please enter a valid company name."),
-    body("address")
-      .trim()
-      .isEmpty()
-      .withMessage("Please enter a valid address."),
     body("phone")
       .matches(/^[0-9]{10}$/)
       .withMessage("Please enter a valid phone number.")

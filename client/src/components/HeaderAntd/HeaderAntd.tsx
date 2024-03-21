@@ -1,6 +1,6 @@
 "use client";
 import React, { useMemo } from "react";
-import { Layout } from "antd";
+import { Layout, message } from "antd";
 import { Menu } from "antd";
 import { useAppSelector } from "@/store/store";
 import { selectMenuKeys, selectUser } from "@/store/slices/userSlice";
@@ -13,10 +13,13 @@ import GlobalModal from "../GlobalModal/GlobalModal";
 import GlobalDrawer from "../GlobalDrawer/GlobalDrawer";
 import Image from "next/image";
 import useGetUserInfo from "@/hooks/useGetUserInfo";
+import { deleteCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 
 const { Content, Header } = Layout;
 
 const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
+  const router = useRouter();
   const { handleChangeMenuKeys } = useSetMenuKeys();
   const menuKeys = useAppSelector(selectMenuKeys);
   const userInfo = useAppSelector(selectUser);
@@ -31,6 +34,13 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
       </Menu.Item>
     ));
   }, [handleChangeMenuKeys]);
+
+  const handleLogout = () => {
+    console.log("logout");
+    deleteCookie("token");
+    message.success("Logout successfully");
+    router.push("/");
+  };
 
   if (!userInfo) {
     return <Loading />;
@@ -74,7 +84,7 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
           <Menu.Item
             key="logout"
             icon={<LogoutOutlined />}
-            onClick={handleChangeMenuKeys}
+            onClick={handleLogout}
           >
             <div className="flex items-center gap-5">Logout</div>
           </Menu.Item>

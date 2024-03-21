@@ -81,7 +81,7 @@ export const navMenu = [
         }}
       />
     ),
-    path: "/invoice",
+    path: "dashboard/invoice",
     key: "invoice",
   },
 ];

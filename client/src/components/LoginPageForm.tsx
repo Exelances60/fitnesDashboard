@@ -42,7 +42,6 @@ const LoginPageForm = () => {
       "Authorization"
     ] = `Bearer ${data.token}`;
 
-    dispatch(setUser(user));
     setError("");
     message.destroy("login");
     message.success("Login Success");

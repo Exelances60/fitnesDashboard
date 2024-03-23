@@ -3,12 +3,9 @@ require("dotenv").config();
 const { validationResult } = require("express-validator");
 const throwNotFoundError = require("../utils/err/throwNotFoundError");
 const throwValidationError = require("../utils/err/throwValidationError");
-const {
-  deleteImageFromStorage,
-  uploadImageToStorage,
-} = require("../utils/firebase/firebase.utils");
 const jwtServices = require("../services/jwtServices");
 const userServices = require("../services/userService");
+const firebaseStorageServices = require("../services/FirebaseServices");
 
 exports.login = async (req, res, next) => {
   try {
@@ -30,7 +27,6 @@ exports.login = async (req, res, next) => {
       throw new Error("Wrong password!");
     }
 
-    // Generate JWT token
     const token = jwtServices.signToken({
       email: owner.email,
       ownerId: owner._id.toString(),
@@ -128,18 +124,15 @@ exports.updateOwner = async (req, res, next) => {
 exports.uploadOwnerImage = async (req, res, next) => {
   try {
     const ownerId = req.userId;
-    const ownerImage = req.file.originalname + "-" + Date.now();
-    const dowlandURLOwnerImage = await uploadImageToStorage(
-      req.file,
-      "owner/" + ownerImage
-    );
+    const dowlandURLOwnerImage =
+      await firebaseStorageServices.uploadImageToStorage(req.file, "owner/");
 
     const owner = await Owner.findById(ownerId);
     if (!owner) {
       throwNotFoundError("Could not find owner.");
     }
     if (owner.ownerImage) {
-      deleteImageFromStorage(owner.ownerImage);
+      await firebaseStorageServices.deleteImageFromStorage(owner.ownerImage);
     }
     owner.ownerImage = dowlandURLOwnerImage;
     await owner.save();

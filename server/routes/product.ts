@@ -59,4 +59,4 @@ router.post(
   productController.addProductCategory
 );
 
-export default router;
+export { router as productRoutes };

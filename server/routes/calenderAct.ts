@@ -6,4 +6,4 @@ const router = Router();
 
 router.delete("/delete-act/:actId", isAuth, calenderActController.deleteAct);
 
-export default router;
+export { router as calendarActRoutes };

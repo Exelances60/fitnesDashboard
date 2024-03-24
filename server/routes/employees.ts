@@ -41,4 +41,4 @@ router.delete(
   employeeController.deleteEmployee
 );
 
-export default router;
+export { router as employeeRoutes };

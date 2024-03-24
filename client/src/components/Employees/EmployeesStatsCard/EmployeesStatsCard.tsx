@@ -45,8 +45,6 @@ const EmployeesStatsCard = ({
     return ((currentSalary - previousSalary) / previousSalary) * 100;
   };
 
-  console.log("totalSalary", totalEmployeesCountIncarese);
-
   return (
     <Grid numItems={1} numItemsSm={1} numItemsLg={2} className="gap-2">
       <Card>

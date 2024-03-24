@@ -1,7 +1,15 @@
+import "dotenv/config";
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
-import "dotenv/config";
-
+declare global {
+  namespace Express {
+    interface Request {
+      userId?: string;
+      file?: Express.Multer.File;
+      files?: Express.Multer.File[];
+    }
+  }
+}
 interface decocedToken {
   ownerId: string;
 }

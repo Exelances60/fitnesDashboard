@@ -70,4 +70,4 @@ router.put(
   authController.uploadOwnerImage
 );
 
-export default router;
+export { router as authRoutes };

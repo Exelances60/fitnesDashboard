@@ -5,4 +5,4 @@ import { isAuth } from "../middleware/isAuth";
 
 const router = Router();
 
-export default router;
+export { router as dashboardRoutes };

@@ -6,4 +6,4 @@ const router = Router();
 
 router.get("/getExercises", isAuth, exercisesController.getExercises);
 
-export default router;
+export { router as exercisesRoutes };

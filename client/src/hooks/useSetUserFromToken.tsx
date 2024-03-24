@@ -11,7 +11,6 @@ const useSetUserFromToken = () => {
   useEffect(() => {
     const token = getCookie("token");
     if (token && !user) {
-      console.log("user set");
       const decoded = jwtDecode(token);
       dispatch(setUser(decoded));
     }

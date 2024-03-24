@@ -24,7 +24,6 @@ type updateFormType = {
 };
 
 const OrderUpdateDrawer = ({ selectedOrder }: OrderUpdateDrawerProps) => {
-  console.log("selectedOrder", selectedOrder);
   const showMessage = useMessage();
   const dispath = useAppDispatch();
   const [form] = Form.useForm();

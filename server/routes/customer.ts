@@ -86,4 +86,4 @@ router.delete(
   customerController.deleteCustomerCoach
 );
 
-export default router;
+export { router as customerRoutes };

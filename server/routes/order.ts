@@ -28,4 +28,4 @@ router.put("/update-order", isAuth, orderController.updateOrder);
 
 router.post("/ordercompleted", isAuth, orderController.orderCompleted);
 
-export default router;
+export { router as orderRoutes };

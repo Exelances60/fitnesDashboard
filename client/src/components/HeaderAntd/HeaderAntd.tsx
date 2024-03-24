@@ -36,7 +36,6 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
   }, [handleChangeMenuKeys]);
 
   const handleLogout = () => {
-    console.log("logout");
     deleteCookie("token");
     message.success("Logout successfully");
     router.push("/");

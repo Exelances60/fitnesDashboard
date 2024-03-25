@@ -3,6 +3,7 @@ import { body } from "express-validator";
 import * as authController from "../controllers/auth";
 import { isAuth } from "../middleware/isAuth";
 import multer from "multer";
+import { UserServices } from "../services/userService";
 
 const router = Router();
 
@@ -22,6 +23,8 @@ const fileFilter = (
     cb(null, false);
   }
 };
+
+const userServices = new UserServices(process.env.MONGODB_DATABASE_TYPE);
 
 router.post(
   "/login",

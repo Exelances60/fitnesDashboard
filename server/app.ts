@@ -3,6 +3,7 @@ import express, { Request, Response, NextFunction } from "express";
 import dbConnection from "./services/DatabaseServices";
 import App from "./services/ExpressAppServices";
 import { PORT } from "./config";
+import { MongoDBDatabase } from "./services/DatabaseServices/MongoDBDatabase";
 
 const StartServer = async () => {
   const app = express();
@@ -17,7 +18,10 @@ const StartServer = async () => {
   next();
 }); */
 
-  await dbConnection();
+  if (process.env.DATABASE_TYPE === "MONGODB") {
+    await dbConnection();
+  }
+
   await App(app);
 
   app.use((error: any, req: Request, res: Response, next: NextFunction) => {

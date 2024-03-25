@@ -1,18 +1,20 @@
-interface UserServicesInterface {
-  findByIdUpdate(id: string, data: object, model: any): Promise<Object>;
-}
+import { Request, Response, NextFunction } from "express";
+export class UserServices {
+  private readonly mongoDBDatabaseType: string;
+  constructor(mongoDBDatabaseType: string) {
+    this.mongoDBDatabaseType = mongoDBDatabaseType;
+  }
 
-class UserServices implements UserServicesInterface {
-  async findByIdUpdate(id: string, data: Request, model: any) {
-    try {
-      const result = await model.findByIdAndUpdate(id, data, { new: true });
-      return result;
-    } catch (error) {
-      throw new Error("Could not update user");
-    }
+  async onLogin(req: Request, res: Response, next: NextFunction) {
+    // Call the login API
+  }
+  async onSignup(req: Request, res: Response, next: NextFunction) {
+    // Call the signup API
+  }
+  async onGetOwnerInfo(req: Request, res: Response, next: NextFunction) {
+    // Call the getOwnerInfo API
+  }
+  async onUpdateOwner(req: Request, res: Response, next: NextFunction) {
+    // Call the updateOwner API
   }
 }
-
-const userServices = new UserServices();
-
-export default userServices;

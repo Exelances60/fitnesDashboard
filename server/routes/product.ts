@@ -1,8 +1,8 @@
 import { Router, Request } from "express";
-import * as productController from "../controllers/product";
 import { body } from "express-validator";
 import { isAuth } from "../middleware/isAuth";
 import multer, { FileFilterCallback } from "multer";
+import { ProductController } from "../controllers/Product/ProductController";
 const router = Router();
 
 const fileFilter = (
@@ -22,22 +22,20 @@ const fileFilter = (
   }
 };
 
+const controller = new ProductController();
+
 router.post(
   "/add-product",
   isAuth,
   multer({ storage: multer.memoryStorage(), fileFilter: fileFilter }).single(
     "image"
   ),
-  productController.addProduct
+  controller.onAddProduct
 );
 
-router.get("/get-products", isAuth, productController.getProducts);
+router.get("/get-products", isAuth, controller.onGetProducts);
 
-router.delete(
-  "/delete-product/:productId",
-  isAuth,
-  productController.deleteProduct
-);
+router.delete("/delete-product/:productId", isAuth, controller.onDeleteProduct);
 
 router.put(
   "/update-product/:productId",
@@ -45,7 +43,7 @@ router.put(
   multer({ storage: multer.memoryStorage(), fileFilter: fileFilter }).single(
     "image"
   ),
-  productController.updateProduct
+  controller.onUpdateProduct
 );
 
 router.post(
@@ -56,7 +54,7 @@ router.post(
       .withMessage("Category name must be at least 3 characters long."),
   ],
   isAuth,
-  productController.addProductCategory
+  controller.onAddProductCategory
 );
 
 export { router as productRoutes };

@@ -1,14 +1,14 @@
 import "dotenv/config";
 import { Request, Response, NextFunction } from "express";
-import Product from "../models/Product";
-import Owner from "../models/Owner";
+import Product from "../../models/Product";
+import Owner from "../../models/Owner";
 import { validationResult } from "express-validator";
-import clearImage from "../utils/clearImage";
-import throwValidationError from "../utils/err/throwValidationError";
-import throwBadRequestError from "../utils/err/throwBadRequestError";
-import throwNotFoundError from "../utils/err/throwNotFoundError";
-import Order from "../models/Order";
-import firebaseStorageServices from "../services/FirebaseServices";
+import clearImage from "../../utils/clearImage";
+import throwValidationError from "../../utils/err/throwValidationError";
+import throwBadRequestError from "../../utils/err/throwBadRequestError";
+import throwNotFoundError from "../../utils/err/throwNotFoundError";
+import Order from "../../models/Order";
+import firebaseStorageServices from "../../services/FirebaseServices";
 import { Types } from "mongoose";
 
 export const addProduct = async (

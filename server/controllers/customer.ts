@@ -7,7 +7,7 @@ import Customer from "../models/Customer";
 import Exersice, { IExercise } from "../models/Exercise";
 import CalenderAcv from "../models/CalenderAcv";
 import Employee from "../models/Employees";
-import firebaseStorageServices from "../services/FirebaseServices";
+import firebaseStorageServices from "../utils/FirebaseServices";
 import customerServices from "../services/customerService";
 
 export const addCustomer = async (

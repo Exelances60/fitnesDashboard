@@ -6,7 +6,7 @@ import throwValidationError from "../utils/err/throwValidationError";
 import throwBadRequestError from "../utils/err/throwBadRequestError";
 import throwNotFoundError from "../utils/err/throwNotFoundError";
 import { currentMonthEmployeesCountIncarese } from "../services/businessLogic/calculateEmployessIncares";
-import firebaseStorageServices from "../services/FirebaseServices";
+import firebaseStorageServices from "../utils/FirebaseServices";
 
 export const createEmployee = async (
   req: Request,

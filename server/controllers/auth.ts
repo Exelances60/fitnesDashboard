@@ -5,9 +5,9 @@ dotenv.config({ path: __dirname + "/.env" });
 import { validationResult } from "express-validator";
 import throwNotFoundError from "../utils/err/throwNotFoundError";
 import throwValidationError from "../utils/err/throwValidationError";
-import jwtServices from "../services/jwtServices";
+import jwtServices from "../utils/jwtServices";
 import userServices from "../services/userService";
-import firebaseStorageServices from "../services/FirebaseServices";
+import firebaseStorageServices from "../utils/FirebaseServices";
 import bcrypt from "bcryptjs";
 
 export const login = async (

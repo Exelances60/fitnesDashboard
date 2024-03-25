@@ -8,7 +8,7 @@ import throwValidationError from "../utils/err/throwValidationError";
 import throwBadRequestError from "../utils/err/throwBadRequestError";
 import throwNotFoundError from "../utils/err/throwNotFoundError";
 import Order from "../models/Order";
-import firebaseStorageServices from "../services/FirebaseServices";
+import firebaseStorageServices from "../utils/FirebaseServices";
 import { Types } from "mongoose";
 
 export const addProduct = async (

@@ -11,7 +11,7 @@ const throwValidationError_1 = __importDefault(require("../utils/err/throwValida
 const throwBadRequestError_1 = __importDefault(require("../utils/err/throwBadRequestError"));
 const throwNotFoundError_1 = __importDefault(require("../utils/err/throwNotFoundError"));
 const calculateEmployessIncares_1 = require("../services/businessLogic/calculateEmployessIncares");
-const FirebaseServices_1 = __importDefault(require("../services/FirebaseServices"));
+const FirebaseServices_1 = __importDefault(require("../utils/FirebaseServices"));
 const createEmployee = async (req, res, next) => {
     if (!req.files) {
         return (0, throwValidationError_1.default)("Profile picture is required");

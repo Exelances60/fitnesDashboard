@@ -8,8 +8,8 @@ export const deleteAct = async (
   res: Response,
   next: NextFunction
 ) => {
-  const actId = req.params.actId;
   try {
+    const actId = req.params.actId;
     const act = await CalenderAct.findById(actId);
     if (!act) {
       const error = new Error("Could not find act.") as any;

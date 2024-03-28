@@ -23,10 +23,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.calendarActRoutes = void 0;
 const express_1 = require("express");
 const isAuth_1 = require("../middleware/isAuth");
 const calenderActController = __importStar(require("../controllers/calenderAct"));
 const router = (0, express_1.Router)();
+exports.calendarActRoutes = router;
 router.delete("/delete-act/:actId", isAuth_1.isAuth, calenderActController.deleteAct);
-exports.default = router;
 //# sourceMappingURL=calenderAct.js.map

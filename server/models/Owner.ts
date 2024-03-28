@@ -2,7 +2,7 @@ import { Schema, Document, model, Types } from "mongoose";
 
 const ModelSchema = Schema;
 
-interface IOwner extends Document {
+export interface IOwner extends Document {
   _id: Types.ObjectId;
   email: string;
   password: string;

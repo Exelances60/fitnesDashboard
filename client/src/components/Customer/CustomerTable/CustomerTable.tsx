@@ -58,7 +58,7 @@ const CustomerTable = ({ customers }: CustomerTableProps) => {
     }
   };
 
-  const diplayCustomers = customers.filter((customer) => {
+  const diplayCustomers = customers?.filter((customer) => {
     return customer.name.toLowerCase().includes(searchById.toLowerCase());
   });
 

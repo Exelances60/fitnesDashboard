@@ -23,10 +23,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.exercisesRoutes = void 0;
 const express_1 = require("express");
 const isAuth_1 = require("../middleware/isAuth");
 const exercisesController = __importStar(require("../controllers/exercises"));
 const router = (0, express_1.Router)();
+exports.exercisesRoutes = router;
 router.get("/getExercises", isAuth_1.isAuth, exercisesController.getExercises);
-exports.default = router;
 //# sourceMappingURL=exercises.js.map

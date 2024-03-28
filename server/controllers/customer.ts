@@ -8,62 +8,22 @@ import Exersice, { IExercise } from "../models/Exercise";
 import CalenderAcv from "../models/CalenderAcv";
 import Employee from "../models/Employees";
 import firebaseStorageServices from "../utils/FirebaseServices";
-import customerServices from "../services/customerService";
+import { CustomerServices } from "../services/customerService";
 
 export const addCustomer = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    throwValidationError("Validation failed, entered data is incorrect.");
-  }
   try {
-    const {
-      age,
-      bodyWeight,
-      height,
-      membershipMonths,
-      membershipPrice,
-      coach,
-      ownerId,
-      parentPhone,
-    } = req.body;
-
-    const fetchedOwner = await Owner.findById(ownerId);
-    if (!fetchedOwner) {
-      return throwBadRequestError("Owner not found.");
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      throwValidationError("Validation failed, entered data is incorrect.");
     }
-
-    const downloadURL = await firebaseStorageServices.uploadImageToStorage(
-      req.file as Express.Multer.File,
-      "customers/"
-    );
-
-    const customer = new Customer({
-      ...req.body,
-      coachPT: coach || null,
-      age: +age,
-      bodyWeight: +bodyWeight,
-      height: +height,
-      membershipPrice: +membershipPrice,
-      membershipStartDate: new Date(),
-      membershipEndDate: new Date(
-        new Date().setMonth(new Date().getMonth() + +membershipMonths)
-      ),
-      membershipType: membershipMonths,
-      exercisePlan: [],
-      profilePicture: downloadURL,
-      parentPhone: parentPhone ? parentPhone : null,
-    });
-
-    const savedCustomer = await customer.save();
-    fetchedOwner.customer.push(savedCustomer._id);
-    await fetchedOwner.save();
+    const responseCustomer = await new CustomerServices().addCustomer(req);
     res.status(201).json({
       message: "Customer created successfully!",
-      customer: savedCustomer,
+      customer: responseCustomer,
       status: 201,
     });
   } catch (error) {
@@ -78,11 +38,14 @@ export const getCustomer = async (
 ) => {
   try {
     const ownerId = req.userId;
-    const fetchedCustomer = await customerServices.getCustomerByOwnerId(
-      ownerId as string
-    );
+    if (!ownerId) return throwBadRequestError("Owner not found.");
+
+    const customerService = new CustomerServices();
+    const fetchedCustomer = await customerService.getCustomer(ownerId);
+
+    console.log(fetchedCustomer);
     res.status(200).json({
-      message: "Fetched customers successfully!",
+      message: "Fetched customer successfully!",
       customers: fetchedCustomer,
       status: 200,
     });

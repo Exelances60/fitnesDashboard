@@ -9,6 +9,7 @@ import jwtServices from "../utils/jwtServices";
 import userServices from "../services/userService";
 import firebaseStorageServices from "../utils/FirebaseServices";
 import bcrypt from "bcryptjs";
+import { printValidatorErrors } from "../utils/printValidatorErrors";
 
 export const login = async (
   req: Request,
@@ -17,9 +18,7 @@ export const login = async (
 ) => {
   try {
     const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      throw new Error("Validation failed, entered data is incorrect.");
-    }
+    printValidatorErrors(errors);
     const { email, password } = req.body;
     const owner = await Owner.findOne({ email });
     if (!owner) {
@@ -53,35 +52,36 @@ export const login = async (
   }
 };
 
-export const signup = (req: Request, res: Response, next: NextFunction) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    throwValidationError("Validation failed, entered data is incorrect.");
-  }
+export const signup = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const errors = validationResult(req);
+    printValidatorErrors(errors);
 
-  const { email, password } = req.body;
+    const { email, password } = req.body;
 
-  bcrypt
-    .hash(password, 12)
-    .then((hashedPw) => {
-      const owner = new Owner({
-        email,
-        password: hashedPw,
-        companyName: "test",
-        address: "test",
-        phone: "1234567890",
-      });
-      return owner.save();
-    })
-    .then((result) => {
-      res.status(201).json({ message: "Owner created!", ownerId: result._id });
-    })
-    .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
+    const hashedPw = await bcrypt.hash(password, 12);
+
+    const owner = new Owner({
+      email,
+      password: hashedPw,
+      companyName: "test",
+      address: "test",
+      phone: "1234567890",
     });
+
+    const result = await owner.save();
+
+    res.status(201).json({ message: "Owner created!", ownerId: result._id });
+  } catch (err: any) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
 };
 
 export const getOwnerInfo = async (
@@ -89,13 +89,13 @@ export const getOwnerInfo = async (
   res: Response,
   next: NextFunction
 ) => {
-  const ownerId = req.userId;
   try {
+    const ownerId = req.userId;
     const owner = await Owner.findById(ownerId).select(
       "email companyName address phone ownerImage productCategory memberShipList memberShipPrice memberShipMonths"
     );
     if (!owner) {
-      throwNotFoundError("Could not find owner.");
+      return throwNotFoundError("Could not find owner.");
     }
     res.status(200).json({ message: "Owner fetched.", owner: owner });
   } catch (err: any) {
@@ -110,14 +110,11 @@ export const updateOwner = async (
   res: Response,
   next: NextFunction
 ) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    throwValidationError("Validation failed, entered data is incorrect.");
-  }
-  if (!req.userId) return;
-  const ownerId = req.userId;
-
   try {
+    const errors = validationResult(req);
+    printValidatorErrors(errors);
+    if (!req.userId) return;
+    const ownerId = req.userId;
     const fetchedOwner = await userServices.findByIdUpdate(
       ownerId,
       req.body,
@@ -152,9 +149,8 @@ export const uploadOwnerImage = async (
       await firebaseStorageServices.uploadImageToStorage(req.file, "owner/");
 
     const owner = await Owner.findById(ownerId);
-    if (!owner) {
-      return throwNotFoundError("Could not find owner.");
-    }
+    if (!owner) return throwNotFoundError("Could not find owner.");
+
     if (owner && owner.ownerImage) {
       await firebaseStorageServices.deleteImageFromStorage(owner.ownerImage);
     }

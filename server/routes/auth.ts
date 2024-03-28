@@ -1,33 +1,20 @@
-import { Router, Request } from "express";
+import { Router } from "express";
 import { body } from "express-validator";
 import * as authController from "../controllers/auth";
 import { isAuth } from "../middleware/isAuth";
 import multer from "multer";
+import { fileFilter } from "../utils/MulterFileFilter";
 
 const router = Router();
-
-const fileFilter = (
-  req: Request,
-  file: Express.Multer.File,
-  cb: multer.FileFilterCallback
-) => {
-  if (
-    file.mimetype === "image/png" ||
-    file.mimetype === "image/jpg" ||
-    file.mimetype === "image/jpeg" ||
-    file.mimetype === "image/webp"
-  ) {
-    cb(null, true);
-  } else {
-    cb(null, false);
-  }
-};
 
 router.post(
   "/login",
   [
     body("email").isEmail().withMessage("Please enter a valid email address."),
-    body("password").trim().isLength({ min: 5 }),
+    body("password")
+      .trim()
+      .isLength({ min: 5 })
+      .withMessage("Password is required.& min length is 5."),
   ],
   authController.login
 );

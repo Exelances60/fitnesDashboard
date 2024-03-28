@@ -9,7 +9,12 @@ import {
   selectProduct,
   setOrderModalVisible,
 } from "@/store/slices/productPageSlice";
-import { emailRules } from "@/utils/FormRules";
+import {
+  emailRules,
+  justRequired,
+  minFive,
+  phoneRules,
+} from "@/utils/FormRules";
 
 type formValuesType = {
   productName: string;
@@ -42,7 +47,7 @@ const ProductOrderModal = () => {
         ...values,
         amount: parseInt(values.amount.toString()),
         price: parseInt(values.price.toString()),
-        phone: `+90${values.phone}`,
+        phone: +values.phone,
         productId: product._id,
         creator: product.ownerId,
       });
@@ -127,17 +132,7 @@ const ProductOrderModal = () => {
         >
           <Input.TextArea />
         </Form.Item>
-        <Form.Item
-          label="Phone Number"
-          name="phone"
-          rules={[
-            {
-              required: true,
-              message: "Please input your phone number!",
-              min: 10,
-            },
-          ]}
-        >
+        <Form.Item label="Phone Number" name="phone" rules={[...phoneRules]}>
           <Input type="tel" addonBefore="+90" />
         </Form.Item>
         <Form.Item label="Email" name="email" rules={emailRules}>
@@ -146,13 +141,7 @@ const ProductOrderModal = () => {
         <Form.Item
           label="Order Owner"
           name="orderOwner"
-          rules={[
-            {
-              required: true,
-              message: "Please input your name!",
-              min: 3,
-            },
-          ]}
+          rules={[...minFive, ...justRequired]}
         >
           <Input />
         </Form.Item>

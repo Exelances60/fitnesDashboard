@@ -12,7 +12,7 @@ const Customer_1 = __importDefault(require("../models/Customer"));
 const Exercise_1 = __importDefault(require("../models/Exercise"));
 const CalenderAcv_1 = __importDefault(require("../models/CalenderAcv"));
 const Employees_1 = __importDefault(require("../models/Employees"));
-const FirebaseServices_1 = __importDefault(require("../services/FirebaseServices"));
+const FirebaseServices_1 = __importDefault(require("../utils/FirebaseServices"));
 const customerService_1 = __importDefault(require("../services/customerService"));
 const addCustomer = async (req, res, next) => {
     const errors = (0, express_validator_1.validationResult)(req);

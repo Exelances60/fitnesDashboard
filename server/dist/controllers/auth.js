@@ -1,47 +1,25 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.uploadOwnerImage = exports.updateOwner = exports.getOwnerInfo = exports.signup = exports.login = void 0;
+require("dotenv/config");
 const Owner_1 = __importDefault(require("../models/Owner"));
-const dotenv = __importStar(require("dotenv"));
-dotenv.config({ path: __dirname + "/.env" });
 const express_validator_1 = require("express-validator");
 const throwNotFoundError_1 = __importDefault(require("../utils/err/throwNotFoundError"));
 const throwValidationError_1 = __importDefault(require("../utils/err/throwValidationError"));
-const jwtServices_1 = __importDefault(require("../services/jwtServices"));
+const jwtServices_1 = __importDefault(require("../utils/jwtServices"));
 const userService_1 = __importDefault(require("../services/userService"));
-const FirebaseServices_1 = __importDefault(require("../services/FirebaseServices"));
+const FirebaseServices_1 = __importDefault(require("../utils/FirebaseServices"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const LoginRequstSchema_1 = require("../Validator/Auth/LoginRequstSchema");
+const PrintTheValidationErrors_1 = require("../utils/PrintTheValidationErrors");
 const login = async (req, res, next) => {
     try {
-        const errors = (0, express_validator_1.validationResult)(req);
-        if (!errors.isEmpty()) {
-            throw new Error("Validation failed, entered data is incorrect.");
+        const requestValidation = LoginRequstSchema_1.LoginRequestSchema.safeParse(req.body);
+        if (!requestValidation.success) {
+            return (0, throwValidationError_1.default)((0, PrintTheValidationErrors_1.printTheValidationErrors)(requestValidation));
         }
         const { email, password } = req.body;
         const owner = await Owner_1.default.findOne({ email });
@@ -118,14 +96,14 @@ const getOwnerInfo = async (req, res, next) => {
 };
 exports.getOwnerInfo = getOwnerInfo;
 const updateOwner = async (req, res, next) => {
-    const errors = (0, express_validator_1.validationResult)(req);
-    if (!errors.isEmpty()) {
-        (0, throwValidationError_1.default)("Validation failed, entered data is incorrect.");
-    }
-    if (!req.userId)
-        return;
-    const ownerId = req.userId;
     try {
+        const requestValidation = LoginRequstSchema_1.LoginRequestSchema.safeParse(req.body);
+        if (!requestValidation.success) {
+            (0, throwValidationError_1.default)((0, PrintTheValidationErrors_1.printTheValidationErrors)(requestValidation));
+        }
+        if (!req.userId)
+            return;
+        const ownerId = req.userId;
         const fetchedOwner = await userService_1.default.findByIdUpdate(ownerId, req.body, Owner_1.default);
         if (!fetchedOwner) {
             (0, throwNotFoundError_1.default)("Could not find owner.");

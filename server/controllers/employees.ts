@@ -7,65 +7,50 @@ import throwBadRequestError from "../utils/err/throwBadRequestError";
 import throwNotFoundError from "../utils/err/throwNotFoundError";
 import { currentMonthEmployeesCountIncarese } from "../services/businessLogic/calculateEmployessIncares";
 import firebaseStorageServices from "../utils/FirebaseServices";
+import { validationResult } from "express-validator";
+import { printValidatorErrors } from "../utils/printValidatorErrors";
 
 export const createEmployee = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.files) {
-    return throwValidationError("Profile picture is required");
-  }
-  const profilePicture =
-    req.files
-      .filter((file) => {
-        if (file.fieldname === "profilePicture") {
-          return file.originalname;
-        }
-      })
-      .map((file) => file.originalname) +
-    "-" +
-    Date.now();
-
-  const documents = req.files
-    .filter((file) => {
-      if (file.fieldname === "documents") {
-        return file.originalname;
-      }
-    })
-    .map((file) => file.originalname);
-
-  const downloadURLProfilePicture =
-    await firebaseStorageServices.uploadImageToStorage(
-      req.files[0],
-      "employees/"
-    );
-
-  let dowlandsDocuments: string[] = [];
-  if (req.files.length > 1) {
-    dowlandsDocuments = await Promise.all(
-      req.files
-        .filter((file) => {
-          if (file.fieldname === "documents") {
-            return file.originalname;
-          }
-        })
-        .map(async (file) => {
-          return await firebaseStorageServices.uploadImageToStorage(
-            file,
-            "empDocument/"
-          );
-        })
-    );
-  }
-  const ownerId = req.body.ownerId;
-  const employee = new Employee({
-    ...req.body,
-    profilePicture: downloadURLProfilePicture,
-    documents: dowlandsDocuments,
-    customers: [],
-  });
   try {
+    const errors = validationResult(req);
+    printValidatorErrors(errors);
+    if (!req.files) {
+      return throwValidationError("Profile picture is required");
+    }
+    const downloadURLProfilePicture =
+      await firebaseStorageServices.uploadImageToStorage(
+        req.files[0],
+        "employees/"
+      );
+
+    let dowlandsDocuments: string[] = [];
+    if (req.files.length > 1) {
+      dowlandsDocuments = await Promise.all(
+        req.files
+          .filter((file) => {
+            if (file.fieldname === "documents") {
+              return file.originalname;
+            }
+          })
+          .map(async (file) => {
+            return await firebaseStorageServices.uploadImageToStorage(
+              file,
+              "empDocument/"
+            );
+          })
+      );
+    }
+    const ownerId = req.body.ownerId;
+    const employee = new Employee({
+      ...req.body,
+      profilePicture: downloadURLProfilePicture,
+      documents: dowlandsDocuments,
+      customers: [],
+    });
     const savedEmployee = await employee.save();
     const owner = await Owner.findById(ownerId);
     if (!owner) {
@@ -116,8 +101,8 @@ export const assignCustomer = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { employeeId, customerId } = req.body;
   try {
+    const { employeeId, customerId } = req.body;
     const employee = await Employee.findById(employeeId);
     const customer = await Customer.findById(customerId);
     if (!employee) {
@@ -152,6 +137,8 @@ export const updateEmployee = async (
   next: NextFunction
 ) => {
   try {
+    const errors = validationResult(req);
+    printValidatorErrors(errors);
     if (!req.body.id) {
       throwBadRequestError("Employee id is required");
     }

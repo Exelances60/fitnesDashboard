@@ -22,6 +22,7 @@ const EmployeesEditModal = ({
       const response = await axiosClient.put(`/employees/update-employee/`, {
         ...values,
         id: employee._id,
+        phone: values.phone ? +values.phone : undefined,
       });
       if (response.status === 200) {
         message.success({

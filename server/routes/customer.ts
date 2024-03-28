@@ -1,27 +1,11 @@
-import { Router, Request } from "express";
+import { Router } from "express";
 import { body } from "express-validator";
 import { isAuth } from "../middleware/isAuth";
 import * as customerController from "../controllers/customer";
 import multer from "multer";
+import { fileFilter } from "../utils/MulterFileFilter";
 
 const router = Router();
-
-const fileFilter = (
-  req: Request,
-  file: Express.Multer.File,
-  cb: multer.FileFilterCallback
-) => {
-  if (
-    file.mimetype === "image/png" ||
-    file.mimetype === "image/jpg" ||
-    file.mimetype === "image/jpeg" ||
-    file.mimetype === "image/webp"
-  ) {
-    cb(null, true);
-  } else {
-    cb(null, false);
-  }
-};
 
 router.post(
   "/add-customer",

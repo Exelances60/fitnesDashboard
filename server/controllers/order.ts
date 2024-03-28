@@ -2,101 +2,81 @@ import "dotenv/config";
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import Product from "../models/Product";
-import Order, { IOrder } from "../models/Order";
+import Order from "../models/Order";
 import Owner from "../models/Owner";
 import throwBadRequestError from "../utils/err/throwBadRequestError";
 import throwNotFoundError from "../utils/err/throwNotFoundError";
-import throwValidationError from "../utils/err/throwValidationError";
 import senMailOrderCreate from "../utils/sendMailOrderCreate";
 import {
   calculatePreviousMonthSales,
   calculatePreviousMonthAmount,
   calculatePreviosMonthComplateSales,
 } from "../services/businessLogic/calculatePreviousMonthSales";
+import { printValidatorErrors } from "../utils/printValidatorErrors";
 
-export const createOrder = (
+export const createOrder = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    throwValidationError("Validation failed, entered data is incorrect.");
-  }
-  const { price, amount, email, address, productId, creator, orderOwner } =
-    req.body;
+  try {
+    const errors = validationResult(req);
+    printValidatorErrors(errors);
+    const { price, amount, email, address, productId, creator, orderOwner } =
+      req.body;
 
-  if (!productId) {
-    throwNotFoundError("Product not  matched.");
-  }
+    const product = await Product.findById(productId);
+    if (!product) {
+      return throwNotFoundError("Product not found.");
+    }
 
-  let fetchedProduct;
-  let fetchedOrder: IOrder;
+    product.amount = product.amount - amount;
+    await product.save();
 
-  Product.findById(productId)
-    .then((product) => {
-      if (!product) {
-        return throwNotFoundError("Product not found.");
-      }
-
-      if (amount > product.amount) {
-        throwBadRequestError("The amount of product is not enough.");
-      }
-
-      if (product.amount === 0) {
-        throwBadRequestError("The product is out of stock.");
-      }
-
-      fetchedProduct = product;
-      product.amount = product.amount - amount;
-
-      return product.save();
-    })
-    .then((result) => {
-      const totalPrice = price * amount;
-      const order = new Order({
-        totalPrice,
-        orderOwnerEmail: email,
-        adress: address,
-        productsId: productId,
-        orderOwner: orderOwner,
-        status: "Preparing",
-        orderImage: result.imageUrl,
-        orderCategory: result.category,
-      });
-      return order.save();
-    })
-    .then((result) => {
-      fetchedOrder = result;
-      return Owner.findById(creator);
-    })
-    .then((owner) => {
-      if (!owner) {
-        return throwNotFoundError("Owner not found.");
-      }
-      owner.orders.push(fetchedOrder._id);
-      return owner.save();
-    })
-    .then((result) => {
-      /* sendMailOrderCreate(
-        fetchedOrder.orderOwnerEmail,
-        process.env.SENDER_MAIL,
-        "Order Confirmation",
-        "Your order has been successfully placed!",
-        {
-          name: fetchedProduct.name,
-          imageUrl: fetchedProduct.imageUrl,
-          amount: fetchedOrder.amount,
-          price: fetchedProduct.price,
-          totalPrice: fetchedOrder.totalPrice,
-        }
-      ); */
-      res.status(201).json({
-        message: "Order created successfully!",
-        order: result,
-        status: 201,
-      });
+    const totalPrice = price * amount;
+    const order = new Order({
+      totalPrice,
+      orderOwnerEmail: email,
+      adress: address,
+      productsId: productId,
+      orderOwner: orderOwner,
+      status: "Preparing",
+      orderImage: product.imageUrl,
+      orderCategory: product.category,
     });
+    const result = await order.save();
+
+    const owner = await Owner.findById(creator);
+    if (!owner) {
+      return throwNotFoundError("Owner not found.");
+    }
+    owner.orders.push(result._id);
+    await owner.save();
+
+    /* sendMailOrderCreate(
+      order.orderOwnerEmail,
+      process.env.SENDER_MAIL,
+      "Order Confirmation",
+      "Your order has been successfully placed!",
+      {
+        name: product.name,
+        imageUrl: product.imageUrl,
+        amount: order.amount,
+        price: product.price,
+        totalPrice: order.totalPrice,
+      }
+    ); */
+    res.status(201).json({
+      message: "Order created successfully!",
+      order: result,
+      status: 201,
+    });
+  } catch (error: any) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
 };
 
 export const getOrders = async (
@@ -177,8 +157,11 @@ export const getOrders = async (
         increasePercentageForCompletedSales,
       },
     });
-  } catch (err) {
-    throwNotFoundError("Fetching orders failed.");
+  } catch (err: any) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   }
 };
 

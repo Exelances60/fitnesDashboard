@@ -26,12 +26,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.productRoutes = void 0;
 const express_1 = require("express");
 const productController = __importStar(require("../controllers/product"));
 const express_validator_1 = require("express-validator");
 const isAuth_1 = require("../middleware/isAuth");
 const multer_1 = __importDefault(require("multer"));
 const router = (0, express_1.Router)();
+exports.productRoutes = router;
 const fileFilter = (req, file, cb) => {
     if (file.mimetype === "image/png" ||
         file.mimetype === "image/jpg" ||
@@ -52,5 +54,4 @@ router.post("/add-product-category", [
         .isLength({ min: 3 })
         .withMessage("Category name must be at least 3 characters long."),
 ], isAuth_1.isAuth, productController.addProductCategory);
-exports.default = router;
 //# sourceMappingURL=product.js.map

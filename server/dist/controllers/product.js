@@ -13,7 +13,7 @@ const throwValidationError_1 = __importDefault(require("../utils/err/throwValida
 const throwBadRequestError_1 = __importDefault(require("../utils/err/throwBadRequestError"));
 const throwNotFoundError_1 = __importDefault(require("../utils/err/throwNotFoundError"));
 const Order_1 = __importDefault(require("../models/Order"));
-const FirebaseServices_1 = __importDefault(require("../services/FirebaseServices"));
+const FirebaseServices_1 = __importDefault(require("../utils/FirebaseServices"));
 const mongoose_1 = require("mongoose");
 const addProduct = async (req, res, next) => {
     try {

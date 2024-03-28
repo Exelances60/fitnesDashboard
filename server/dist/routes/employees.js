@@ -26,11 +26,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.employeeRoutes = void 0;
 const express_1 = require("express");
 const employeeController = __importStar(require("../controllers/employees"));
 const isAuth_1 = require("../middleware/isAuth");
 const multer_1 = __importDefault(require("multer"));
 const router = (0, express_1.Router)();
+exports.employeeRoutes = router;
 const fileFilter = (req, file, cb) => {
     if (file.mimetype === "image/png" ||
         file.mimetype === "image/jpg" ||
@@ -47,5 +49,4 @@ router.get("/get-employees", isAuth_1.isAuth, employeeController.getEmployees);
 router.post("/assignCustomer", isAuth_1.isAuth, employeeController.assignCustomer);
 router.put("/update-employee", isAuth_1.isAuth, employeeController.updateEmployee);
 router.delete("/delete-employee/:employeeId", isAuth_1.isAuth, employeeController.deleteEmployee);
-exports.default = router;
 //# sourceMappingURL=employees.js.map

@@ -3,7 +3,8 @@ import { IExercise } from "./Exercise";
 
 const ModelSchema = Schema;
 
-export interface ICustomer {
+export interface ICustomer extends Document {
+  _id: Types.ObjectId;
   name: string;
   phone: number;
   parentPhone: number;

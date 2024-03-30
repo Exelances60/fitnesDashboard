@@ -42,8 +42,6 @@ export const getCustomer = async (
 
     const customerService = new CustomerServices();
     const fetchedCustomer = await customerService.getCustomer(ownerId);
-
-    console.log(fetchedCustomer);
     res.status(200).json({
       message: "Fetched customer successfully!",
       customers: fetchedCustomer,
@@ -59,36 +57,17 @@ export const updateCustomer = async (
   res: Response,
   next: NextFunction
 ) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    throwValidationError("Validation failed, entered data is incorrect.");
-  }
-  const { _id, ownerId } = req.body;
   try {
-    const fetchedOwner = await Owner.findById(ownerId);
-    if (!fetchedOwner) {
-      return throwBadRequestError("Owner not found.");
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      throwValidationError("Validation failed, entered data is incorrect.");
     }
-    if (!fetchedOwner.customer.includes(_id)) {
-      return throwBadRequestError("Customer not found.");
-    }
-    let customer = await Customer.findById(_id);
-    if (!customer) {
-      return throwBadRequestError("Customer not found.");
-    }
-
-    customer = {
-      ...req.body,
-      membershipType: req.body.membershipMonths,
-      membershipPrice: req.body.membershipPrice,
-      membershipStatus: req.body.membershipStatus,
-      exercisePlan: req.body.exercisePlan || customer.exercisePlan,
-    };
-
-    const updatedCustomer = await customer?.save();
+    const responseUpdateCustomer = await new CustomerServices().updateCustomer(
+      req
+    );
     res.status(200).json({
       message: "Customer updated successfully!",
-      customer: updatedCustomer,
+      customer: responseUpdateCustomer,
       status: 200,
     });
   } catch (error) {
@@ -101,24 +80,9 @@ export const deleteCustomer = async (
   res: Response,
   next: NextFunction
 ) => {
-  const customerId = req.params.customerId;
-  if (!customerId) throwBadRequestError("Customer not found.");
   try {
-    const customer = await Customer.findById(customerId);
-    if (!customer) {
-      return throwBadRequestError("Customer not found.");
-    }
-    const ownerId = customer.ownerId;
-    const fetchedOwner = await Owner.findById(ownerId);
-    if (!fetchedOwner) {
-      return throwBadRequestError("Owner not found.");
-    }
-    fetchedOwner.customer.filter(
-      (cust) => cust.toString() !== customerId.toString()
-    );
-    await fetchedOwner.save();
-    firebaseStorageServices.deleteImageFromStorage(customer.profilePicture);
-    await customer.deleteOne();
+    if (!req.params.customerId) throwBadRequestError("Customer not found.");
+    await new CustomerServices().deleteCustomer(req.params.customerId);
     res.status(200).json({
       message: "Customer deleted successfully!",
       status: 200,
@@ -134,27 +98,13 @@ export const findCustomer = async (
   next: NextFunction
 ) => {
   try {
-    const customerId = req.params.customerId;
-    if (!customerId) throwBadRequestError("Customer not found.");
-    const fetchedCustomer = await Customer.findById(customerId)
-      .populate("calendarAcv")
-      .populate({
-        path: "coachPT",
-        select: "name email phone profilePicture position",
-      });
-
-    if (!fetchedCustomer) {
-      return throwBadRequestError("Customer not found.");
-    }
-
-    const fetchedExersice = await Exersice.find({
-      name: fetchedCustomer.exercisePlan,
-    });
-    fetchedCustomer.exercisePlan = fetchedExersice;
-
+    const responseCustomer = await new CustomerServices().findCustomer(
+      req.params.customerId
+    );
+    console.log(responseCustomer);
     res.status(200).json({
       message: "Fetched customer successfully!",
-      customer: fetchedCustomer,
+      customer: responseCustomer,
       status: 200,
     });
   } catch (error: any) {
@@ -211,14 +161,16 @@ export const updateCustomerPlan = async (
     }
     const newExercises = exerciseName.filter((exercise: IExercise) => {
       return typeof exercise === "string"
-        ? fetchedCustomer.exercisePlan.includes(exercise)
+        ? !fetchedCustomer.exercisePlan.includes(exercise)
         : undefined;
     });
+    console.log(newExercises);
 
     fetchedCustomer.exercisePlan = [
       ...fetchedCustomer.exercisePlan,
       ...newExercises,
     ];
+
     await fetchedCustomer.save();
     res.status(200).json({
       message: "Customer exercise plan updated successfully!",

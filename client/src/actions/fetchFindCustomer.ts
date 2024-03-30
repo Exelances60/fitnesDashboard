@@ -1,6 +1,8 @@
 "use server";
 import { cookies } from "next/headers";
 
+interface PromiseReturn {}
+
 export const fetchFindCustomer = async (customerId: string) => {
   const cookiesStore = cookies();
   const token = cookiesStore.get("token")?.value;

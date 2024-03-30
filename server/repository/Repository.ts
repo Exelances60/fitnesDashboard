@@ -7,46 +7,79 @@ export default class RepositoryBase<T extends Model<any>> {
     this.model = model;
   }
 
-  async findById<T>(id: string): Promise<T> {
-    const result = await this.model.findById(id);
-    if (!result) {
-      throw new Error("Not found");
+  async findById<T>(id: string): Promise<T & Model<T>> {
+    try {
+      const result = (await this.model.findById(id)) as T & Model<T>;
+      if (!result) {
+        throw new Error("Not found");
+      }
+      return result;
+    } catch (error: any) {
+      throw new Error(error);
     }
-    return result;
   }
 
-  async create<T>(data: T): Promise<T> {
-    const result = await this.model.create(data);
-    return result;
+  async create<T>(data: T): Promise<T & Model<T>> {
+    try {
+      const result = await this.model.create(data);
+      return result;
+    } catch (error: any) {
+      throw new Error(error);
+    }
   }
 
-  async update<T>(id: string, data: UpdateQuery<T>) {
-    const result = await this.model.findByIdAndUpdate(id, data, { new: true });
-    if (!result) {
-      throw new Error("Not found");
+  async update<T>(id: string, data: UpdateQuery<T>): Promise<T & Model<T>> {
+    try {
+      const result = await this.model.findByIdAndUpdate(id, data, {
+        new: true,
+      });
+      if (!result) {
+        throw new Error("Not found");
+      }
+      return result;
+    } catch (error: any) {
+      throw new Error(error);
     }
-    return result;
   }
 
   async delete(id: string) {
-    const result = await this.model.findByIdAndDelete(id);
-    if (!result) {
-      throw new Error("Not found");
+    try {
+      const result = await this.model.findByIdAndDelete(id);
+      if (!result) {
+        throw new Error("Not found");
+      }
+      return result;
+    } catch (error: any) {
+      throw new Error(error);
     }
-    return result;
   }
   async findByIdWithPopulate(
     id: string,
     populateModel: string,
     populateField: string
   ) {
-    const result = await this.model.findById(id).populate({
-      path: `${populateModel}`,
-      select: `${populateField}`,
-    });
-    if (!result) {
-      throw new Error("Not found");
+    try {
+      const result = await this.model.findById(id).populate({
+        path: `${populateModel}`,
+        select: `${populateField}`,
+      });
+      if (!result) {
+        throw new Error("Not found");
+      }
+      return result;
+    } catch (error: any) {
+      throw new Error(error);
     }
-    return result;
+  }
+  async find(query: any) {
+    try {
+      const result = await this.model.find(query);
+      if (!result) {
+        throw new Error("Not found");
+      }
+      return result;
+    } catch (error: any) {
+      throw new Error(error);
+    }
   }
 }

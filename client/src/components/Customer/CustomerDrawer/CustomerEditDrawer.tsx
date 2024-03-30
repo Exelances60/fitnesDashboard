@@ -25,7 +25,7 @@ const CustomerEditDrawer = ({ customer }: CustomerEditDrawerProps) => {
 
     const updatedCustomer = {
       ...values,
-      exercisePlan: values.exercisePlan,
+      /*     exercisePlan: values.exercisePlan, */
       membershipType: values.membershipMonths,
     };
     try {
@@ -101,8 +101,8 @@ const CustomerEditDrawer = ({ customer }: CustomerEditDrawerProps) => {
           </Form.Item>
           <CustomerMemberShipStatus editMode={true} />
         </div>
-
-        <CustomerEditExersiceForm />
+        {/* 
+        <CustomerEditExersiceForm /> */}
       </Form>
     </>
   );

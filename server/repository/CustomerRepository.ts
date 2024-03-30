@@ -23,4 +23,29 @@ export class CustomerRepository extends RepositoryBase<typeof Customer> {
       throw new Error(error.message);
     }
   }
+  async findByIdWithDoublePopulate(
+    id: string,
+    populateModel1: string,
+    populateField1: string,
+    populateModel2: string,
+    populateField2: string
+  ) {
+    try {
+      const result = await Customer.findById(id)
+        .populate({
+          path: populateModel1,
+          select: populateField1,
+        })
+        .populate({
+          path: populateModel2,
+          select: populateField2,
+        });
+      if (!result) {
+        throw new Error("Not found");
+      }
+      return result;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
 }

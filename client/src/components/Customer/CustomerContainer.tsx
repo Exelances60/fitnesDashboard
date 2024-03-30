@@ -7,8 +7,6 @@ import { fetchCustomer } from "@/actions/fetchCustomer";
 const CustomerContainer = async () => {
   const [data] = await Promise.all([fetchCustomer()]);
 
-  console.log(data);
-
   return (
     <Card className="overflow-auto flex flex-col gap-2">
       <CustomerContainerHeader />

@@ -2,6 +2,7 @@ import "dotenv/config";
 import express, { Request, Response, NextFunction } from "express";
 import dbConnection from "./services/DatabaseServices";
 import App from "./services/ExpressAppServices";
+import path from "path";
 import { PORT } from "./config";
 
 const StartServer = async () => {
@@ -16,6 +17,7 @@ const StartServer = async () => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 }); */
+  app.use("/images", express.static(path.join(__dirname, "images")));
 
   await dbConnection();
   await App(app);

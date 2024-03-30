@@ -18,7 +18,7 @@ export interface ICustomer extends Document {
   membershipPrice: number;
   membershipStartDate: Date;
   membershipEndDate: Date;
-  membershipType: string;
+  membershipType: number;
   membershipStatus: string;
   gender: string;
   exercisePlan: string[] | IExercise[];
@@ -82,7 +82,7 @@ const customerSchema = new ModelSchema<ICustomer>(
       require: true,
     },
     membershipType: {
-      type: String,
+      type: Number,
       require: true,
     },
     membershipStatus: {

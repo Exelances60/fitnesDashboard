@@ -101,7 +101,6 @@ export const findCustomer = async (
     const responseCustomer = await new CustomerServices().findCustomer(
       req.params.customerId
     );
-    console.log(responseCustomer);
     res.status(200).json({
       message: "Fetched customer successfully!",
       customer: responseCustomer,

@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import Employee from "../models/Employees";
 import Customer from "../models/Customer";
-import Owner from "../models/Owner";
 import throwValidationError from "../utils/err/throwValidationError";
 import throwBadRequestError from "../utils/err/throwBadRequestError";
 import throwNotFoundError from "../utils/err/throwNotFoundError";
@@ -9,6 +8,7 @@ import { currentMonthEmployeesCountIncarese } from "../services/businessLogic/ca
 import firebaseStorageServices from "../utils/FirebaseServices";
 import { validationResult } from "express-validator";
 import { printValidatorErrors } from "../utils/printValidatorErrors";
+import { EmployeesServices } from "../services/EmployeesServices";
 
 export const createEmployee = async (
   req: Request,
@@ -18,51 +18,16 @@ export const createEmployee = async (
   try {
     const errors = validationResult(req);
     printValidatorErrors(errors);
-    if (!req.files) {
-      return throwValidationError("Profile picture is required");
-    }
-    const downloadURLProfilePicture =
-      await firebaseStorageServices.uploadImageToStorage(
-        req.files[0],
-        "employees/"
-      );
-
-    let dowlandsDocuments: string[] = [];
-    if (req.files.length > 1) {
-      dowlandsDocuments = await Promise.all(
-        req.files
-          .filter((file) => {
-            if (file.fieldname === "documents") {
-              return file.originalname;
-            }
-          })
-          .map(async (file) => {
-            return await firebaseStorageServices.uploadImageToStorage(
-              file,
-              "empDocument/"
-            );
-          })
-      );
-    }
-    const ownerId = req.body.ownerId;
-    const employee = new Employee({
-      ...req.body,
-      profilePicture: downloadURLProfilePicture,
-      documents: dowlandsDocuments,
-      customers: [],
+    const savedEmployee = await new EmployeesServices().createEmployee(req);
+    res.status(201).json({
+      message: "Employee created successfully",
+      savedEmployee,
     });
-    const savedEmployee = await employee.save();
-    const owner = await Owner.findById(ownerId);
-    if (!owner) {
-      return throwNotFoundError("Owner not found");
-    }
-    owner.employees.push(savedEmployee._id);
-    await owner.save();
-    res
-      .status(201)
-      .json({ message: "Employee created successfully", savedEmployee });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
 };
 

@@ -39,7 +39,6 @@ const EmployeesAddDrawer = ({ setEmployeeData }: EmployeesAddDrawerProps) => {
     formData.append("university", newValues.university);
     formData.append("education", newValues.education);
     formData.append("ownerId", userInfo._id);
-
     try {
       const response = await axiosClient.postForm(
         "/employees/create-employee",

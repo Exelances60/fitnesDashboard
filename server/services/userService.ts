@@ -40,6 +40,12 @@ export class UserServices {
       throw new Error(error);
     }
   }
+  /**
+   * Retrieves information about an owner.
+   * @param ownerId - The ID of the owner.
+   * @returns A promise that resolves to an `IOwner` object containing the owner's information.
+   * @throws If the owner is not found or an error occurs during the retrieval process.
+   */
   async getOwnerInfo(ownerId: string): Promise<IOwner> {
     try {
       const owner = await this.ownerRepository.findById<IOwner>(ownerId);
@@ -53,6 +59,7 @@ export class UserServices {
         productCategory: owner.productCategory,
         memberShipList: owner.memberShipList,
         memberShipPrice: owner.memberShipPrice,
+        _id: owner._id,
         memberShipMonths: owner.memberShipMonths,
       } as IOwner;
       return responseOwner;

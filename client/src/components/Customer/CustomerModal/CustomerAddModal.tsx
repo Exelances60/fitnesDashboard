@@ -68,7 +68,6 @@ const CustomerAddModal = () => {
       <Form.Item
         label="Profile Picture"
         name="profilePicture"
-        valuePropName="fileList"
         className="w-full flex flex-col gap-[10px] justify-center"
         getValueFromEvent={(e) => {
           if (Array.isArray(e)) {

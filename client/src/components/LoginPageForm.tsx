@@ -5,15 +5,12 @@ import { getCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import axiosClient from "@/utils/AxiosClient";
 import { jwtDecode } from "jwt-decode";
-import { useAppDispatch } from "@/store/store";
-import { setUser } from "@/store/slices/userSlice";
 import { emailRules } from "@/utils/FormRules";
 
 const LoginPageForm = () => {
   const router = useRouter();
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const token = getCookie("token");

@@ -1,11 +1,12 @@
-import { Schema, model } from "mongoose";
+import { Schema, Types, model } from "mongoose";
 
-interface ICalenderAcv {
+export interface ICalenderAcv {
+  _id: Types.ObjectId;
   date: Date;
   text: string;
   type: string;
   color: string;
-  customerId: Schema.Types.ObjectId;
+  customerId: Types.ObjectId;
 }
 
 const calenderAcvSchema = new Schema<ICalenderAcv>({

@@ -6,18 +6,33 @@ import { ICustomer } from "../models/Customer";
 import { IOwner } from "../models/Owner";
 import { ExerciseRepository } from "../repository/ExersiceRepository";
 import { IExercise } from "../models/Exercise";
+import throwNotFoundError from "../utils/err/throwNotFoundError";
+import throwBadRequestError from "../utils/err/throwBadRequestError";
+import { CalendarActRepository } from "../repository/CalendarActRepository";
+import { ICalenderAcv } from "../models/CalenderAcv";
+import { EmployeeRepository } from "../repository/EmployeeRepository";
+import { IEmployee } from "../models/Employees";
 
 export class CustomerServices {
   private customerRepository: CustomerRepository;
   private ownerRepository: OwnerRepository;
   private exerciseRepository: ExerciseRepository;
+  private calendarAcvRepository: CalendarActRepository;
+  private employeeRepository: EmployeeRepository;
 
   constructor() {
     this.customerRepository = new CustomerRepository();
     this.ownerRepository = new OwnerRepository();
     this.exerciseRepository = new ExerciseRepository();
+    this.calendarAcvRepository = new CalendarActRepository();
+    this.employeeRepository = new EmployeeRepository();
   }
 
+  /**
+   * Retrieves a customer by their ID.
+   * @param _id - The ID of the customer to retrieve.
+   * @returns A Promise that resolves to the customer object if found, or throws an error if not found.
+   */
   async getCustomer(_id: string) {
     try {
       const customer = await this.customerRepository.findOwnerIdWithPopulate(
@@ -25,14 +40,19 @@ export class CustomerServices {
         "coachPT",
         "name email phone profilePicture"
       );
-      if (!customer) {
-        throw new Error("Customer not found");
-      }
+      if (!customer) return throwNotFoundError("Customer not found");
+
       return customer;
     } catch (error: any) {
       throw new Error(error.message);
     }
   }
+  /**
+   * Adds a new customer.
+   * @param req - The request object containing the customer data.
+   * @returns The saved customer object.
+   * @throws Error if there is an error while adding the customer.
+   */
   async addCustomer(req: Request) {
     try {
       const { coach, ownerId } = req.body;
@@ -40,9 +60,8 @@ export class CustomerServices {
         ownerId
       )) as IOwner;
 
-      if (!fetchedOwner) {
-        throw new Error("Owner not found");
-      }
+      if (!fetchedOwner) return throwNotFoundError("Owner not found");
+
       const downloadURL = await firebaseStorageServices.uploadImageToStorage(
         req.file as Express.Multer.File,
         "customers/"
@@ -73,23 +92,27 @@ export class CustomerServices {
     }
   }
 
+  /**
+   * Updates a customer based on the provided request.
+   * @param req - The request object containing the necessary data for updating the customer.
+   * @returns The updated customer object.
+   * @throws Error if any error occurs during the update process.
+   */
   async updateCustomer(req: Request) {
     try {
       const fetchedOwner = await this.ownerRepository.findById<IOwner>(
         req.body.ownerId
       );
-      if (!fetchedOwner) {
-        throw new Error("Owner not found");
-      }
-      if (!fetchedOwner.customer.includes(req.body._id)) {
-        throw new Error("Customer not found");
-      }
+      if (!fetchedOwner) return throwNotFoundError("Owner not found");
+
+      if (!fetchedOwner.customer.includes(req.body._id))
+        return throwBadRequestError("Customer not found in owner's list");
+
       const customer = await this.customerRepository.findById<ICustomer>(
         req.body._id
       );
-      if (!customer) {
-        throw new Error("Customer not found");
-      }
+      if (!customer) return throwNotFoundError("Customer not found");
+
       const updatedCustomer = await this.customerRepository.update<ICustomer>(
         req.body._id,
         {
@@ -103,7 +126,12 @@ export class CustomerServices {
     }
   }
 
-  async deleteCustomer(customerId: string) {
+  /**
+   * Deletes a customer from the database.
+   * @param customerId - The ID of the customer to delete.
+   * @throws Error if the customer or owner is not found, or if there is an error during the deletion process.
+   */
+  async deleteCustomer(customerId: string): Promise<void> {
     try {
       const customer = await this.customerRepository.findById<ICustomer>(
         customerId
@@ -126,15 +154,21 @@ export class CustomerServices {
       throw new Error(error.message);
     }
   }
+  /**
+   * Finds a customer by their ID and retrieves their information along with related exercise details.
+   * @param customerId - The ID of the customer to find.
+   * @returns The customer information along with their exercise details.
+   * @throws Error if there is an error during the process.
+   */
   async findCustomer(customerId: string) {
     try {
       const fetchedCustomer = await this.customerRepository.findById<ICustomer>(
         customerId
       );
-      if (!fetchedCustomer) {
-        throw new Error("Customer not found");
-      }
-      await fetchedCustomer.populate("calendarAcv", "title");
+
+      if (!fetchedCustomer) return throwNotFoundError("Customer not found");
+
+      await fetchedCustomer.populate("calendarAcv", "date text type color _id");
       await fetchedCustomer.populate(
         "coachPT",
         "name email phone profilePicture position"
@@ -144,6 +178,7 @@ export class CustomerServices {
         name: fetchedCustomer.exercisePlan,
       });
 
+      if (!fetchedExersice) return throwNotFoundError("Exercise not found");
       const exerciseNames = fetchedExersice.map((exercise) => {
         return {
           bodyPart: exercise.bodyPart,
@@ -176,7 +211,117 @@ export class CustomerServices {
         address: fetchedCustomer.address,
         bloodGroup: fetchedCustomer.bloodGroup,
       };
+      console.log(responseCustomer);
       return responseCustomer;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+  /**
+   * Deletes an exercise plan from a customer's list of exercise plans.
+   * @param req - The request object containing the customer ID and exercise name.
+   * @throws {BadRequestError} If the customer ID is not found in the request body.
+   * @throws {NotFoundError} If the customer is not found in the database.
+   * @throws {Error} If any other error occurs during the deletion process.
+   */
+  async deleteCustomerExercisePlan(req: Request) {
+    try {
+      if (!req.body.customerId)
+        return throwBadRequestError("Customer id not found");
+      const fetchedCustomer = await this.customerRepository.findById<ICustomer>(
+        req.body.customerId
+      );
+      if (!fetchedCustomer) return throwNotFoundError("Customer not found");
+      const deleteExersice = fetchedCustomer.exercisePlan.filter(
+        (exersice) => exersice !== req.body.exerciseName
+      ) as string[];
+      fetchedCustomer.exercisePlan = deleteExersice;
+      await fetchedCustomer.updateOne(fetchedCustomer);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  /**
+   * Updates the exercise plan for a customer.
+   * @param req - The request object containing the customer ID and new exercise plan.
+   * @throws Error if there is an error updating the customer's exercise plan.
+   */
+  async updateCustomerExercisePlan(req: Request) {
+    try {
+      const fetchedCustomer = await this.customerRepository.findById<ICustomer>(
+        req.body.customerId
+      );
+      if (!fetchedCustomer) return throwNotFoundError("Customer not found");
+      const newExercises = req.body.exerciseName.filter(
+        (exercise: IExercise) => {
+          return typeof exercise === "string"
+            ? !fetchedCustomer.exercisePlan.includes(exercise)
+            : undefined;
+        }
+      );
+      fetchedCustomer.exercisePlan = [
+        ...fetchedCustomer.exercisePlan,
+        ...newExercises,
+      ];
+      await fetchedCustomer.updateOne(fetchedCustomer);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+  /**
+   * Adds a customer activity.
+   * @param req - The request object containing the activity details.
+   * @returns A promise that resolves to the created customer activity.
+   * @throws An error if there is an issue adding the customer activity.
+   */
+  async addCustomerActivity(req: Request): Promise<ICalenderAcv> {
+    try {
+      const { planText, planType, customerId } = req.body;
+      const fetchedCustomer = await this.customerRepository.findById<ICustomer>(
+        customerId
+      );
+      if (!fetchedCustomer) return throwNotFoundError("Customer not found");
+      const savedActivity =
+        await this.calendarAcvRepository.create<ICalenderAcv>({
+          planText,
+          planType,
+          customerId,
+          ...req.body,
+        });
+      fetchedCustomer.calendarAcv.push(savedActivity._id);
+      await fetchedCustomer.updateOne(fetchedCustomer);
+      return savedActivity;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+  /**
+   * Deletes a customer's coach and updates the corresponding records.
+   * @param customerId - The ID of the customer to delete the coach for.
+   * @returns A promise that resolves to undefined.
+   * @throws Error if there is an error during the deletion process.
+   */
+  async deleteCustomerCoach(customerId: string): Promise<undefined> {
+    try {
+      const fetchedCustomer = await this.customerRepository.findById<ICustomer>(
+        customerId
+      );
+      if (!fetchedCustomer) return throwNotFoundError("Customer not found");
+      if (!fetchedCustomer.coachPT)
+        return throwBadRequestError("Customer does not have a coach");
+
+      const fetchedEmployee = await this.employeeRepository.findById<IEmployee>(
+        fetchedCustomer.coachPT.toString()
+      );
+      if (!fetchedEmployee) return throwNotFoundError("Employee not found");
+
+      fetchedEmployee.customers.filter(
+        (cust) => cust.toString() !== customerId.toString()
+      );
+      await fetchedEmployee.updateOne(fetchedEmployee);
+      fetchedCustomer.coachPT = null;
+      await fetchedCustomer.updateOne(fetchedCustomer);
     } catch (error: any) {
       throw new Error(error.message);
     }

@@ -7,7 +7,7 @@ export default class RepositoryBase<T extends Model<any>> {
     this.model = model;
   }
 
-  async findById<T>(id: string): Promise<T & Model<T>> {
+  async findById<T>(id: string): Promise<Model<T> & T> {
     try {
       const result = (await this.model.findById(id)) as T & Model<T>;
       if (!result) {

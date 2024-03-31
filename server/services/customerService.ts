@@ -211,7 +211,6 @@ export class CustomerServices {
         address: fetchedCustomer.address,
         bloodGroup: fetchedCustomer.bloodGroup,
       };
-      console.log(responseCustomer);
       return responseCustomer;
     } catch (error: any) {
       throw new Error(error.message);

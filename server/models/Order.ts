@@ -2,7 +2,7 @@ import { Schema, model, Types } from "mongoose";
 
 const ModelSchema = Schema;
 
-export interface IOrder {
+export interface IOrder extends Document {
   _id: Types.ObjectId;
   adress: string;
   status: string;

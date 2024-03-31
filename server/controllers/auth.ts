@@ -1,15 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import Owner from "../models/Owner";
-import * as dotenv from "dotenv";
-dotenv.config({ path: __dirname + "/.env" });
+import "dotenv/config";
 import { validationResult } from "express-validator";
-import throwNotFoundError from "../utils/err/throwNotFoundError";
 import throwValidationError from "../utils/err/throwValidationError";
-import jwtServices from "../utils/jwtServices";
-import userServices from "../services/userService";
-import firebaseStorageServices from "../utils/FirebaseServices";
 import bcrypt from "bcryptjs";
 import { printValidatorErrors } from "../utils/printValidatorErrors";
+import { UserServices } from "../services/userService";
 
 export const login = async (
   req: Request,
@@ -19,36 +15,21 @@ export const login = async (
   try {
     const errors = validationResult(req);
     printValidatorErrors(errors);
-    const { email, password } = req.body;
-    const owner = await Owner.findOne({ email });
-    if (!owner) {
-      throw new Error("A owner with this email could not be found.");
-    }
-    const isPasswordMatch = await jwtServices.comparePassword(
-      password,
-      owner.password
+
+    const token = await new UserServices().Login(
+      req.body.email,
+      req.body.password
     );
-
-    if (!isPasswordMatch) {
-      throw new Error("Wrong password!");
-    }
-
-    const token = jwtServices.signToken({
-      email: owner.email,
-      ownerId: owner._id.toString(),
-      _id: owner._id.toString(),
-    });
 
     res.status(200).json({
       token,
-      ownerId: owner._id.toString(),
       message: "Login successful!",
     });
   } catch (err: any) {
     if (!err.statusCode) {
-      err.statusCode = 500; // Set default status code if not provided
+      err.statusCode = 500;
     }
-    next(err); // Pass the error to the error handling middleware
+    next(err);
   }
 };
 
@@ -90,13 +71,8 @@ export const getOwnerInfo = async (
   next: NextFunction
 ) => {
   try {
-    const ownerId = req.userId;
-    const owner = await Owner.findById(ownerId).select(
-      "email companyName address phone ownerImage productCategory memberShipList memberShipPrice memberShipMonths"
-    );
-    if (!owner) {
-      return throwNotFoundError("Could not find owner.");
-    }
+    if (!req.userId) return throwValidationError("No user id provided.");
+    const owner = await new UserServices().getOwnerInfo(req.userId);
     res.status(200).json({ message: "Owner fetched.", owner: owner });
   } catch (err: any) {
     if (!err.statusCode) {
@@ -113,18 +89,7 @@ export const updateOwner = async (
   try {
     const errors = validationResult(req);
     printValidatorErrors(errors);
-    if (!req.userId) return;
-    const ownerId = req.userId;
-    const fetchedOwner = await userServices.findByIdUpdate(
-      ownerId,
-      req.body,
-      Owner
-    );
-
-    if (!fetchedOwner) {
-      throwNotFoundError("Could not find owner.");
-    }
-
+    const fetchedOwner = await new UserServices().updateOwnerInfo(req);
     res.status(200).json({ message: "Owner updated!", owner: fetchedOwner });
   } catch (error: any) {
     if (!error.statusCode) {
@@ -140,25 +105,10 @@ export const uploadOwnerImage = async (
   next: NextFunction
 ) => {
   try {
-    if (!req.file) {
-      throwValidationError("No image provided.");
-    }
-    const ownerId = req.userId;
-    if (!req.file) return;
-    const dowlandURLOwnerImage =
-      await firebaseStorageServices.uploadImageToStorage(req.file, "owner/");
-
-    const owner = await Owner.findById(ownerId);
-    if (!owner) return throwNotFoundError("Could not find owner.");
-
-    if (owner && owner.ownerImage) {
-      await firebaseStorageServices.deleteImageFromStorage(owner.ownerImage);
-    }
-    owner.ownerImage = dowlandURLOwnerImage;
-    await owner.save();
+    const responseOwner = await new UserServices().uploadOwnerImage(req);
     res.status(201).json({
       message: "Owner Image uploaded.",
-      ownerImage: owner.ownerImage,
+      ownerImage: responseOwner.ownerImage,
     });
   } catch (error: any) {
     if (!error.statusCode) {

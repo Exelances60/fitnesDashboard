@@ -82,4 +82,15 @@ export default class RepositoryBase<T extends Model<any>> {
       throw new Error(error);
     }
   }
+  async findOne<T>(query: any): Promise<T & Model<T>> {
+    try {
+      const result = await this.model.findOne(query);
+      if (!result) {
+        throw new Error("Not found");
+      }
+      return result;
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }
 }

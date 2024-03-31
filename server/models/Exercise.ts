@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 const ModelSchema = Schema;
 
-export interface IExercise {
+export interface IExercise extends Document {
   bodyPart: string;
   equipment: string;
   gifUrl: string;

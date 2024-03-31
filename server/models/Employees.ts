@@ -3,7 +3,7 @@ import { Schema, model } from "mongoose";
 
 const ModelSchema = Schema;
 
-export interface IEmployee {
+export interface IEmployee extends Document {
   _id: Types.ObjectId;
   profilePicture?: string;
   name: string;

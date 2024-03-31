@@ -2,7 +2,7 @@ import { Schema, Types, model } from "mongoose";
 
 const ModelSchema = Schema;
 
-export interface IProduct {
+export interface IProduct extends Document {
   _id: Types.ObjectId;
   name: string;
   category: string;

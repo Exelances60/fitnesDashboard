@@ -6,6 +6,7 @@ import firebaseStorageServices from "../utils/FirebaseServices";
 import { OwnerRepository } from "../repository/OwnerRepository";
 import throwNotFoundError from "../utils/err/throwNotFoundError";
 import { IOwner } from "../models/Owner";
+import { Model } from "mongoose";
 
 export class EmployeesServices {
   private employeeRepository: EmployeeRepository;
@@ -15,6 +16,12 @@ export class EmployeesServices {
     this.employeeRepository = new EmployeeRepository();
     this.ownerRepository = new OwnerRepository();
   }
+  /**
+   * Creates a new employee.
+   * @param req - The request object containing employee data.
+   * @returns A promise that resolves to the created employee.
+   * @throws An error if there is any issue during the creation process.
+   */
   async createEmployee(req: Request): Promise<IEmployee> {
     try {
       if (!req.files)
@@ -54,6 +61,29 @@ export class EmployeesServices {
       fetchedOwner.employees.push(employee._id);
       await fetchedOwner.save();
       return employee;
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }
+  /**
+   * Retrieves the employees associated with the specified owner.
+   * @param ownerId - The ID of the owner.
+   * @returns A promise that resolves to an array of employees.
+   * @throws If an error occurs while retrieving the employees.
+   */
+  async getEmployees(ownerId: string): Promise<IEmployee[]> {
+    try {
+      const fetchedEmployee = await this.employeeRepository.find({
+        ownerId: ownerId,
+      });
+      return Promise.all(
+        fetchedEmployee.map(async (employee) => {
+          return await employee.populate(
+            "customers",
+            "name email phone profilePicture"
+          );
+        })
+      );
     } catch (error: any) {
       throw new Error(error);
     }

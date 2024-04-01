@@ -1,5 +1,6 @@
 import { Types } from "mongoose";
 import { Schema, model } from "mongoose";
+import { ICustomer } from "./Customer";
 
 const ModelSchema = Schema;
 
@@ -18,7 +19,7 @@ export interface IEmployee extends Document {
   education: string;
   documents: string[];
   ownerId: Schema.Types.ObjectId;
-  customers: Schema.Types.ObjectId[];
+  customers: Schema.Types.ObjectId[] | ICustomer[];
 }
 
 const employeeSchema = new ModelSchema<IEmployee>({

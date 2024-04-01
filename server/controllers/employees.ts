@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import Employee from "../models/Employees";
+import Employee, { IEmployee } from "../models/Employees";
 import Customer from "../models/Customer";
 import throwValidationError from "../utils/err/throwValidationError";
 import throwBadRequestError from "../utils/err/throwBadRequestError";
@@ -36,16 +36,12 @@ export const getEmployees = async (
   res: Response,
   next: NextFunction
 ) => {
-  const ownerId = req.userId;
   try {
-    const employees = await Employee.find({ ownerId: ownerId }).populate({
-      path: "customers",
-      select: "name email phone profilePicture",
-    });
+    const ownerId = req.userId;
 
-    if (!employees) {
-      throwNotFoundError("Employees not found");
-    }
+    if (!ownerId) return throwBadRequestError("Owner id is required");
+    const employees = await new EmployeesServices().getEmployees(ownerId);
+
     const totalEmployeesCountIncarese =
       currentMonthEmployeesCountIncarese(employees);
 

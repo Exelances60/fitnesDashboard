@@ -36,9 +36,7 @@ export class CustomerServices {
   async getCustomer(_id: string) {
     try {
       const customer = await this.customerRepository.findOwnerIdWithPopulate(
-        _id,
-        "coachPT",
-        "name email phone profilePicture"
+        _id
       );
       if (!customer) return throwNotFoundError("Customer not found");
 

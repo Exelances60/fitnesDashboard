@@ -5,12 +5,12 @@ import CustomerTable from "./CustomerTable/CustomerTable";
 import { fetchCustomer } from "@/actions/fetchCustomer";
 
 const CustomerContainer = async () => {
-  const [data] = await Promise.all([fetchCustomer()]);
+  const data = await fetchCustomer();
 
   return (
     <Card className="overflow-auto flex flex-col gap-2">
       <CustomerContainerHeader />
-      <CustomerTable customers={data} />
+      <CustomerTable customers={data || []} />
     </Card>
   );
 };

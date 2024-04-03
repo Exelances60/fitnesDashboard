@@ -33,8 +33,8 @@ export const getCustomer = async (
   try {
     const ownerId = req.userId;
     if (!ownerId) return throwBadRequestError("Owner not found.");
+    const fetchedCustomer = await new CustomerServices().getCustomer(ownerId);
 
-    const fetchedCustomer = new CustomerServices().getCustomer(ownerId);
     res.status(200).json({
       message: "Fetched customer successfully!",
       customers: fetchedCustomer,

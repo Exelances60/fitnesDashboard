@@ -5,15 +5,11 @@ export class CustomerRepository extends RepositoryBase<typeof Customer> {
   constructor() {
     super(Customer);
   }
-  async findOwnerIdWithPopulate(
-    id: string,
-    populateModel: string,
-    populateField: string
-  ) {
+  async findOwnerIdWithPopulate(id: string) {
     try {
       const result = await Customer.find({ ownerId: id }).populate({
-        path: populateModel,
-        select: populateField,
+        path: "coachPT",
+        select: "name email phone profilePicture",
       });
       if (!result) {
         throw new Error("Not found");

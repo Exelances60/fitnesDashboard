@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import throwValidationError from "../utils/err/throwValidationError";
 import throwBadRequestError from "../utils/err/throwBadRequestError";
-import { CustomerServices } from "../services/customerService";
+import { CustomerServices } from "../services/CustomerServices";
 
 export const addCustomer = async (
   req: Request,
@@ -34,8 +34,7 @@ export const getCustomer = async (
     const ownerId = req.userId;
     if (!ownerId) return throwBadRequestError("Owner not found.");
 
-    const customerService = new CustomerServices();
-    const fetchedCustomer = await customerService.getCustomer(ownerId);
+    const fetchedCustomer = new CustomerServices().getCustomer(ownerId);
     res.status(200).json({
       message: "Fetched customer successfully!",
       customers: fetchedCustomer,

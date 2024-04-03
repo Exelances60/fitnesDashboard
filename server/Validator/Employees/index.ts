@@ -56,5 +56,4 @@ export const updateEmployeeValidator = [
   body("age").custom(customeAgeValidator).isInt().notEmpty(),
   body("hireDate").notEmpty().withMessage("Hire date is required"),
   body("salary").isInt().notEmpty().withMessage("Salary is required"),
-  body("ownerId").notEmpty().isString().withMessage("Owner is required"),
 ];

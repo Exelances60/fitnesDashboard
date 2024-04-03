@@ -20,10 +20,9 @@ export const createOrder = async (
   next: NextFunction
 ) => {
   try {
-    const errors = validationResult(req);
-    printValidatorErrors(errors);
-    const { price, amount, email, address, productId, creator, orderOwner } =
-      req.body;
+    /*    const errors = validationResult(req);
+    printValidatorErrors(errors); */
+    const { price, amount, email, address, productId, creator } = req.body;
 
     const product = await Product.findById(productId);
     if (!product) {
@@ -39,10 +38,10 @@ export const createOrder = async (
       orderOwnerEmail: email,
       adress: address,
       productsId: productId,
-      orderOwner: orderOwner,
       status: "Preparing",
       orderImage: product.imageUrl,
       orderCategory: product.category,
+      ...req.body,
     });
     const result = await order.save();
 

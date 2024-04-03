@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { body } from "express-validator";
 import * as orderController from "../controllers/order";
 import { isAuth } from "../middleware/isAuth";
 import { scheduleJob } from "node-schedule";

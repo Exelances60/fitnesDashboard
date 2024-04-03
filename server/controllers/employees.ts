@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import Employee, { IEmployee } from "../models/Employees";
+import Employee from "../models/Employees";
 import Customer from "../models/Customer";
 import throwValidationError from "../utils/err/throwValidationError";
 import throwBadRequestError from "../utils/err/throwBadRequestError";
@@ -41,7 +41,6 @@ export const getEmployees = async (
 
     if (!ownerId) return throwBadRequestError("Owner id is required");
     const employees = await new EmployeesServices().getEmployees(ownerId);
-
     const totalEmployeesCountIncarese =
       currentMonthEmployeesCountIncarese(employees);
 
@@ -63,27 +62,9 @@ export const assignCustomer = async (
   next: NextFunction
 ) => {
   try {
-    const { employeeId, customerId } = req.body;
-    const employee = await Employee.findById(employeeId);
-    const customer = await Customer.findById(customerId);
-    if (!employee) {
-      return throwNotFoundError("Employee not found");
-    }
-    if (!customer) {
-      return throwNotFoundError("Customer not found");
-    }
-
-    if (!employee.customers) {
-      employee.customers = [];
-    }
-
-    if (employee.customers.includes(customerId)) {
-      throwValidationError("Customer already assigned to this employee");
-    }
-    employee.customers.push(customerId);
-    await employee.save();
-    customer.coachPT = employeeId;
-    await customer.save();
+    const errors = validationResult(req);
+    printValidatorErrors(errors);
+    await new EmployeesServices().assignCustomer(req);
     res.status(200).json({ message: "Customer assigned successfully" });
   } catch (error: any) {
     if (!error.statusCode) {
@@ -100,18 +81,7 @@ export const updateEmployee = async (
   try {
     const errors = validationResult(req);
     printValidatorErrors(errors);
-    if (!req.body.id) {
-      throwBadRequestError("Employee id is required");
-    }
-    const employeeId = req.body.id;
-    const fetchedEmployee = await Employee.findByIdAndUpdate(
-      employeeId,
-      req.body
-    );
-    if (!fetchedEmployee) {
-      throwNotFoundError("Employee not found");
-    }
-
+    await new EmployeesServices().updateEmployee(req);
     res.status(200).json({
       message: "Employee updated successfully",
     });
@@ -128,29 +98,8 @@ export const deleteEmployee = async (
   res: Response,
   next: NextFunction
 ) => {
-  const employeeId = req.params.employeeId;
   try {
-    const employee = await Employee.findById(employeeId);
-    if (!employee) {
-      return throwNotFoundError("Employee not found");
-    }
-    if (employee.customers.length > 0) {
-      const customers = await Customer.find({ coachPT: employeeId });
-      if (!customers) {
-        throwNotFoundError("Customers not found");
-      }
-      customers.forEach(async (customer) => {
-        customer.coachPT = null;
-        await customer.save();
-      });
-    }
-    if (employee.profilePicture) {
-      firebaseStorageServices.deleteImageFromStorage(employee.profilePicture);
-    }
-    employee.documents.forEach((document) => {
-      firebaseStorageServices.deleteImageFromStorage(document);
-    });
-    await Employee.findByIdAndDelete(employeeId);
+    await new EmployeesServices().deleteEmployee(req);
     res.status(200).json({ message: "Employee deleted successfully" });
   } catch (error: any) {
     if (!error.statusCode) {

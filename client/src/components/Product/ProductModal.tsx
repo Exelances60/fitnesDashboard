@@ -39,7 +39,7 @@ const ProductModal = () => {
 
     try {
       const response = await fetch(
-        "${process.env.BACK_END_SERVICES}/products/add-product",
+        `${process.env.BACK_END_SERVICES}/products/add-product`,
         {
           method: "POST",
           headers: {
@@ -139,7 +139,6 @@ const ProductModal = () => {
 
           <Form.Item label="Image" name="image" rules={justRequired}>
             <Upload
-              action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
               listType="picture"
               maxCount={1}
               onChange={(info) => {

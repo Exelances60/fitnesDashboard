@@ -6,15 +6,18 @@ import firebaseStorageServices from "../utils/FirebaseServices";
 import { OwnerRepository } from "../repository/OwnerRepository";
 import throwNotFoundError from "../utils/err/throwNotFoundError";
 import { IOwner } from "../models/Owner";
-import { Model } from "mongoose";
+import { CustomerRepository } from "../repository/CustomerRepository";
+import { ICustomer } from "../models/Customer";
 
 export class EmployeesServices {
   private employeeRepository: EmployeeRepository;
+  private customerRepository: CustomerRepository;
   private ownerRepository: OwnerRepository;
 
   constructor() {
     this.employeeRepository = new EmployeeRepository();
     this.ownerRepository = new OwnerRepository();
+    this.customerRepository = new CustomerRepository();
   }
   /**
    * Creates a new employee.
@@ -84,6 +87,73 @@ export class EmployeesServices {
           );
         })
       );
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }
+  async assignCustomer(req: Request): Promise<void> {
+    try {
+      const employee = await this.employeeRepository.findById<IEmployee>(
+        req.body.employeeId
+      );
+      if (!employee) return throwNotFoundError("Employee not found");
+      const customer = await this.customerRepository.findById<ICustomer>(
+        req.body.customerId
+      );
+      if (!customer) return throwNotFoundError("Customer not found");
+      if (!employee.customers) {
+        employee.customers = [];
+      }
+
+      if (employee.customers.includes(req.body.customerId)) {
+        return throwValidationError(
+          "Customer already assigned to this employee"
+        );
+      }
+      employee.customers.push(req.body.customerId);
+      await employee.updateOne(employee);
+      await customer.updateOne({
+        coachPT: employee._id,
+      });
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }
+  async updateEmployee(req: Request): Promise<void> {
+    try {
+      if (!req.body.id) return throwValidationError("Employee id is required");
+      const fetchedEmployee = await this.employeeRepository.update(
+        req.body.id,
+        req.body
+      );
+      if (!fetchedEmployee) return throwNotFoundError("Employee not found");
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }
+  async deleteEmployee(req: Request): Promise<void> {
+    try {
+      const employee = await this.employeeRepository.findById<IEmployee>(
+        req.params.employeeId
+      );
+      if (!employee) return throwNotFoundError("Employee not found");
+      if (employee.customers.length > 0) {
+        const customers = await this.customerRepository.find({
+          coachPT: employee._id,
+        });
+        if (!customers) return throwNotFoundError("Customers not found");
+        customers.forEach(async (customer) => {
+          customer.coachPT = null;
+          await customer.save();
+        });
+      }
+      if (employee.profilePicture) {
+        firebaseStorageServices.deleteImageFromStorage(employee.profilePicture);
+      }
+      employee.documents.forEach((document) => {
+        firebaseStorageServices.deleteImageFromStorage(document);
+      });
+      await this.employeeRepository.delete(employee._id as any);
     } catch (error: any) {
       throw new Error(error);
     }

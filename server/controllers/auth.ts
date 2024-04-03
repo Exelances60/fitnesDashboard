@@ -5,7 +5,7 @@ import { validationResult } from "express-validator";
 import throwValidationError from "../utils/err/throwValidationError";
 import bcrypt from "bcryptjs";
 import { printValidatorErrors } from "../utils/printValidatorErrors";
-import { UserServices } from "../services/userService";
+import { UserServices } from "../services/UserService";
 
 export const login = async (
   req: Request,

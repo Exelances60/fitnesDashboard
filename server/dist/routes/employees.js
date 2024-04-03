@@ -31,22 +31,13 @@ const express_1 = require("express");
 const employeeController = __importStar(require("../controllers/employees"));
 const isAuth_1 = require("../middleware/isAuth");
 const multer_1 = __importDefault(require("multer"));
+const MulterFileFilter_1 = require("../utils/MulterFileFilter");
+const Employees_1 = require("../Validator/Employees");
 const router = (0, express_1.Router)();
 exports.employeeRoutes = router;
-const fileFilter = (req, file, cb) => {
-    if (file.mimetype === "image/png" ||
-        file.mimetype === "image/jpg" ||
-        file.mimetype === "image/jpeg" ||
-        file.mimetype === "image/webp") {
-        cb(null, true);
-    }
-    else {
-        cb(null, false);
-    }
-};
-router.post("/create-employee", isAuth_1.isAuth, (0, multer_1.default)({ storage: multer_1.default.memoryStorage(), fileFilter: fileFilter }).any(), employeeController.createEmployee);
+router.post("/create-employee", isAuth_1.isAuth, (0, multer_1.default)({ storage: multer_1.default.memoryStorage(), fileFilter: MulterFileFilter_1.fileFilter }).any(), Employees_1.createEmployeesValidator, employeeController.createEmployee);
 router.get("/get-employees", isAuth_1.isAuth, employeeController.getEmployees);
-router.post("/assignCustomer", isAuth_1.isAuth, employeeController.assignCustomer);
-router.put("/update-employee", isAuth_1.isAuth, employeeController.updateEmployee);
+router.post("/assignCustomer", isAuth_1.isAuth, Employees_1.assignCustomerValidator, employeeController.assignCustomer);
+router.put("/update-employee", isAuth_1.isAuth, Employees_1.updateEmployeeValidator, employeeController.updateEmployee);
 router.delete("/delete-employee/:employeeId", isAuth_1.isAuth, employeeController.deleteEmployee);
 //# sourceMappingURL=employees.js.map

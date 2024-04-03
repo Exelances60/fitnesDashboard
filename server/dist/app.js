@@ -7,6 +7,7 @@ require("dotenv/config");
 const express_1 = __importDefault(require("express"));
 const DatabaseServices_1 = __importDefault(require("./services/DatabaseServices"));
 const ExpressAppServices_1 = __importDefault(require("./services/ExpressAppServices"));
+const path_1 = __importDefault(require("path"));
 const config_1 = require("./config");
 const StartServer = async () => {
     const app = (0, express_1.default)();
@@ -19,6 +20,7 @@ const StartServer = async () => {
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
     next();
   }); */
+    app.use("/images", express_1.default.static(path_1.default.join(__dirname, "images")));
     await (0, DatabaseServices_1.default)();
     await (0, ExpressAppServices_1.default)(app);
     app.use((error, req, res, next) => {

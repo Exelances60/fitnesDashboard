@@ -8,8 +8,8 @@ const CalenderAcv_1 = __importDefault(require("../models/CalenderAcv"));
 const Customer_1 = __importDefault(require("../models/Customer"));
 const throwBadRequestError_1 = __importDefault(require("../utils/err/throwBadRequestError"));
 const deleteAct = async (req, res, next) => {
-    const actId = req.params.actId;
     try {
+        const actId = req.params.actId;
         const act = await CalenderAcv_1.default.findById(actId);
         if (!act) {
             const error = new Error("Could not find act.");

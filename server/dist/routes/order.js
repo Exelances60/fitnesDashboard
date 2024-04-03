@@ -25,21 +25,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.orderRoutes = void 0;
 const express_1 = require("express");
-const express_validator_1 = require("express-validator");
 const orderController = __importStar(require("../controllers/order"));
 const isAuth_1 = require("../middleware/isAuth");
 const node_schedule_1 = require("node-schedule");
 const scheduleJobs_1 = require("../controllers/scheduleJobs");
+const Order_1 = require("../Validator/Order");
 const router = (0, express_1.Router)();
 exports.orderRoutes = router;
 const sendInformantion = (0, node_schedule_1.scheduleJob)("0 0 * * *", scheduleJobs_1.scheduleJobs);
-router.post("/create-order", [
-    (0, express_validator_1.body)("price").isNumeric(),
-    (0, express_validator_1.body)("amount").isNumeric(),
-    (0, express_validator_1.body)("email").isEmail().trim(),
-    (0, express_validator_1.body)("address").isLength({ min: 10 }),
-    (0, express_validator_1.body)("phone").isLength({ min: 10 }),
-], isAuth_1.isAuth, orderController.createOrder);
+router.post("/create-order", isAuth_1.isAuth, Order_1.createOrderValidator, orderController.createOrder);
 router.get("/get-orders", isAuth_1.isAuth, orderController.getOrders);
 router.put("/update-order", isAuth_1.isAuth, orderController.updateOrder);
 router.post("/ordercompleted", isAuth_1.isAuth, orderController.orderCompleted);

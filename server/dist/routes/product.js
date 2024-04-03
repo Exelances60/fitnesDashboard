@@ -32,23 +32,13 @@ const productController = __importStar(require("../controllers/product"));
 const express_validator_1 = require("express-validator");
 const isAuth_1 = require("../middleware/isAuth");
 const multer_1 = __importDefault(require("multer"));
+const MulterFileFilter_1 = require("../utils/MulterFileFilter");
 const router = (0, express_1.Router)();
 exports.productRoutes = router;
-const fileFilter = (req, file, cb) => {
-    if (file.mimetype === "image/png" ||
-        file.mimetype === "image/jpg" ||
-        file.mimetype === "image/jpeg" ||
-        file.mimetype === "image/webp") {
-        cb(null, true);
-    }
-    else {
-        cb(null, false);
-    }
-};
-router.post("/add-product", isAuth_1.isAuth, (0, multer_1.default)({ storage: multer_1.default.memoryStorage(), fileFilter: fileFilter }).single("image"), productController.addProduct);
+router.post("/add-product", isAuth_1.isAuth, (0, multer_1.default)({ storage: multer_1.default.memoryStorage(), fileFilter: MulterFileFilter_1.fileFilter }).single("image"), productController.addProduct);
 router.get("/get-products", isAuth_1.isAuth, productController.getProducts);
 router.delete("/delete-product/:productId", isAuth_1.isAuth, productController.deleteProduct);
-router.put("/update-product/:productId", isAuth_1.isAuth, (0, multer_1.default)({ storage: multer_1.default.memoryStorage(), fileFilter: fileFilter }).single("image"), productController.updateProduct);
+router.put("/update-product/:productId", isAuth_1.isAuth, (0, multer_1.default)({ storage: multer_1.default.memoryStorage(), fileFilter: MulterFileFilter_1.fileFilter }).single("image"), productController.updateProduct);
 router.post("/add-product-category", [
     (0, express_validator_1.body)("category")
         .isLength({ min: 3 })

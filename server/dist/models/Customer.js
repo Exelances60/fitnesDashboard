@@ -56,7 +56,7 @@ const customerSchema = new ModelSchema({
         require: true,
     },
     membershipType: {
-        type: String,
+        type: Number,
         require: true,
     },
     membershipStatus: {

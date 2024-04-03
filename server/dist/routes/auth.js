@@ -35,13 +35,29 @@ const multer_1 = __importDefault(require("multer"));
 const MulterFileFilter_1 = require("../utils/MulterFileFilter");
 const router = (0, express_1.Router)();
 exports.authRoutes = router;
-router.post("/login", authController.login);
+router.post("/login", [
+    (0, express_validator_1.body)("email").isEmail().withMessage("Please enter a valid email address."),
+    (0, express_validator_1.body)("password")
+        .trim()
+        .isLength({ min: 5 })
+        .withMessage("Password is required.& min length is 5."),
+], authController.login);
 router.post("/signup", [
     (0, express_validator_1.body)("email").isEmail().withMessage("Please enter a valid email address."),
     (0, express_validator_1.body)("password").trim().isLength({ min: 5 }),
     (0, express_validator_1.body)("companyName").trim().not().isEmpty(),
 ], authController.signup);
 router.get("/ownerInfo", isAuth_1.isAuth, authController.getOwnerInfo);
-router.put("/update-owner", isAuth_1.isAuth, authController.updateOwner);
+router.put("/update-owner", isAuth_1.isAuth, [
+    (0, express_validator_1.body)("email")
+        .isEmail()
+        .withMessage("Please enter a valid email address.")
+        .normalizeEmail(),
+    (0, express_validator_1.body)("phone")
+        .matches(/^[0-9]{10}$/)
+        .withMessage("Please enter a valid phone number.")
+        .trim(),
+    (0, express_validator_1.body)("memberShipPrice").isInt().withMessage("Please enter a valid price."),
+], authController.updateOwner);
 router.put("/uploadOwnerImage", isAuth_1.isAuth, (0, multer_1.default)({ storage: multer_1.default.memoryStorage(), fileFilter: MulterFileFilter_1.fileFilter }).single("ownerImage"), authController.uploadOwnerImage);
 //# sourceMappingURL=auth.js.map

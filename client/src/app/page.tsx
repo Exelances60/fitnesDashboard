@@ -1,15 +1,26 @@
 import LoginPageForm from "@/components/LoginPageForm";
-import SvgComp from "@/components/SvgComp";
+import Image from "next/image";
+import PLACEHOLDERIMAGE from "@/../public/dashboard/placeholder.svg";
 
 export default function LoginPage() {
   return (
-    <div className="w-full h-[100vh] flex items-center justify-center bg-[#4880FF] overflow-hidden">
-      <div className="w-[350px]  md:w-[630px] md:h-[700px] h-[600px] bg-white rounded-[20px] flex flex-col gap-[15px] items-center justify-center z-20">
-        <h1 className="text-3xl font-bold">Login the Account</h1>
-        <p className="text-[#6E7191]">Enter your email and password to login</p>
-        <LoginPageForm />
+    <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px] h-screen bg-gray-100">
+      <div className="flex items-center justify-center py-12">
+        <div className=" grid w-[350px] gap-6">
+          <div className="grid gap-2 text-center z-10">
+            <h1 className="text-3xl font-bold">Login</h1>
+            <p className="text-balance text-muted-foreground">
+              Enter your email below to login to your account
+            </p>
+          </div>
+          <div className="grid gap-4 z-10">
+            <LoginPageForm />
+          </div>
+        </div>
       </div>
-      <SvgComp />
+      <div className="hidden bg-muted lg:block relative bg-blue-400">
+        <Image src={PLACEHOLDERIMAGE} alt="placeholder" fill />
+      </div>
     </div>
   );
 }

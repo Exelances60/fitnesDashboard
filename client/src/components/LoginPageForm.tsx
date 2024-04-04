@@ -63,9 +63,9 @@ const LoginPageForm = () => {
   };
 
   return (
-    <div className="z-10">
+    <>
       <Form
-        className="flex flex-col gap-[10px] justify-center"
+        className="flex  flex-col gap-[10px] justify-center"
         layout="vertical"
         onFinish={onFinish}
       >
@@ -101,7 +101,7 @@ const LoginPageForm = () => {
         </Button>
         {error ? <p className="text-red-500">{error}</p> : null}
       </Form>
-    </div>
+    </>
   );
 };
 

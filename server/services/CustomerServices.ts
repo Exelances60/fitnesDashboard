@@ -12,6 +12,7 @@ import { CalendarActRepository } from "../repository/CalendarActRepository";
 import { ICalenderAcv } from "../models/CalenderAcv";
 import { EmployeeRepository } from "../repository/EmployeeRepository";
 import { IEmployee } from "../models/Employees";
+import { ObjectId } from "mongoose";
 
 export class CustomerServices {
   private customerRepository: CustomerRepository;
@@ -175,7 +176,6 @@ export class CustomerServices {
       const fetchedExersice = await this.exerciseRepository.find({
         name: fetchedCustomer.exercisePlan,
       });
-
       if (!fetchedExersice) return throwNotFoundError("Exercise not found");
       const exerciseNames = fetchedExersice.map((exercise) => {
         return {
@@ -281,8 +281,8 @@ export class CustomerServices {
       if (!fetchedCustomer) return throwNotFoundError("Customer not found");
       const savedActivity =
         await this.calendarAcvRepository.create<ICalenderAcv>({
-          planText,
-          planType,
+          text: planText,
+          type: planType,
           customerId,
           ...req.body,
         });
@@ -313,9 +313,10 @@ export class CustomerServices {
       );
       if (!fetchedEmployee) return throwNotFoundError("Employee not found");
 
-      fetchedEmployee.customers.filter(
+      const removeCustomerArray = fetchedEmployee.customers.filter(
         (cust) => cust.toString() !== customerId.toString()
-      );
+      ) as ObjectId[];
+      fetchedEmployee.customers = removeCustomerArray;
       await fetchedEmployee.updateOne(fetchedEmployee);
       fetchedCustomer.coachPT = null;
       await fetchedCustomer.updateOne(fetchedCustomer);

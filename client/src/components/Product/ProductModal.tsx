@@ -11,6 +11,9 @@ import {
 } from "@/utils/FormRules";
 import SelectCategoryDropDown from "../SelectCategoryDropDown";
 
+import "react-quill/dist/quill.snow.css";
+import TextEditor from "../TextEditor";
+
 const ProductModal = () => {
   const showMessage = useMessage();
   const userInfo = useSelectUserInfo();
@@ -102,7 +105,7 @@ const ProductModal = () => {
             name="description"
             rules={productDescriptionRules}
           >
-            <Input.TextArea placeholder="Description" />
+            <TextEditor placeholder="Description" />
           </Form.Item>
           <Form.Item label="Price" name="price" rules={justRequired}>
             <Input placeholder="Price" type="number" />

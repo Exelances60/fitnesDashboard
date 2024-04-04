@@ -44,6 +44,16 @@ export const calculatePreviousMonthAmount = (
   }).length;
 };
 
+export const calculateCurrentMonthAmount = (
+  ordersWithProducts: IOrderWithProducts[]
+) => {
+  const currentDate = new Date();
+  return ordersWithProducts.filter((order) => {
+    const orderDate = new Date(order.createdAt);
+    return orderDate.getMonth() === currentDate.getMonth();
+  }).length;
+};
+
 export const calculateCurrentComplateSales = (
   ordersWithProducts: IOrderWithProducts[]
 ) => {

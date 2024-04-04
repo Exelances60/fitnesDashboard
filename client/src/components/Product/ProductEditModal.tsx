@@ -9,6 +9,7 @@ import {
   setEditModalVisible,
 } from "@/store/slices/productPageSlice";
 import { justRequired, maxPrice, minFive } from "@/utils/FormRules";
+import TextEditor from "../TextEditor";
 
 const ProductEditModal = () => {
   const product = useAppSelector(selectProduct);
@@ -94,7 +95,7 @@ const ProductEditModal = () => {
           name="description"
           rules={[...justRequired, ...minFive]}
         >
-          <Input.TextArea placeholder="Description" />
+          <TextEditor placeholder="Description" />
         </Form.Item>
         <Form.Item
           label="Price"

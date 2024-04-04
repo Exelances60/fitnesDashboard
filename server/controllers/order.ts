@@ -5,6 +5,7 @@ import {
   calculatePreviousMonthSales,
   calculatePreviousMonthAmount,
   calculatePreviosMonthComplateSales,
+  calculateCurrentMonthAmount,
 } from "../services/businessLogic/calculatePreviousMonthSales";
 import { printValidatorErrors } from "../utils/printValidatorErrors";
 import { OrderServices } from "../services/OrderServices";
@@ -59,6 +60,17 @@ export const getOrders = async (
       calculatePreviousMonthAmount(ordersWithProducts);
     const increasePercentageForCompletedSales =
       calculatePreviosMonthComplateSales(ordersWithProducts);
+    const currentMonthAmount = calculateCurrentMonthAmount(ordersWithProducts);
+
+    const increasePercentageForAmount =
+      ((ordersWithProducts.length - previousMonthAmount) /
+        previousMonthAmount) *
+        100 ===
+      Infinity
+        ? currentMonthAmount * 100
+        : ((ordersWithProducts.length - previousMonthAmount) /
+            previousMonthAmount) *
+          100;
 
     const totalSalesPrice = ordersWithProducts.reduce(
       (acc, order) => acc + order.totalPrice,
@@ -68,11 +80,6 @@ export const getOrders = async (
     const totalSalesCompleted = ordersWithProducts
       .filter((order) => order.status === "Completed")
       .reduce((acc, order) => acc + order.totalPrice, 0);
-
-    const increasePercentageForAmount =
-      ((ordersWithProducts.length - previousMonthAmount) /
-        previousMonthAmount) *
-      100;
 
     res.status(200).json({
       message: "Fetched orders successfully.",

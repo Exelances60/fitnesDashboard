@@ -68,6 +68,7 @@ export class UserServices {
     }
   }
   async updateOwnerInfo(req: Request): Promise<IOwner> {
+    console.log(req.body);
     try {
       if (!req.userId) return throwBadRequestError("No user id provided.");
       const fetchedOwner = await this.ownerRepository.update<IOwner>(

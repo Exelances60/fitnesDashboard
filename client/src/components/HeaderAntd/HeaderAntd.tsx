@@ -28,10 +28,7 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
   const menuItems = useMemo(() => {
     return navMenu.map((item) => (
       <Menu.Item key={item.key} icon={item.icon} onClick={handleChangeMenuKeys}>
-        <Link
-          href={`https://fitnes-dashboard-azba.vercel.app/${item.path}`}
-          passHref
-        >
+        <Link href={`http://localhost:3000/${item.path}`} passHref>
           <div className="flex items-center gap-5">{item.name}</div>
         </Link>
       </Menu.Item>
@@ -77,7 +74,7 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
           <hr className="my-5" />
           <Menu.Item key="profile" icon={<SettingOutlined />}>
             <div className="flex items-center gap-5">
-              <Link href="https://fitnes-dashboard-azba.vercel.app/dashboard/settings">
+              <Link href="http://localhost:3000/dashboard/settings">
                 Settings
               </Link>
             </div>

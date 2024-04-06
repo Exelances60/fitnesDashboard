@@ -65,7 +65,7 @@ const LoginPageForm = () => {
   return (
     <>
       <Form
-        className="flex  flex-col gap-[10px] justify-center"
+        className="flex flex-col gap-[10px] justify-center w-full"
         layout="vertical"
         onFinish={onFinish}
       >
@@ -74,7 +74,7 @@ const LoginPageForm = () => {
             type="text"
             placeholder="Email"
             value={""}
-            className="w-[300px] md:w-[500px] h-[50px] px-[20px] bg-[#F0F2F5] rounded-[10px]"
+            className="w-full h-[50px] px-[20px] bg-[#F0F2F5] rounded-[10px]"
           />
         </Form.Item>
 
@@ -87,7 +87,7 @@ const LoginPageForm = () => {
             type="password"
             placeholder="Password"
             value={""}
-            className="w-[300px] md:w-[500px] h-[50px] px-[20px] bg-[#F0F2F5] rounded-[10px]"
+            className="w-full h-[50px] px-[20px] bg-[#F0F2F5] rounded-[10px]"
           />
         </Form.Item>
         <Button
@@ -95,7 +95,7 @@ const LoginPageForm = () => {
           type="primary"
           size="large"
           loading={loading}
-          className="w-[300px] md:w-[500px] h-[50px] bg-[#4880FF] rounded-[10px] text-white font-bold"
+          className="w-full h-[50px] bg-[#4880FF] rounded-[10px] text-white font-bold"
         >
           Login
         </Button>

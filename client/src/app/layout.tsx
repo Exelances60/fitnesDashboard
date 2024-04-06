@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { ConfigProvider } from "antd";
 import "./globals.css";
 import ReduxProvider from "@/lib/ProviderRedux";
-import trTR from "antd/locale/tr_TR";
-import "dayjs/locale/tr";
+import ConfigProviderComp from "@/lib/ConfigProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,11 +20,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ConfigProvider locale={trTR}>
-          <AntdRegistry>
-            <ReduxProvider>{children}</ReduxProvider>
-          </AntdRegistry>
-        </ConfigProvider>
+        <AntdRegistry>
+          <ReduxProvider>
+            <ConfigProviderComp>{children}</ConfigProviderComp>
+          </ReduxProvider>
+        </AntdRegistry>
       </body>
     </html>
   );

@@ -4,7 +4,10 @@ import { isAuth } from "../middleware/isAuth";
 import * as customerController from "../controllers/customer";
 import multer from "multer";
 import { fileFilter } from "../utils/MulterFileFilter";
-import { customerUpdateValidator } from "../Validator/Customer";
+import {
+  addCustomerValidator,
+  customerUpdateValidator,
+} from "../Validator/Customer";
 
 const router = Router();
 
@@ -14,6 +17,7 @@ router.post(
   multer({ storage: multer.memoryStorage(), fileFilter: fileFilter }).single(
     "profilePicture"
   ),
+  addCustomerValidator,
   customerController.addCustomer
 );
 

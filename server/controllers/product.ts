@@ -1,6 +1,8 @@
 import "dotenv/config";
 import { Request, Response, NextFunction } from "express";
 import { ProductServices } from "../services/ProductServices";
+import { validationResult } from "express-validator";
+import { printValidatorErrors } from "../utils/printValidatorErrors";
 
 export const addProduct = async (
   req: Request,
@@ -8,6 +10,8 @@ export const addProduct = async (
   next: NextFunction
 ) => {
   try {
+    const errors = validationResult(req);
+    printValidatorErrors(errors);
     const result = await new ProductServices().createProduct(req);
     res.status(201).json({
       message: "Product created successfully!",
@@ -64,6 +68,8 @@ export const updateProduct = async (
   next: NextFunction
 ) => {
   try {
+    const errors = validationResult(req);
+    printValidatorErrors(errors);
     await new ProductServices().updateProduct(req);
     res.status(200).json({ message: "Product updated!", status: 200 });
   } catch (err: any) {

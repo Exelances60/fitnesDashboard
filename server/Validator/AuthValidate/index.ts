@@ -1,4 +1,5 @@
 import { body } from "express-validator";
+import { customePhoneValidator } from "../BaseCustomValidator";
 
 export const loginValidator = [
   body("email")
@@ -15,15 +16,6 @@ export const loginValidator = [
 
 export const updateOwnerValidator = [
   body("email").isEmail().withMessage("Email not valid").normalizeEmail(),
-  body("phone")
-    .matches(/^[0-9]{10}$/)
-    .withMessage("Phone number not valid")
-    .trim()
-    .custom((value) => {
-      if (parseInt(value) <= 0) {
-        throw new Error("Phone number not valid");
-      }
-      return true;
-    }),
+  body("phone").custom(customePhoneValidator).trim(),
   body("memberShipPrice").isInt().withMessage("Price not valid"),
 ];

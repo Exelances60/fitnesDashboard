@@ -15,12 +15,10 @@ export const login = async (
   try {
     const errors = validationResult(req);
     printValidatorErrors(errors);
-
     const token = await new UserServices().Login(
       req.body.email,
       req.body.password
     );
-
     res.status(200).json({
       token,
       message: "Login successful!",
@@ -41,9 +39,7 @@ export const signup = async (
   try {
     const errors = validationResult(req);
     printValidatorErrors(errors);
-
     const { email, password } = req.body;
-
     const hashedPw = await bcrypt.hash(password, 12);
 
     const owner = new Owner({

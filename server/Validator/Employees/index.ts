@@ -1,13 +1,5 @@
 import { body } from "express-validator";
-
-export const customeAgeValidator = (value: any) => {
-  if (+value < 18) {
-    throw new Error("Age must be greater than 18");
-  } else if (+value > 80) {
-    throw new Error("Age must be less than 60");
-  }
-  return true;
-};
+import { customeAgeValidator } from "../BaseCustomValidator";
 
 export const createEmployeesValidator = [
   body("name")
@@ -48,11 +40,7 @@ export const assignCustomerValidator = [
 export const updateEmployeeValidator = [
   body("name").isLength({ min: 2 }).withMessage("Name less than 2").notEmpty(),
   body("email").isEmail().withMessage("Email not valid").notEmpty(),
-  body("phone")
-    .isLength({ min: 10 })
-    .withMessage("Phone less than 10")
-    .isInt()
-    .notEmpty(),
+  body("phone").custom(customeAgeValidator).isInt().notEmpty(),
   body("age").custom(customeAgeValidator).isInt().notEmpty(),
   body("hireDate").notEmpty().withMessage("Hire date is required"),
   body("salary").isInt().notEmpty().withMessage("Salary is required"),

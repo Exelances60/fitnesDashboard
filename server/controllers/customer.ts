@@ -3,6 +3,7 @@ import { validationResult } from "express-validator";
 import throwValidationError from "../utils/err/throwValidationError";
 import throwBadRequestError from "../utils/err/throwBadRequestError";
 import { CustomerServices } from "../services/CustomerServices";
+import { printValidatorErrors } from "../utils/printValidatorErrors";
 
 export const addCustomer = async (
   req: Request,
@@ -11,9 +12,8 @@ export const addCustomer = async (
 ) => {
   try {
     const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      throwValidationError("Validation failed, entered data is incorrect.");
-    }
+
+    printValidatorErrors(errors);
     const responseCustomer = await new CustomerServices().addCustomer(req);
     res.status(201).json({
       message: "Customer created successfully!",
@@ -52,6 +52,7 @@ export const updateCustomer = async (
 ) => {
   try {
     const errors = validationResult(req);
+    printValidatorErrors(errors);
     if (!errors.isEmpty()) {
       throwValidationError("Validation failed, entered data is incorrect.");
     }

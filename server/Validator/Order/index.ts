@@ -1,5 +1,6 @@
 import { body } from "express-validator";
 import Product from "../../models/Product";
+import { customePhoneValidator } from "../BaseCustomValidator";
 
 export const createOrderValidator = [
   body("productName")
@@ -39,9 +40,7 @@ export const createOrderValidator = [
     .notEmpty()
     .withMessage("Address must be not empty"),
   body("phone")
-    .isString()
-    .isLength({ min: 10 })
-    .withMessage("Phone length must be greater than 10")
+    .custom(customePhoneValidator)
     .notEmpty()
     .withMessage("Phone must be not empty"),
 ];

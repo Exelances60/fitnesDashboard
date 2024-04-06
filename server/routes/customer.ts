@@ -4,6 +4,7 @@ import { isAuth } from "../middleware/isAuth";
 import * as customerController from "../controllers/customer";
 import multer from "multer";
 import { fileFilter } from "../utils/MulterFileFilter";
+import { customerUpdateValidator } from "../Validator/Customer";
 
 const router = Router();
 
@@ -21,16 +22,7 @@ router.get("/get-customer", isAuth, customerController.getCustomer);
 router.put(
   "/update-customer",
   isAuth,
-  [
-    body("name").trim().isLength({ min: 3 }),
-    body("phone").trim().isLength({ min: 10 }),
-    body("email").isEmail(),
-    body("age").isNumeric(),
-    body("bodyWeight").isNumeric(),
-    body("height").isNumeric(),
-    body("membershipMonths").isNumeric(),
-    body("membershipPrice").isNumeric(),
-  ],
+  customerUpdateValidator,
   customerController.updateCustomer
 );
 

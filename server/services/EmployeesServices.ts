@@ -8,6 +8,10 @@ import throwNotFoundError from "../utils/err/throwNotFoundError";
 import { IOwner } from "../models/Owner";
 import { CustomerRepository } from "../repository/CustomerRepository";
 import { ICustomer } from "../models/Customer";
+import {
+  IAssingCustomerRequest,
+  IUpdateEmployeeRequest,
+} from "../dto/EmployeesDTO";
 
 export class EmployeesServices {
   private employeeRepository: EmployeeRepository;
@@ -91,7 +95,7 @@ export class EmployeesServices {
       throw new Error(error);
     }
   }
-  async assignCustomer(req: Request): Promise<void> {
+  async assignCustomer(req: IAssingCustomerRequest): Promise<void> {
     try {
       const employee = await this.employeeRepository.findById<IEmployee>(
         req.body.employeeId
@@ -105,12 +109,12 @@ export class EmployeesServices {
         employee.customers = [];
       }
 
-      if (employee.customers.includes(req.body.customerId)) {
+      if (employee.customers.includes(req.body.customerId as any)) {
         return throwValidationError(
           "Customer already assigned to this employee"
         );
       }
-      employee.customers.push(req.body.customerId);
+      employee.customers.push(req.body.customerId as any);
       await employee.updateOne(employee);
       await customer.updateOne({
         coachPT: employee._id,
@@ -119,7 +123,7 @@ export class EmployeesServices {
       throw new Error(error);
     }
   }
-  async updateEmployee(req: Request): Promise<void> {
+  async updateEmployee(req: IUpdateEmployeeRequest): Promise<void> {
     try {
       if (!req.body.id) return throwValidationError("Employee id is required");
       const fetchedEmployee = await this.employeeRepository.update(

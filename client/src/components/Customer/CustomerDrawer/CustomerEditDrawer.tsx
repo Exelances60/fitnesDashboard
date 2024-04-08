@@ -27,6 +27,7 @@ const CustomerEditDrawer = ({ customer }: CustomerEditDrawerProps) => {
       ...values,
       /*     exercisePlan: values.exercisePlan, */
       membershipType: values.membershipMonths,
+      age: +values.age,
     };
     try {
       const response = await axiosClient.put("/customers/update-customer", {

@@ -1,6 +1,6 @@
 import { Schema, Types, model } from "mongoose";
 
-export interface ICalenderAcv {
+export interface ICalenderAcv extends Document {
   _id: Types.ObjectId;
   date: Date;
   text: string;

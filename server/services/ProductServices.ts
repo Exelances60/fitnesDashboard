@@ -8,6 +8,7 @@ import { IProduct } from "../models/Product";
 import throwBadRequestError from "../utils/err/throwBadRequestError";
 import throwNotFoundError from "../utils/err/throwNotFoundError";
 import { OrderRepository } from "../repository/OrderRepository";
+import { IUpdateProductRequest } from "../dto/ProductDTO";
 
 export class ProductServices {
   private productRepository: ProductRepository;
@@ -93,7 +94,7 @@ export class ProductServices {
       throw new Error(error.message);
     }
   }
-  async updateProduct(req: Request): Promise<IProduct> {
+  async updateProduct(req: IUpdateProductRequest): Promise<IProduct> {
     try {
       const { name, price, description, amount } = req.body;
       if (!name || !price || !description || !amount)
@@ -122,20 +123,6 @@ export class ProductServices {
         amount: +req.body.amount,
       });
       return product;
-    } catch (error: any) {
-      throw new Error(error.message);
-    }
-  }
-  async addProductCategory(req: Request): Promise<void> {
-    try {
-      if (!req.body.category)
-        return throwValidationError("Category must be filled.");
-      const owner = await this.ownerRepository.findById<IOwner>(
-        req.body.ownerId
-      );
-      if (!owner) return throwNotFoundError("Owner not found.");
-      owner.productCategory?.push(req.body.category);
-      await owner.updateOne(owner);
     } catch (error: any) {
       throw new Error(error.message);
     }

@@ -38,15 +38,4 @@ router.put(
   productController.updateProduct
 );
 
-router.post(
-  "/add-product-category",
-  isAuth,
-  [
-    body("category")
-      .isLength({ min: 3 })
-      .withMessage("Category name must be at least 3 characters long."),
-  ],
-  productController.addProductCategory
-);
-
 export { router as productRoutes };

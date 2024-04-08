@@ -13,6 +13,11 @@ import { ICalenderAcv } from "../models/CalenderAcv";
 import { EmployeeRepository } from "../repository/EmployeeRepository";
 import { IEmployee } from "../models/Employees";
 import { ObjectId } from "mongoose";
+import {
+  IDeleteCustomerExercisePlanRequestDTO,
+  IUpdateCustomerExercisePlanRequestDTO,
+  IUpdateCustomerRequestDTO,
+} from "../dto/CustomerDTO";
 
 export class CustomerServices {
   private customerRepository: CustomerRepository;
@@ -85,6 +90,7 @@ export class CustomerServices {
         parentPhone: req.body.parentPhone ? req.body.parentPhone : null,
       });
       fetchedOwner.customer.push(savedCustomer._id);
+      await fetchedOwner.save();
       return savedCustomer;
     } catch (error: any) {
       throw new Error(error.message);
@@ -97,14 +103,14 @@ export class CustomerServices {
    * @returns The updated customer object.
    * @throws Error if any error occurs during the update process.
    */
-  async updateCustomer(req: Request) {
+  async updateCustomer(req: IUpdateCustomerRequestDTO) {
     try {
       const fetchedOwner = await this.ownerRepository.findById<IOwner>(
         req.body.ownerId
       );
       if (!fetchedOwner) return throwNotFoundError("Owner not found");
 
-      if (!fetchedOwner.customer.includes(req.body._id))
+      if (!fetchedOwner.customer.includes(req.body._id as any))
         return throwBadRequestError("Customer not found in owner's list");
 
       const customer = await this.customerRepository.findById<ICustomer>(
@@ -221,7 +227,7 @@ export class CustomerServices {
    * @throws {NotFoundError} If the customer is not found in the database.
    * @throws {Error} If any other error occurs during the deletion process.
    */
-  async deleteCustomerExercisePlan(req: Request) {
+  async deleteCustomerExercisePlan(req: IDeleteCustomerExercisePlanRequestDTO) {
     try {
       if (!req.body.customerId)
         return throwBadRequestError("Customer id not found");
@@ -244,23 +250,22 @@ export class CustomerServices {
    * @param req - The request object containing the customer ID and new exercise plan.
    * @throws Error if there is an error updating the customer's exercise plan.
    */
-  async updateCustomerExercisePlan(req: Request) {
+  async updateCustomerExercisePlan(req: IUpdateCustomerExercisePlanRequestDTO) {
     try {
       const fetchedCustomer = await this.customerRepository.findById<ICustomer>(
         req.body.customerId
       );
       if (!fetchedCustomer) return throwNotFoundError("Customer not found");
-      const newExercises = req.body.exerciseName.filter(
-        (exercise: IExercise) => {
-          return typeof exercise === "string"
-            ? !fetchedCustomer.exercisePlan.includes(exercise)
-            : undefined;
-        }
-      );
+
+      const notFoundExercises = req.body.exerciseName.filter(
+        (exercise) =>
+          !(fetchedCustomer.exercisePlan as string[]).includes(exercise)
+      ) as string[];
+
       fetchedCustomer.exercisePlan = [
         ...fetchedCustomer.exercisePlan,
-        ...newExercises,
-      ];
+        ...notFoundExercises,
+      ] as string[];
       await fetchedCustomer.updateOne(fetchedCustomer);
     } catch (error: any) {
       throw new Error(error.message);

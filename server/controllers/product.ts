@@ -79,22 +79,3 @@ export const updateProduct = async (
     next(err);
   }
 };
-
-export const addProductCategory = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    await new ProductServices().addProductCategory(req);
-    res.status(201).json({
-      message: "Category added successfully!",
-      status: 201,
-    });
-  } catch (error: any) {
-    if (!error.statusCode) {
-      error.statusCode = 500;
-    }
-    next(error);
-  }
-};

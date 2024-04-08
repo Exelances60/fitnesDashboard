@@ -1,5 +1,8 @@
 import { body } from "express-validator";
-import { customeAgeValidator } from "../BaseCustomValidator";
+import {
+  customeAgeValidator,
+  customePhoneValidator,
+} from "../BaseCustomValidator";
 
 export const createEmployeesValidator = [
   body("name")
@@ -40,7 +43,7 @@ export const assignCustomerValidator = [
 export const updateEmployeeValidator = [
   body("name").isLength({ min: 2 }).withMessage("Name less than 2").notEmpty(),
   body("email").isEmail().withMessage("Email not valid").notEmpty(),
-  body("phone").custom(customeAgeValidator).isInt().notEmpty(),
+  body("phone").custom(customePhoneValidator).isInt().notEmpty(),
   body("age").custom(customeAgeValidator).isInt().notEmpty(),
   body("hireDate").notEmpty().withMessage("Hire date is required"),
   body("salary").isInt().notEmpty().withMessage("Salary is required"),

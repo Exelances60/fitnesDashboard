@@ -5,6 +5,7 @@ import throwBadRequestError from "../utils/err/throwBadRequestError";
 import throwNotFoundError from "../utils/err/throwNotFoundError";
 import jwtServices from "../utils/jwtServices";
 import firebaseStorageServices from "../utils/FirebaseServices";
+import { IUpdateOwnerRequest } from "../dto/AuthDTO";
 
 export class UserServices {
   private ownerRepository: OwnerRepository;
@@ -67,7 +68,7 @@ export class UserServices {
       throw new Error(error);
     }
   }
-  async updateOwnerInfo(req: Request): Promise<IOwner> {
+  async updateOwnerInfo(req: IUpdateOwnerRequest): Promise<IOwner> {
     try {
       if (!req.userId) return throwBadRequestError("No user id provided.");
       const fetchedOwner = await this.ownerRepository.update<IOwner>(

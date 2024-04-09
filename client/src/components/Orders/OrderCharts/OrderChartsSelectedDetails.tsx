@@ -18,7 +18,7 @@ const OrderChartsSelectedDetails = ({
         {selected.name}
       </h4>
       <p className="text-tremor-content-emphasis dark:text-dark-tremor-content-emphasis">
-        {currencyFormatter(selected.totalPrice)}
+        {currencyFormatter(selected.totalPrice, "TRY")}
       </p>
       <p>{selected.orderId}</p>
     </motion.div>

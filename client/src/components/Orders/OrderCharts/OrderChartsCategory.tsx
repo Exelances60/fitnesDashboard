@@ -30,7 +30,7 @@ const OrderChartsCategory = ({ chartsDonutData }: OrderChartsCategoryProps) => {
         data={data}
         category="totalPrice"
         index="category"
-        valueFormatter={currencyFormatter}
+        valueFormatter={(value) => currencyFormatter(value, "TRY")}
         colors={["cyan", "blue", "indigo", "violet", "fuchsia"]}
       />
       <p className="mt-8 flex items-center justify-between text-tremor-label text-tremor-content dark:text-dark-tremor-content">
@@ -51,7 +51,7 @@ const OrderChartsCategory = ({ chartsDonutData }: OrderChartsCategoryProps) => {
                 {item.category}
               </span>
               <span className="rounded-tremor-small bg-tremor-background-subtle px-1.5 py-0.5 text-tremor-label font-medium tabular-nums text-tremor-content-emphasis dark:bg-dark-tremor-background-subtle dark:text-dark-tremor-content-emphasis">
-                {currencyFormatter(item.totalPrice)}
+                {currencyFormatter(item.totalPrice, "TRY")}
               </span>
             </div>
           </ListItem>

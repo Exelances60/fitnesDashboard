@@ -14,6 +14,8 @@ import {
   phoneRules,
 } from "@/utils/FormRules";
 import axiosClient from "@/utils/AxiosClient";
+import { counterInfoList } from "@/mock/counteryInfoList";
+import Image from "next/image";
 
 interface SettingUpdateFormProps {
   ownerInfo: OwnerType;
@@ -192,6 +194,24 @@ const SettingsUpdateForm = ({
               {membershipMonths.map((month) => (
                 <Select.Option key={month} value={month}>
                   {month} Months
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+
+          <Form.Item label="Money Currency" name="moneyCurrency">
+            <Select placeholder="Select a currency" style={{ width: "100%" }}>
+              {counterInfoList.map((counterInfo) => (
+                <Select.Option key={counterInfo.code} value={counterInfo.code}>
+                  <div className="flex items-center">
+                    <Image
+                      src={counterInfo.flag}
+                      alt={counterInfo.code}
+                      width={15}
+                      height={15}
+                    />
+                    <span className="ml-2">{counterInfo.name}</span>
+                  </div>
                 </Select.Option>
               ))}
             </Select>

@@ -6,6 +6,9 @@ const nextConfig = {
       "react-material.fusetheme.com",
       "fitnesdashboard.onrender.com",
       "firebasestorage.googleapis.com",
+      "upload.wikimedia.org",
+      "cdn-icons-png.flaticon.com",
+      "1000logos.net",
     ],
   },
   env: {

@@ -35,23 +35,9 @@ type CardDataType = {
   increasePercentageForAmount: number;
   increasePercentageForCompletedSales: number;
 };
-type ordersType = {
-  _id: string;
-  amount: number;
-  products: productsType[];
-  adress: string;
-  totalPrice: number;
-  status: "Pending" | "Completed" | "Cancelled" | "Preparing";
-  orderOwner: string;
-  phone: number;
-  createdAt: string;
-  updatedAt: string;
-  creator: string;
-  orderOwnerEmail: string;
-};
 
 type getOrdersType = {
-  orders: ordersType[] | [];
+  orders: OrdersType[] | [];
   chartsData: orderDonutChartType[];
   cardData: CardDataType;
 };

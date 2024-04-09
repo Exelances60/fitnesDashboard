@@ -26,7 +26,7 @@ const OrderChartsTotalPrice = ({
           data={chartsDonutData}
           category="totalPrice"
           index="name"
-          valueFormatter={currencyFormatter}
+          valueFormatter={(value) => currencyFormatter(value, "TRY")}
           onValueChange={(value) => setSelected(value)}
           colors={["cyan", "blue", "indigo", "violet", "fuchsia"]}
         />

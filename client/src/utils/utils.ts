@@ -1,5 +1,41 @@
-export const currencyFormatter = (number: number) => {
-  return Intl.NumberFormat("tr").format(number).toString() + "TL";
+type MoneyType =
+  | "USD"
+  | "EUR"
+  | "GBP"
+  | "JPY"
+  | "CNY"
+  | "RUB"
+  | "KRW"
+  | "INR"
+  | "BRL"
+  | "CAD"
+  | "AUD"
+  | "MXN"
+  | "IDR"
+  | "TRY"
+  | "ZAR"
+  | "HKD"
+  | "PHP"
+  | "SGD"
+  | "NOK"
+  | "SEK"
+  | "DKK"
+  | "CHF"
+  | "CZK"
+  | "PLN"
+  | "HUF"
+  | "RON"
+  | "HRK"
+  | "BGN"
+  | "NZD"
+  | "THB"
+  | "MYR";
+
+export const currencyFormatter = (number: number, type: MoneyType) => {
+  return Intl.NumberFormat("default", {
+    style: "currency",
+    currency: type,
+  }).format(number);
 };
 
 export const capitalizeFirstLetter = (str: string) => {

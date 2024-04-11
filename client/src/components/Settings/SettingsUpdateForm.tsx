@@ -40,7 +40,6 @@ const SettingsUpdateForm = ({
     try {
       const newValues = {
         ...values,
-        productCategory: [...categoryList],
         memberShipPrice: parseFloat(values.memberShipPrice as string),
       };
       const response = await axiosClient.put("/auth/update-owner", newValues);
@@ -56,6 +55,8 @@ const SettingsUpdateForm = ({
         key: "updateError",
         content: "Error while updating the settings",
       });
+    } finally {
+      setActiveUpdate(true);
     }
   };
 

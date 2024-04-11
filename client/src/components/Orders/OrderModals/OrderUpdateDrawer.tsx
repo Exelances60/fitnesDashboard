@@ -73,7 +73,6 @@ const OrderUpdateDrawer = ({ selectedOrder }: OrderUpdateDrawerProps) => {
       });
       if (response.status === 200) {
         showMessage("Order updated successfully", "success", 2);
-        /*        setUpdateOrderDrawerVisible(false); */
         dispath(setHideDrawer());
       }
     } catch (error: any) {

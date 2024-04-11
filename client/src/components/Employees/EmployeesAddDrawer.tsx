@@ -1,7 +1,7 @@
 import useSelectUserInfo from "@/hooks/useSelectUserInfo";
 import axiosClient from "@/utils/AxiosClient";
-import { Form, message } from "antd";
-import React from "react";
+import { Form, message, Spin } from "antd";
+import React, { useState } from "react";
 import EmployeesAddForm from "./EmployeesAddForm";
 import useMessage from "@/hooks/useMessage";
 
@@ -10,12 +10,13 @@ interface EmployeesAddDrawerProps {
 }
 const EmployeesAddDrawer = ({ setEmployeeData }: EmployeesAddDrawerProps) => {
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
   const userInfo = useSelectUserInfo();
   const showMessage = useMessage();
 
   const onFinish = async (values: any) => {
+    setLoading(true);
     if (!userInfo) return;
-    showMessage("Adding employee", "info");
     const profilePicture = values.profilePicture.fileList[0].originFileObj;
     const documents = values.documents.fileList.map(
       (file: any) => file.originFileObj
@@ -49,21 +50,25 @@ const EmployeesAddDrawer = ({ setEmployeeData }: EmployeesAddDrawerProps) => {
         setEmployeeData((prev) => [...prev, response.data.savedEmployee]);
         form.resetFields();
       }
-    } catch (error) {
-      message.error({ content: "Error", key: "addEmployee" });
+    } catch (error: any) {
+      message.error({ content: error.response.data.message, key: "error" });
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div>
-      <Form
-        name="addEmployeeForm"
-        layout="vertical"
-        form={form}
-        onFinish={onFinish}
-      >
-        <EmployeesAddForm editMode={false} />
-      </Form>
+      <Spin spinning={loading} tip="Adding Employee...">
+        <Form
+          name="addEmployeeForm"
+          layout="vertical"
+          form={form}
+          onFinish={onFinish}
+        >
+          <EmployeesAddForm editMode={false} />
+        </Form>
+      </Spin>
     </div>
   );
 };

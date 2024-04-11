@@ -24,10 +24,6 @@ const CreateInvoicePDFPage = () => {
   }
 
   const createPDF = async () => {
-    message.loading({
-      key: "createPDF",
-      content: "Creating PDF...",
-    });
     setLoading(true);
     const htmlArray = Array.from((ref.current as any).children).map(
       (child: any) => {
@@ -63,7 +59,7 @@ const CreateInvoicePDFPage = () => {
 
   return (
     <Card className="flex flex-col items-center justify-center p-5 gap-2 min-h-[810px]">
-      <Spin spinning={loading} fullscreen />
+      <Spin spinning={loading} fullscreen size="large" tip="Creating PDF..." />
       <div
         className="lg:w-1/2 w-full p-10 bg-[#f7f7f7] rounded-md shadow min-h-[770px]"
         ref={ref}
@@ -142,7 +138,7 @@ const CreateInvoicePDFPage = () => {
                   {product.price} TRY
                 </td>
                 <td className="py-2 text-lg text-[#6b7290]">
-                  {selectInvoiceData?.totalPrice} TRY
+                  {product.price * selectInvoiceData?.amount} TRY
                 </td>
               </tr>
             ))}
@@ -158,14 +154,14 @@ const CreateInvoicePDFPage = () => {
         <hr className="my-3" />
         <div className="flex justify-between px-10">
           <p className="text-xl text-[#6b7290]">Tax : </p>
-          <p className="font-bold text-[#6b7290] text-lg pt-1">20%</p>
+          <p className="font-bold text-[#6b7290] text-lg pt-1">8%</p>
         </div>
         <hr className="my-3" />
         <div className="flex justify-between px-10">
           <p className="text-xl text-[#6b7290]">Total Price with Tax : </p>
           <p className="font-bold text-[#6b7290] text-lg pt-1">
             {selectInvoiceData?.totalPrice
-              ? selectInvoiceData.totalPrice * 1.2
+              ? selectInvoiceData.totalPrice
               : null}{" "}
             TRY
           </p>

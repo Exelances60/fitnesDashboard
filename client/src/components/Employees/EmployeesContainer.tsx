@@ -38,7 +38,10 @@ const EmployeesContainer = ({
         employees={employeeData}
         totalEmployeesCountIncarese={totalEmployeesCountIncarese}
       />
-      <Card className="flex flex-col gap-2 overflow-auto" title="Employees">
+      <Card
+        className="flex flex-col gap-2 overflow-auto min-h-[680px]"
+        title="Employees"
+      >
         <div className="w-full flex justify-end">
           <Button type="default" color="blue" onClick={openAddDrawer}>
             Add Employee

@@ -25,7 +25,7 @@ export class OrderServices {
       if (!product) return throwNotFoundError("Product not found.");
       product.amount = product.amount - req.body.amount;
       await product.updateOne(product);
-      const totalPrice = req.body.price * req.body.amount;
+      const totalPrice = (req.body.price * req.body.amount * 1.08).toFixed(2);
 
       const order = await this.orderRepository.create<IOrder>({
         totalPrice,

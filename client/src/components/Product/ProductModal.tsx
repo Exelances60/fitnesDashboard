@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Button, Modal, Input, Form, Upload, Select } from "antd";
+import { Button, Modal, Input, Form, Upload, Select, Spin } from "antd";
 import { getCookie } from "cookies-next";
 import useSelectUserInfo from "@/hooks/useSelectUserInfo";
 import useMessage from "@/hooks/useMessage";
@@ -19,6 +19,7 @@ const ProductModal = () => {
   const userInfo = useSelectUserInfo();
   const [file, setFile] = useState<any>();
   const [addProductModal, setAddProductModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [categoryList, setCategoryList] = useState<string[]>(
     userInfo?.productCategory || []
   );
@@ -28,6 +29,7 @@ const ProductModal = () => {
   };
 
   const handleFinish = async (values: any) => {
+    setLoading(true);
     if (userInfo === null) return;
     showMessage("Product Creating", "loading");
     const token = getCookie("token");
@@ -51,13 +53,14 @@ const ProductModal = () => {
           body: formData,
         }
       );
-
       if (response.ok) {
         setAddProductModal(false);
         showMessage("Product Created", "success");
       }
     } catch (error) {
       showMessage("Some error pls try again", "error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -87,71 +90,73 @@ const ProductModal = () => {
           </Button>,
         ]}
       >
-        <Form
-          id="addProductForm"
-          onFinish={handleFinish}
-          className="w-full flex flex-col gap-[10px] justify-center"
-          encType="multipart/form-data"
-        >
-          <Form.Item
-            label="Product Name"
-            name="productName"
-            rules={[...justRequired, ...minFive]}
+        <Spin spinning={loading}>
+          <Form
+            id="addProductForm"
+            onFinish={handleFinish}
+            className="w-full flex flex-col gap-[10px] justify-center"
+            encType="multipart/form-data"
           >
-            <Input placeholder="Product Name" />
-          </Form.Item>
-          <Form.Item
-            label="Description"
-            name="description"
-            rules={productDescriptionRules}
-          >
-            <TextEditor placeholder="Description" />
-          </Form.Item>
-          <Form.Item label="Price" name="price" rules={justRequired}>
-            <Input placeholder="Price" type="number" />
-          </Form.Item>
-          <Form.Item label="Amount" name="amount" rules={justRequired}>
-            <Input placeholder="Amount" type="number" />
-          </Form.Item>
-          <Form.Item label="Category" name="category" rules={justRequired}>
-            <Select
-              placeholder="Select a category"
-              dropdownRender={(menu) => (
-                <SelectCategoryDropDown
-                  menu={menu}
-                  categoryList={categoryList}
-                  setCategoryList={setCategoryList}
-                  key={categoryList.length}
-                  editable={false}
-                />
-              )}
+            <Form.Item
+              label="Product Name"
+              name="productName"
+              rules={[...justRequired, ...minFive]}
             >
-              <Select.Option value="ProteinPowder">
-                Protein Powder
-              </Select.Option>
-              <Select.Option value="Vitamins">Vitamins</Select.Option>
-              <Select.Option value="Supplements">Supplements</Select.Option>
-              <Select.Option value="Others">Others</Select.Option>
-              {categoryList.map((item) => (
-                <Select.Option key={item} value={item}>
-                  {item}
+              <Input placeholder="Product Name" />
+            </Form.Item>
+            <Form.Item
+              label="Description"
+              name="description"
+              rules={productDescriptionRules}
+            >
+              <TextEditor placeholder="Description" />
+            </Form.Item>
+            <Form.Item label="Price" name="price" rules={justRequired}>
+              <Input placeholder="Price" type="number" />
+            </Form.Item>
+            <Form.Item label="Amount" name="amount" rules={justRequired}>
+              <Input placeholder="Amount" type="number" />
+            </Form.Item>
+            <Form.Item label="Category" name="category" rules={justRequired}>
+              <Select
+                placeholder="Select a category"
+                dropdownRender={(menu) => (
+                  <SelectCategoryDropDown
+                    menu={menu}
+                    categoryList={categoryList}
+                    setCategoryList={setCategoryList}
+                    key={categoryList.length}
+                    editable={false}
+                  />
+                )}
+              >
+                <Select.Option value="ProteinPowder">
+                  Protein Powder
                 </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
+                <Select.Option value="Vitamins">Vitamins</Select.Option>
+                <Select.Option value="Supplements">Supplements</Select.Option>
+                <Select.Option value="Others">Others</Select.Option>
+                {categoryList.map((item) => (
+                  <Select.Option key={item} value={item}>
+                    {item}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
 
-          <Form.Item label="Image" name="image" rules={justRequired}>
-            <Upload
-              listType="picture"
-              maxCount={1}
-              onChange={(info) => {
-                setFile(info.file.originFileObj);
-              }}
-            >
-              <Button>Upload Image</Button>
-            </Upload>
-          </Form.Item>
-        </Form>
+            <Form.Item label="Image" name="image" rules={justRequired}>
+              <Upload
+                listType="picture"
+                maxCount={1}
+                onChange={(info) => {
+                  setFile(info.file.originFileObj);
+                }}
+              >
+                <Button>Upload Image</Button>
+              </Upload>
+            </Form.Item>
+          </Form>
+        </Spin>
       </Modal>
     </div>
   );

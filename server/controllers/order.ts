@@ -109,7 +109,6 @@ export const updateOrder = async (
   next: NextFunction
 ) => {
   try {
-    console.log(req.body);
     const result = await new OrderServices().updateOrder(req);
     res.status(200).json({
       message: "Order updated successfully!",

@@ -4,7 +4,7 @@ import { selectSelectedInvoiceData } from "@/store/slices/invoiceSlice";
 import { useAppSelector } from "@/store/store";
 import { Card } from "@tremor/react";
 import { useRouter } from "next/navigation";
-import { Button, message } from "antd";
+import { Button, message, Spin } from "antd";
 import axiosClient from "@/utils/AxiosClient";
 import useSelectUserInfo from "@/hooks/useSelectUserInfo";
 
@@ -12,6 +12,7 @@ const CreateInvoicePDFPage = () => {
   const userInfo = useSelectUserInfo();
   const router = useRouter();
   const ref = useRef(null);
+  const [loading, setLoading] = useState(false);
 
   const selectInvoiceData = useAppSelector(selectSelectedInvoiceData);
   if (!selectInvoiceData) {
@@ -23,21 +24,24 @@ const CreateInvoicePDFPage = () => {
   }
 
   const createPDF = async () => {
+    message.loading({
+      key: "createPDF",
+      content: "Creating PDF...",
+    });
+    setLoading(true);
     const htmlArray = Array.from((ref.current as any).children).map(
       (child: any) => {
         return child.outerHTML;
       }
     );
     const htmlString = htmlArray.join("\n");
-
     try {
       const response = await axiosClient.post("/orders/createOrderInvoice", {
         htmlString,
       });
-      console.log(response.data.pdf);
       if (response.status === 200) {
         message.success({
-          key: "success",
+          key: "createPDF",
           content: "PDF created successfully",
         });
         const pdfBuffer = Buffer.from(response.data.pdf);
@@ -48,12 +52,18 @@ const CreateInvoicePDFPage = () => {
         link.click();
       }
     } catch (error: any) {
-      console.log(error);
+      message.error({
+        key: "createPDF",
+        content: error.response.data.message,
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <Card className="flex flex-col items-center justify-center p-5 gap-2 min-h-[810px]">
+      <Spin spinning={loading} fullscreen />
       <div
         className="lg:w-1/2 w-full p-10 bg-[#f7f7f7] rounded-md shadow min-h-[770px]"
         ref={ref}
@@ -171,7 +181,12 @@ const CreateInvoicePDFPage = () => {
           dolorum culpa labore et.
         </p>
       </div>
-      <Button type="primary" className="w-[200px]" onClick={createPDF}>
+      <Button
+        type="primary"
+        className="w-[200px]"
+        onClick={createPDF}
+        loading={loading}
+      >
         Create PDF
       </Button>
     </Card>

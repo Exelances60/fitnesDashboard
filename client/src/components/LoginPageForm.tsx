@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, message, Spin } from "antd";
 import { getCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import axiosClient from "@/utils/AxiosClient";
@@ -64,43 +64,45 @@ const LoginPageForm = () => {
 
   return (
     <>
-      <Form
-        className="flex flex-col gap-[10px] justify-center w-full"
-        layout="vertical"
-        onFinish={onFinish}
-      >
-        <Form.Item name="email" rules={emailRules} label="Email">
-          <Input
-            type="text"
-            placeholder="Email"
-            value={""}
-            className="w-full h-[50px] px-[20px] bg-[#F0F2F5] rounded-[10px]"
-          />
-        </Form.Item>
+      <Spin spinning={loading}>
+        <Form
+          className="flex flex-col gap-[10px] justify-center w-full"
+          layout="vertical"
+          onFinish={onFinish}
+        >
+          <Form.Item name="email" rules={emailRules} label="Email">
+            <Input
+              type="text"
+              placeholder="Email"
+              value={""}
+              className="w-full h-[50px] px-[20px] bg-[#F0F2F5] rounded-[10px]"
+            />
+          </Form.Item>
 
-        <Form.Item
-          name="password"
-          rules={[{ required: true, message: "Please Input your Password!" }]}
-          label="Password"
-        >
-          <Input.Password
-            type="password"
-            placeholder="Password"
-            value={""}
-            className="w-full h-[50px] px-[20px] bg-[#F0F2F5] rounded-[10px]"
-          />
-        </Form.Item>
-        <Button
-          htmlType="submit"
-          type="primary"
-          size="large"
-          loading={loading}
-          className="w-full h-[50px] bg-[#4880FF] rounded-[10px] text-white font-bold"
-        >
-          Login
-        </Button>
-        {error ? <p className="text-red-500">{error}</p> : null}
-      </Form>
+          <Form.Item
+            name="password"
+            rules={[{ required: true, message: "Please Input your Password!" }]}
+            label="Password"
+          >
+            <Input.Password
+              type="password"
+              placeholder="Password"
+              value={""}
+              className="w-full h-[50px] px-[20px] bg-[#F0F2F5] rounded-[10px]"
+            />
+          </Form.Item>
+          <Button
+            htmlType="submit"
+            type="primary"
+            size="large"
+            loading={loading}
+            className="w-full h-[50px] bg-[#4880FF] rounded-[10px] text-white font-bold"
+          >
+            Login
+          </Button>
+          {error ? <p className="text-red-500">{error}</p> : null}
+        </Form>
+      </Spin>
     </>
   );
 };

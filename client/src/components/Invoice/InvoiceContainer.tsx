@@ -35,7 +35,6 @@ const InvoiceContainer = ({ data }: IInvoiceContainerProps) => {
             color="error"
             onClick={() => editPDFDocument(order)}
           />
-          <PrinterOutlined />
         </div>
       </div>
     ),

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 import { Popconfirm, Tag } from "antd";
 import Image from "next/image";
 import { capitalizeFirstLetter } from "@/utils/utils";

@@ -32,7 +32,7 @@ const OrderChartsTotalPrice = ({
         />
       </div>
 
-      {selected ? <OrderChartsSelectedDetails selected={selected} /> : null}
+      <OrderChartsSelectedDetails selected={selected} />
 
       <p className="mt-8 flex items-center justify-between text-tremor-label text-tremor-content dark:text-dark-tremor-content">
         <span>Product Name</span>

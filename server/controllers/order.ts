@@ -9,6 +9,7 @@ import {
 } from "../services/businessLogic/calculatePreviousMonthSales";
 import { printValidatorErrors } from "../utils/printValidatorErrors";
 import { OrderServices } from "../services/OrderServices";
+import { PDFServices } from "../services/PDFServices";
 
 export const createOrder = async (
   req: Request,
@@ -139,6 +140,27 @@ export const orderCompleted = async (
     res.status(200).json({
       message: "Order completed successfully!",
       status: 200,
+    });
+  } catch (error: any) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};
+
+export const createOrderInvoice = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { htmlString } = req.body;
+    const pdf = await new PDFServices().htmlToPdf(htmlString);
+    res.status(200).json({
+      message: "Invoice created successfully!",
+      status: 200,
+      pdf,
     });
   } catch (error: any) {
     if (!error.statusCode) {

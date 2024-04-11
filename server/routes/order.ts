@@ -22,4 +22,6 @@ router.put("/update-order", isAuth, orderController.updateOrder);
 
 router.post("/ordercompleted", isAuth, orderController.orderCompleted);
 
+router.post("/createOrderInvoice", isAuth, orderController.createOrderInvoice);
+
 export { router as orderRoutes };

@@ -1,7 +1,6 @@
 import React from "react";
 import { Form, Input, Divider, InputNumber } from "antd";
 import { MailOutlined } from "@ant-design/icons";
-import CustomerEditExersiceForm from "./CustomerEditExersiceForm";
 import useSelectUserInfo from "@/hooks/useSelectUserInfo";
 import axiosClient from "@/utils/AxiosClient";
 import useMessage from "@/hooks/useMessage";

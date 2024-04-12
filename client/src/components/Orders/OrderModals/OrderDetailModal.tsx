@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Map from "@/components/Map";
 
 type OrderDetailModalProps = {
   selectedOrder: OrdersType;
@@ -84,6 +85,9 @@ const OrderDetailModal = ({ selectedOrder }: OrderDetailModalProps) => {
               </span>
             ))}
           </p>
+          <div className="w-full h-96 mt-2 p-5">
+            <Map address={selectedOrder.adress} />
+          </div>
         </div>
       </div>
     </>

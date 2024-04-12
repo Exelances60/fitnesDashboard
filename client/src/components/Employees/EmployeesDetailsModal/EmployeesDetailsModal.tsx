@@ -30,7 +30,7 @@ const EmployeesDetailsModal = ({ employee }: EmployeesDetailsModalProps) => {
       <p>Universty : {employee.university}</p>
       <p>Hire Date : {new Date(employee.hireDate || "").toLocaleString()}</p>
       <h1 className="text-xl font-bold">Documents</h1>
-      <div className="w-full flex gap-2">
+      <div className="w-full flex gap-2 items-center justify-center">
         {employee && employee.documents
           ? employee.documents.map((doc, index) => (
               <Image

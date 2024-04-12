@@ -90,7 +90,7 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
         </Menu>
       </Layout.Sider>
       <Layout>
-        <Header style={{ backgroundColor: "#FFFF" }}>Header</Header>
+        <Header style={{ backgroundColor: "#FFFF" }}></Header>
         <Content
           style={{ margin: "0px 5px 0", backgroundColor: "#F5F6FA" }}
           className="shadow  rounded-md"

@@ -64,7 +64,7 @@ const InvoiceShowProducts = ({ order }: IInvoiceShowProductsProps) => {
             </div>
             <div className="flex justify-between">
               <span className="font-bold">Product Quantity</span>
-              <span>{product.amount}</span>
+              <span>{order.amount}</span>
             </div>
           </div>
         ))}

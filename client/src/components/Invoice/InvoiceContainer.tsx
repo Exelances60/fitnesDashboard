@@ -3,11 +3,11 @@ import React from "react";
 import { currencyFormatter } from "@/utils/utils";
 import { Card } from "@tremor/react";
 import { Collapse, CollapseProps } from "antd";
-import InvoiceShowProducts from "./InvoiceShowProducts";
-import { PrinterOutlined, FilePdfOutlined } from "@ant-design/icons";
+import { FilePdfOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "@/store/store";
 import { setSelectedInvoiceData } from "@/store/slices/invoiceSlice";
 import { useRouter } from "next/navigation";
+import InvoiceShowProducts from "./InvoiceShowProducts";
 
 interface IInvoiceContainerProps {
   data: OrdersType[];

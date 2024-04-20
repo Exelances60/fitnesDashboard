@@ -308,10 +308,8 @@ export class CustomerServices {
     try {
       const fetchedCustomer = await this.customerRepository.findById<ICustomer>(
         customerId
-      );
-      if (!fetchedCustomer) return throwNotFoundError("Customer not found");
-      if (!fetchedCustomer.coachPT)
-        return throwBadRequestError("Customer does not have a coach");
+        );
+      if (!fetchedCustomer || !fetchedCustomer.coachPT) return throwBadRequestError("Customer or coach not found");
 
       const fetchedEmployee = await this.employeeRepository.findById<IEmployee>(
         fetchedCustomer.coachPT.toString()

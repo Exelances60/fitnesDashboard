@@ -1,13 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\controllers",
-    "\\middleware",
-    "\\models",
-    "\\routes",
+    "\\dto\\AuthDTO",
+    "\\dto\\CustomerDTO",
+    "\\dto\\EmployeesDTO",
+    "\\dto\\ProductDTO",
     "\\services",
-    "\\utils"
+    "\\utils\\err",
+    "\\Validator\\AuthValidate",
+    "\\Validator\\Customer",
+    "\\Validator\\Employees"
   ],
-  "SelectedNode": "\\controllers\\customer.js",
+  "SelectedNode": "\\services\\CustomerServices.ts",
   "PreviewInSolutionExplorer": false
 }

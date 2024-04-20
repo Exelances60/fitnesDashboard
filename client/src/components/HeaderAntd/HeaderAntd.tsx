@@ -15,6 +15,7 @@ import Image from "next/image";
 import useGetUserInfo from "@/hooks/useGetUserInfo";
 import { deleteCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
+import HeaderNavigation from "./HeaderNavigation";
 
 const { Content, Header } = Layout;
 
@@ -90,7 +91,16 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
         </Menu>
       </Layout.Sider>
       <Layout>
-        <Header style={{ backgroundColor: "#FFFF" }}></Header>
+        <Header
+          style={{
+            backgroundColor: "#FFFF",
+            display: "flex",
+            justifyContent: "end",
+            alignItems: "center",
+          }}
+        >
+          <HeaderNavigation />
+        </Header>
         <Content
           style={{ margin: "0px 5px 0", backgroundColor: "#F5F6FA" }}
           className="shadow  rounded-md"

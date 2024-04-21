@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Card, DonutChart, List, ListItem } from "@tremor/react";
 import OrderChartsSelectedDetails from "./OrderChartsSelectedDetails";
 import OrderChartsList from "./OrderChartsList";
-import { currencyFormatter } from "@/utils/utils";
+import useCurrencyFormatter from "@/hooks/useCurrencyFormatter";
 
 type OrderChartsTotalPriceProps = {
   chartsDonutData: orderDonutChartType[];
@@ -15,6 +15,7 @@ const OrderChartsTotalPrice = ({
   const [selected, setSelected] = useState<orderDonutChartType | null>(null);
   chartsDonutData.sort((a, b) => b.totalPrice - a.totalPrice);
   const topTenItems = chartsDonutData.slice(0, 10);
+  const { renderCurrency } = useCurrencyFormatter();
   return (
     <Card title="Order Chats" className="order-chats">
       <h3 className="text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
@@ -26,7 +27,7 @@ const OrderChartsTotalPrice = ({
           data={chartsDonutData}
           category="totalPrice"
           index="name"
-          valueFormatter={(value) => currencyFormatter(value, "TRY")}
+          valueFormatter={renderCurrency}
           onValueChange={(value) => setSelected(value)}
           colors={["cyan", "blue", "indigo", "violet", "fuchsia"]}
         />

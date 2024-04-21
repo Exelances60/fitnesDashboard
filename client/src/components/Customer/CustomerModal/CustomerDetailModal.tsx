@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import NOUSERPHOTE from "@/../public/customer/noUser.webp";
 import React from "react";
+import useCurrencyFormatter from "@/hooks/useCurrencyFormatter";
 
 interface CustomerEditModalProps {
   customer: CustomerType;
@@ -12,6 +13,7 @@ interface CustomerEditModalProps {
 
 const CustomerDetailsModal = ({ customer }: CustomerEditModalProps) => {
   const dispatch = useAppDispatch();
+  const { renderCurrency } = useCurrencyFormatter();
   return (
     <div className="flex flex-col  gap-5">
       <div className="flex flex-col items-center justify-center gap-5 w-full">
@@ -66,7 +68,9 @@ const CustomerDetailsModal = ({ customer }: CustomerEditModalProps) => {
         </p>
         <p className="flex gap-2">
           💵 Membership Price
-          <p className="font-bold">{customer.membershipPrice} TL</p>
+          <p className="font-bold">
+            {renderCurrency(customer.membershipPrice)}
+          </p>
         </p>
         <p className="flex gap-2">
           🥋 Coach:

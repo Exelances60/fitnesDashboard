@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Card, DonutChart, List, ListItem } from "@tremor/react";
-import { currencyFormatter } from "@/utils/utils";
+import useCurrencyFormatter from "@/hooks/useCurrencyFormatter";
 
 type OrderChartsCategoryProps = {
   chartsDonutData: orderDonutChartType[];
@@ -20,6 +20,8 @@ const OrderChartsCategory = ({ chartsDonutData }: OrderChartsCategoryProps) => {
     totalPrice: filteredByCategory[category],
   }));
   data.sort((a, b) => b.totalPrice - a.totalPrice);
+  const { renderCurrency } = useCurrencyFormatter();
+
   return (
     <Card title="Order Chats" className="order-chats">
       <h3 className="text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
@@ -30,7 +32,7 @@ const OrderChartsCategory = ({ chartsDonutData }: OrderChartsCategoryProps) => {
         data={data}
         category="totalPrice"
         index="category"
-        valueFormatter={(value) => currencyFormatter(value, "TRY")}
+        valueFormatter={renderCurrency}
         colors={["cyan", "blue", "indigo", "violet", "fuchsia"]}
       />
       <p className="mt-8 flex items-center justify-between text-tremor-label text-tremor-content dark:text-dark-tremor-content">
@@ -51,7 +53,7 @@ const OrderChartsCategory = ({ chartsDonutData }: OrderChartsCategoryProps) => {
                 {item.category}
               </span>
               <span className="rounded-tremor-small bg-tremor-background-subtle px-1.5 py-0.5 text-tremor-label font-medium tabular-nums text-tremor-content-emphasis dark:bg-dark-tremor-background-subtle dark:text-dark-tremor-content-emphasis">
-                {currencyFormatter(item.totalPrice, "TRY")}
+                {renderCurrency(item.totalPrice)}
               </span>
             </div>
           </ListItem>

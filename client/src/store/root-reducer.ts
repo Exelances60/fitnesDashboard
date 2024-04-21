@@ -5,6 +5,7 @@ import { modalReducer } from "./slices/modalSlice";
 import { drawerReducer } from "./slices/drawerSlice";
 import { customerDetailsReducer } from "./slices/customerDetailsSlice";
 import { invoiceReducer } from "./slices/invoiceSlice";
+import { navigationReducer } from "./slices/navigationSlice";
 export const rootReducer = combineReducers({
   user: userReducer,
   productPage: productPageReducer,
@@ -12,4 +13,5 @@ export const rootReducer = combineReducers({
   drawerReducer: drawerReducer,
   customerDetailsReducer: customerDetailsReducer,
   invoiceReducer: invoiceReducer,
+  navigationReducer: navigationReducer,
 });

@@ -13,6 +13,7 @@ import {
   setProduct,
 } from "@/store/slices/productPageSlice";
 import Image from "next/image";
+import useCurrencyFormatter from "@/hooks/useCurrencyFormatter";
 
 type productsRowType = {
   product: productsType;
@@ -20,7 +21,7 @@ type productsRowType = {
 };
 const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
   const dispatch = useAppDispatch();
-
+  const { renderCurrency } = useCurrencyFormatter();
   const handleClickEditButton = () => {
     dispatch(setProduct(product));
     dispatch(setEditModalVisible(true));
@@ -45,12 +46,7 @@ const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
         />
       </TableCell>
       <TableCell>{product.name}</TableCell>
-      <TableCell>
-        {new Intl.NumberFormat("tr-TR", {
-          style: "currency",
-          currency: "TRY",
-        }).format(product.price)}
-      </TableCell>
+      <TableCell>{renderCurrency(product.price)}</TableCell>
       <TableCell>{product.amount} pcs</TableCell>
       <TableCell>{product.category}</TableCell>
       <TableCell className="md:w-[200px] ">

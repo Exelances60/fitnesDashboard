@@ -1,4 +1,4 @@
-import { Model, UpdateQuery } from "mongoose";
+import { Model, Types, UpdateQuery } from "mongoose";
 
 export default class RepositoryBase<T extends Model<any>> {
   private model: T;
@@ -28,7 +28,10 @@ export default class RepositoryBase<T extends Model<any>> {
     }
   }
 
-  async update<T>(id: string, data: UpdateQuery<T>): Promise<T & Model<T>> {
+  async update<T>(
+    id: string | Types.ObjectId,
+    data: UpdateQuery<T>
+  ): Promise<T & Model<T>> {
     try {
       const result = await this.model.findByIdAndUpdate(id, data, {
         new: true,
@@ -42,7 +45,7 @@ export default class RepositoryBase<T extends Model<any>> {
     }
   }
 
-  async delete(id: string) {
+  async delete(id: string | Types.ObjectId) {
     try {
       const result = await this.model.findByIdAndDelete(id);
       if (!result) {

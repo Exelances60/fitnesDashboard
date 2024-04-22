@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, createAction } from "@reduxjs/toolkit";
 import { rootReducer } from "./root-reducer";
 import logger from "redux-logger";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";

@@ -20,10 +20,14 @@ export const userSlice = createSlice({
     setMenuKeys: (state, action) => {
       state.menuKeys = action.payload;
     },
+    logout: (state) => {
+      state.user = null;
+      state.menuKeys = "dashboard";
+    },
   },
 });
 
-export const { setUser, setMenuKeys } = userSlice.actions;
+export const { setUser, setMenuKeys, logout } = userSlice.actions;
 export const selectUser = (state: RootState) => state.user.user;
 export const selectMenuKeys = (state: RootState) => state.user.menuKeys;
 export const userReducer = userSlice.reducer;

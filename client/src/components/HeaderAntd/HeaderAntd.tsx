@@ -2,8 +2,8 @@
 import React, { useMemo } from "react";
 import { Layout, message } from "antd";
 import { Menu } from "antd";
-import { useAppSelector } from "@/store/store";
-import { selectMenuKeys, selectUser } from "@/store/slices/userSlice";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { logout, selectMenuKeys, selectUser } from "@/store/slices/userSlice";
 import { LogoutOutlined, SettingOutlined } from "@ant-design/icons";
 import { navMenu } from "@/mock/navMenu";
 import useSetMenuKeys from "@/hooks/useSetMenuKeys";
@@ -21,6 +21,7 @@ const { Content, Header } = Layout;
 
 const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const { handleChangeMenuKeys } = useSetMenuKeys();
   const menuKeys = useAppSelector(selectMenuKeys);
   const userInfo = useAppSelector(selectUser);
@@ -37,6 +38,7 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
   }, [handleChangeMenuKeys]);
 
   const handleLogout = () => {
+    dispatch(logout());
     deleteCookie("token");
     message.success("Logout successfully");
     router.push("/");

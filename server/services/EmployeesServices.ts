@@ -66,7 +66,7 @@ export class EmployeesServices {
       );
       if (!fetchedOwner) return throwNotFoundError("Owner not found");
       fetchedOwner.employees.push(employee._id);
-      await fetchedOwner.save();
+      await this.ownerRepository.update<IOwner>(fetchedOwner._id, fetchedOwner);
       return employee;
     } catch (error: any) {
       throw new Error(error);
@@ -115,8 +115,9 @@ export class EmployeesServices {
         );
       }
       employee.customers.push(req.body.customerId as any);
-      await employee.updateOne(employee);
-      await customer.updateOne({
+
+      await this.employeeRepository.update<IEmployee>(employee._id, employee);
+      await this.customerRepository.update<ICustomer>(customer._id, {
         coachPT: employee._id,
       });
     } catch (error: any) {
@@ -147,8 +148,9 @@ export class EmployeesServices {
         });
         if (!customers) return throwNotFoundError("Customers not found");
         customers.forEach(async (customer) => {
-          customer.coachPT = null;
-          await customer.save();
+          await this.customerRepository.update<ICustomer>(customer._id, {
+            coachPT: null,
+          });
         });
       }
       if (employee.profilePicture) {
@@ -157,7 +159,7 @@ export class EmployeesServices {
       employee.documents.forEach((document) => {
         firebaseStorageServices.deleteImageFromStorage(document);
       });
-      await this.employeeRepository.delete(employee._id as any);
+      await this.employeeRepository.delete(employee._id);
     } catch (error: any) {
       throw new Error(error);
     }

@@ -104,7 +104,7 @@ export class UserServices {
         );
       }
       fetchedOwner.ownerImage = dowlandURLOwnerImage;
-      await fetchedOwner.save();
+      await this.ownerRepository.update<IOwner>(fetchedOwner._id, fetchedOwner);
       return fetchedOwner;
     } catch (error: any) {
       throw new Error(error);

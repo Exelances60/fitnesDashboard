@@ -24,7 +24,10 @@ export class OrderServices {
       );
       if (!product) return throwNotFoundError("Product not found.");
       product.amount = product.amount - req.body.amount;
-      await product.updateOne(product);
+      await this.productRepository.update<IProduct>(
+        req.body.productId,
+        product
+      );
       const totalPrice = (req.body.price * req.body.amount * 1.08).toFixed(2);
 
       const order = await this.orderRepository.create<IOrder>({
@@ -43,7 +46,7 @@ export class OrderServices {
       );
       if (!owner) return throwNotFoundError("Owner not found.");
       owner.orders.push(order._id);
-      await owner.updateOne(owner);
+      await this.ownerRepository.update<IOwner>(owner._id, owner);
       return order;
     } catch (error: any) {
       throw new Error(error.message);
@@ -114,7 +117,7 @@ export class OrderServices {
       if (order.status === "Completed")
         return throwNotFoundError("Order already completed.");
       order.status = "Completed";
-      await order.updateOne(order);
+      await this.orderRepository.update<IOrder>(order._id, order);
     } catch (error: any) {
       throw new Error(error.message);
     }

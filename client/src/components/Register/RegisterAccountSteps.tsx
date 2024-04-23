@@ -21,15 +21,12 @@ const RegisterAccountSteps = forwardRef<
         }}
         transition={{ duration: 0.3 }}
       >
-        <Form.Item
-          name="email"
-          label="Email"
-          rules={[...justRequired, ...emailRules]}
-        >
+        <Form.Item name="email" label="Email" rules={[...emailRules]}>
           <Input placeholder="Enter The Email" />
         </Form.Item>
         <Form.Item
           name="password"
+          required
           label="Password"
           rules={[...justRequired, { min: 6 }]}
         >

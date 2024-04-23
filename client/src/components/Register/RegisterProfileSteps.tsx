@@ -30,10 +30,7 @@ const RegisterProfileSteps = React.forwardRef<
             className="w-full h-full  border-gray-300 rounded-lg"
             valuePropName="fileList"
             getValueFromEvent={(e) => {
-              if (Array.isArray(e)) {
-                return e;
-              }
-              return e && e.fileList;
+              return e.file.originFileObj ? e.file.originFileObj : [];
             }}
           >
             <Dragger

@@ -1,5 +1,5 @@
 "use client";
-import { Button, Form, Segmented, Tooltip, Tour } from "antd";
+import { Button, Form, message, Segmented, Tooltip, Tour } from "antd";
 import React, { useRef, useState } from "react";
 import RegisterAccountSteps from "./RegisterAccountSteps";
 import RegisterProfileSteps from "./RegisterProfileSteps";
@@ -7,13 +7,22 @@ import { motion } from "framer-motion";
 import { QuestionOutlined } from "@ant-design/icons";
 import { TourProps } from "antd/lib";
 
+interface IFormValues {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  ownerImage: File | [];
+  companyName: string;
+  address: string;
+}
+
 const RegisterSteps = () => {
   const accountRef = useRef(null);
   const profileRef = useRef(null);
   const finishRef = useRef(null);
   const [current, setCurrent] = useState("Account");
   const [open, setOpen] = useState(false);
-
+  const [form] = Form.useForm();
   const steps: TourProps["steps"] = [
     {
       title: "Welcome to Account Registration",
@@ -38,6 +47,12 @@ const RegisterSteps = () => {
     },
   ];
 
+  const onFinish = (values: IFormValues) => {
+    if (values.password !== values.confirmPassword) {
+      return message.error("Password and Confirm Password must be the same");
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center gap-2 w-full">
       <Segmented
@@ -58,37 +73,46 @@ const RegisterSteps = () => {
         />
       </Tooltip>
       <Form
+        form={form}
         layout="vertical"
         className="w-full"
-        onFinish={(values) => {
-          console.log(values);
-        }}
+        onFinish={onFinish}
+        name="register"
       >
-        {current === "Account" ? (
+        <div className={current === "Account" ? "block" : "hidden"}>
           <RegisterAccountSteps current={current} ref={accountRef} />
-        ) : null}
-        {current === "Profile" ? (
+        </div>
+
+        <div className={current === "Profile" ? "block" : "hidden"}>
           <RegisterProfileSteps current={current} ref={profileRef} />
-        ) : null}
-        {current === "Finish" ? (
-          <div ref={finishRef}>
-            <motion.div
-              initial={{ opacity: 0, x: 100 }}
-              animate={{
-                opacity: current === "Finish" ? 1 : 0,
-                x: current === "Finish" ? 0 : 100,
-              }}
-              className="flex flex-col items-center justify-center gap-2 w-full"
+        </div>
+
+        <div
+          ref={finishRef}
+          className={current === "Finish" ? "block" : "hidden"}
+        >
+          <motion.div
+            initial={{ opacity: 0, x: 100 }}
+            animate={{
+              opacity: current === "Finish" ? 1 : 0,
+              x: current === "Finish" ? 0 : 100,
+            }}
+            className="flex flex-col items-center justify-center gap-2 w-full"
+          >
+            <p> Thank you for registering </p>
+            <p>Your account is under review 🔍 </p>
+            <p> We will send you an email or SMS to in 2 days ⌚</p>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="w-full"
+              form="register"
             >
-              <p> Thank you for registering </p>
-              <p>Your account is under review 🔍 </p>
-              <p> We will send you an email or SMS to in 2 days ⌚</p>
-              <Button type="primary" htmlType="submit" className="w-full">
-                Finish
-              </Button>
-            </motion.div>
-          </div>
-        ) : null}
+              Finish
+            </Button>
+          </motion.div>
+        </div>
+
         <Tour
           open={open}
           onClose={() => setOpen(false)}

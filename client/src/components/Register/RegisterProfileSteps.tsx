@@ -28,9 +28,11 @@ const RegisterProfileSteps = React.forwardRef<
           <Form.Item
             name="ownerImage"
             className="w-full h-full  border-gray-300 rounded-lg"
-            valuePropName="fileList"
             getValueFromEvent={(e) => {
-              return e.file.originFileObj ? e.file.originFileObj : [];
+              if (Array.isArray(e)) {
+                return e;
+              }
+              return e && e.fileList;
             }}
           >
             <Dragger

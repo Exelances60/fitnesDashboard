@@ -27,6 +27,20 @@ class JwtServices implements JwtServicesInterface {
       throw new Error("Could not sign token");
     }
   }
+  async hashPassword(password: string) {
+    try {
+      return await bcrypt.hash(password, 12);
+    } catch (error) {
+      throw new Error("Could not hash password");
+    }
+  }
+  verifyToken(token: string) {
+    try {
+      return jwt.verify(token, this.secret);
+    } catch (error) {
+      throw new Error("Could not verify token");
+    }
+  }
 }
 
 const jwtServices = new JwtServices();

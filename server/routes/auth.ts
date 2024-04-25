@@ -15,11 +15,9 @@ router.post("/login", loginValidator, authController.login);
 
 router.post(
   "/signup",
-  [
-    body("email").isEmail().withMessage("Please enter a valid email address."),
-    body("password").trim().isLength({ min: 5 }),
-    body("companyName").trim().not().isEmpty(),
-  ],
+  multer({ storage: multer.memoryStorage(), fileFilter: fileFilter }).single(
+    "ownerImage"
+  ),
   authController.signup
 );
 

@@ -39,20 +39,11 @@ export const signup = async (
   try {
     const errors = validationResult(req);
     printValidatorErrors(errors);
-    const { email, password } = req.body;
-    const hashedPw = await bcrypt.hash(password, 12);
-
-    const owner = new Owner({
-      email,
-      password: hashedPw,
-      companyName: "test",
-      address: "test",
-      phone: "1234567890",
+    const qrCodeID = await new UserServices().signUpOwner(req);
+    res.status(201).json({
+      message: "Owner create Request sent.",
+      qrCodeID: qrCodeID,
     });
-
-    const result = await owner.save();
-
-    res.status(201).json({ message: "Owner created!", ownerId: result._id });
   } catch (err: any) {
     if (!err.statusCode) {
       err.statusCode = 500;

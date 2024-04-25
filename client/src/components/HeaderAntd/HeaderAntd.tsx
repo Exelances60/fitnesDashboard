@@ -9,8 +9,6 @@ import { navMenu } from "@/mock/navMenu";
 import useSetMenuKeys from "@/hooks/useSetMenuKeys";
 import Loading from "@/app/loading";
 import Link from "next/link";
-import GlobalModal from "../GlobalModal/GlobalModal";
-import GlobalDrawer from "../GlobalDrawer/GlobalDrawer";
 import Image from "next/image";
 import useGetUserInfo from "@/hooks/useGetUserInfo";
 import { deleteCookie } from "cookies-next";
@@ -109,8 +107,6 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
         >
           <div className="w-full p-4 box-border min-h-[92vh] overflow-y-auto mt-[10px] max-h-[92vh]">
             {children}
-            <GlobalModal />
-            <GlobalDrawer />
           </div>
         </Content>
       </Layout>

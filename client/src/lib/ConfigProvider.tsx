@@ -4,6 +4,8 @@ import trTR from "antd/locale/tr_TR";
 import "dayjs/locale/tr";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistor } from "@/store/store";
+import GlobalDrawer from "@/components/GlobalDrawer/GlobalDrawer";
+import GlobalModal from "@/components/GlobalModal/GlobalModal";
 
 const ConfigProviderComp = ({ children }: { children: React.ReactNode }) => {
   const { darkAlgorithm } = theme;
@@ -26,6 +28,8 @@ const ConfigProviderComp = ({ children }: { children: React.ReactNode }) => {
       >
         {children}
       </PersistGate>
+      <GlobalDrawer />
+      <GlobalModal />
     </ConfigProvider>
   );
 };

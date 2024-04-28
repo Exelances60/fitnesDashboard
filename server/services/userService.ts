@@ -117,12 +117,9 @@ export class UserServices {
   }
   async signUpOwner(req: Request): Promise<string | Types.ObjectId> {
     try {
-      if (!req.file) {
-        return throwBadRequestError("No image provided.");
-      }
       const bcryptPassword = await jwtServices.hashPassword(req.body.password);
       req.body.password = bcryptPassword;
-      if (req.body.ownerImage) {
+      if (req.body.ownerImage && req.file) {
         const uploadImage = await firebaseStorageServices.uploadImageToStorage(
           req.file,
           "pendingOwner/"

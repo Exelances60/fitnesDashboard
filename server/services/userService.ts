@@ -117,16 +117,15 @@ export class UserServices {
   }
   async signUpOwner(req: Request): Promise<string | Types.ObjectId> {
     try {
-      if (!req.file) {
-        return throwBadRequestError("No image provided.");
-      }
       const bcryptPassword = await jwtServices.hashPassword(req.body.password);
       req.body.password = bcryptPassword;
-      const uploadImage = await firebaseStorageServices.uploadImageToStorage(
-        req.file,
-        "pendingOwner/"
-      );
-      req.body.ownerImage = uploadImage;
+      if (req.body.ownerImage && req.file) {
+        const uploadImage = await firebaseStorageServices.uploadImageToStorage(
+          req.file,
+          "pendingOwner/"
+        );
+        req.body.ownerImage = uploadImage;
+      }
       const pendingOwner =
         await this.peddingAccountRepository.create<IPendingAccount>(req.body);
       return pendingOwner._id;

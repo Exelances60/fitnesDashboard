@@ -36,7 +36,6 @@ const pendingAccountSchema = new ModelSchema<IPendingAccount>({
   },
   ownerImage: {
     type: String,
-    required: true,
   },
   status: {
     type: String,

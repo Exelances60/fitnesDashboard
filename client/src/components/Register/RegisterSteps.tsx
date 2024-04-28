@@ -72,7 +72,9 @@ const RegisterSteps = () => {
       const formData = new FormData();
       formData.append("email", values.email);
       formData.append("password", values.password);
-      formData.append("ownerImage", values.ownerImage[0].originFileObj);
+      if (values.ownerImage) {
+        formData.append("ownerImage", values.ownerImage[0].originFileObj);
+      }
       formData.append("companyName", values.companyName);
       formData.append("address", values.address);
       formData.append("phone", values.phone);

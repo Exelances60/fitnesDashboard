@@ -122,11 +122,13 @@ export class UserServices {
       }
       const bcryptPassword = await jwtServices.hashPassword(req.body.password);
       req.body.password = bcryptPassword;
-      const uploadImage = await firebaseStorageServices.uploadImageToStorage(
-        req.file,
-        "pendingOwner/"
-      );
-      req.body.ownerImage = uploadImage;
+      if (req.body.ownerImage) {
+        const uploadImage = await firebaseStorageServices.uploadImageToStorage(
+          req.file,
+          "pendingOwner/"
+        );
+        req.body.ownerImage = uploadImage;
+      }
       const pendingOwner =
         await this.peddingAccountRepository.create<IPendingAccount>(req.body);
       return pendingOwner._id;

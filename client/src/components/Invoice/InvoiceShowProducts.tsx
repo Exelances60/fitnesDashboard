@@ -1,10 +1,10 @@
 import React from "react";
 import { useState } from "react";
-import { currencyFormatter } from "@/utils/utils";
 import { DownOutlined } from "@ant-design/icons";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Divider } from "antd";
+import useCurrencyFormatter from "@/hooks/useCurrencyFormatter";
 
 interface IInvoiceShowProductsProps {
   order: OrdersType;
@@ -12,6 +12,7 @@ interface IInvoiceShowProductsProps {
 
 const InvoiceShowProducts = ({ order }: IInvoiceShowProductsProps) => {
   const [showProducts, setShowProducts] = useState<string[]>([]);
+  const { renderCurrency } = useCurrencyFormatter();
 
   const toggleProduct = (orderId: string) => {
     if (showProducts.includes(orderId)) {
@@ -60,11 +61,11 @@ const InvoiceShowProducts = ({ order }: IInvoiceShowProductsProps) => {
             </div>
             <div className="flex justify-between">
               <span className="font-bold">Product Price</span>
-              <span>{currencyFormatter(product.price, "TRY")}</span>
+              <span>{renderCurrency(product.price)}</span>
             </div>
             <div className="flex justify-between">
               <span className="font-bold">Product Quantity</span>
-              <span>{product.amount}</span>
+              <span>{order.amount}</span>
             </div>
           </div>
         ))}

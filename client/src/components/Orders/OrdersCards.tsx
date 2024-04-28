@@ -1,3 +1,5 @@
+"use client";
+import useCurrencyFormatter from "@/hooks/useCurrencyFormatter";
 import { Badge, Card, Grid } from "@tremor/react";
 import React from "react";
 
@@ -6,6 +8,7 @@ interface OrdersCardsProps {
 }
 
 const OrdersCards = ({ cardData }: OrdersCardsProps) => {
+  const { renderCurrency } = useCurrencyFormatter();
   return (
     <Grid numItems={1} numItemsSm={1} numItemsLg={3} className="gap-2 ">
       <Card>
@@ -43,10 +46,7 @@ const OrdersCards = ({ cardData }: OrdersCardsProps) => {
           </Badge>
         </div>
         <p className="text-tremor-metric font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">
-          {new Intl.NumberFormat("tr-TR", {
-            style: "currency",
-            currency: "TRY",
-          }).format(cardData.totalSalesPrice)}
+          {renderCurrency(cardData.totalSalesPrice)}
         </p>
       </Card>
       <Card>
@@ -65,10 +65,7 @@ const OrdersCards = ({ cardData }: OrdersCardsProps) => {
           </Badge>
         </div>
         <p className="text-tremor-metric font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">
-          {new Intl.NumberFormat("tr-TR", {
-            style: "currency",
-            currency: "TRY",
-          }).format(cardData.totalSalesCompleted)}
+          {renderCurrency(cardData.totalSalesCompleted)}
         </p>
       </Card>
     </Grid>

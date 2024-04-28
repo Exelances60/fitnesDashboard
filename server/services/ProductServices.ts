@@ -39,7 +39,7 @@ export class ProductServices {
       );
       if (!owner) throw new Error("Owner not found");
       owner.product.push(product._id);
-      await owner.updateOne(owner);
+      await this.ownerRepository.update<IOwner>(owner._id, owner);
       return product;
     } catch (error: any) {
       throw new Error(error.message);
@@ -77,9 +77,8 @@ export class ProductServices {
         (order) => order.orderImage === product.imageUrl
       );
 
-      const result = await this.productRepository.delete(
-        product._id.toString()
-      );
+      const result = await this.productRepository.delete(product._id);
+
       if (!result) return throwNotFoundError("Product not found");
       if (!ordersHaveProductImage.length) {
         await firebaseStorageServices.deleteImageFromStorage(product.imageUrl);
@@ -87,7 +86,8 @@ export class ProductServices {
       const filtredProduct = owner.product.filter((prod) => {
         return prod.toString() !== product._id.toString();
       });
-      await owner.updateOne({
+
+      await this.ownerRepository.update<IOwner>(owner._id, {
         product: filtredProduct,
       });
     } catch (error: any) {
@@ -116,12 +116,14 @@ export class ProductServices {
       if (imageUrl !== product.imageUrl && product.imageUrl) {
         firebaseStorageServices.deleteImageFromStorage(product.imageUrl);
       }
-      await product.updateOne({
+
+      await this.productRepository.update<IProduct>(product._id, {
         ...req.body,
         imageUrl,
         price: +req.body.price,
         amount: +req.body.amount,
       });
+
       return product;
     } catch (error: any) {
       throw new Error(error.message);

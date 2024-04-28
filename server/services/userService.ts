@@ -6,12 +6,17 @@ import throwNotFoundError from "../utils/err/throwNotFoundError";
 import jwtServices from "../utils/jwtServices";
 import firebaseStorageServices from "../utils/FirebaseServices";
 import { IUpdateOwnerRequest } from "../dto/AuthDTO";
+import { PeddingAccountRepository } from "../repository/PeddingAccountRepository";
+import { IPendingAccount } from "../models/PendingAccounts";
+import { Types } from "mongoose";
 
 export class UserServices {
   private ownerRepository: OwnerRepository;
+  private peddingAccountRepository: PeddingAccountRepository;
 
   constructor() {
     this.ownerRepository = new OwnerRepository();
+    this.peddingAccountRepository = new PeddingAccountRepository();
   }
 
   /**
@@ -104,8 +109,49 @@ export class UserServices {
         );
       }
       fetchedOwner.ownerImage = dowlandURLOwnerImage;
-      await fetchedOwner.save();
+      await this.ownerRepository.update<IOwner>(fetchedOwner._id, fetchedOwner);
       return fetchedOwner;
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }
+  async signUpOwner(req: Request): Promise<string | Types.ObjectId> {
+    try {
+      if (!req.file) {
+        return throwBadRequestError("No image provided.");
+      }
+      const bcryptPassword = await jwtServices.hashPassword(req.body.password);
+      req.body.password = bcryptPassword;
+      const uploadImage = await firebaseStorageServices.uploadImageToStorage(
+        req.file,
+        "pendingOwner/"
+      );
+      req.body.ownerImage = uploadImage;
+      const pendingOwner =
+        await this.peddingAccountRepository.create<IPendingAccount>(req.body);
+      return pendingOwner._id;
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }
+
+  async getPeddingRegister(req: Request) {
+    try {
+      const pedingOwner =
+        await this.peddingAccountRepository.findById<IPendingAccount>(
+          req.params.registerId
+        );
+      if (!pedingOwner) throw throwNotFoundError("Pedding Owner not found!");
+      const returnOwnerPending = {
+        email: pedingOwner.email,
+        companyName: pedingOwner.companyName,
+        address: pedingOwner.address,
+        phone: pedingOwner.phone,
+        ownerImage: pedingOwner.ownerImage,
+        _id: pedingOwner._id,
+        status: pedingOwner.status,
+      } as IPendingAccount;
+      return returnOwnerPending;
     } catch (error: any) {
       throw new Error(error);
     }

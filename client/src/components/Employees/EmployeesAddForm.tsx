@@ -14,6 +14,7 @@ import {
 } from "@/utils/FormRules";
 import { allUniverstyList } from "@/mock/allUniverstyList";
 import Image from "next/image";
+import useCurrencyFormatter from "@/hooks/useCurrencyFormatter";
 
 const ProfilePictureUpload = () => (
   <Form.Item label="Profile Picture" name="profilePicture">
@@ -62,6 +63,7 @@ interface EmployeesAddFormProps {
 }
 
 const EmployeesAddForm = ({ editMode, employee }: EmployeesAddFormProps) => {
+  const { currentCurrencySymbol } = useCurrencyFormatter();
   return (
     <>
       {!editMode ? (
@@ -134,7 +136,7 @@ const EmployeesAddForm = ({ editMode, employee }: EmployeesAddFormProps) => {
         >
           <Input
             type="number"
-            suffix="TL"
+            suffix={currentCurrencySymbol}
             addonBefore={<EuroCircleOutlined />}
           />
         </Form.Item>

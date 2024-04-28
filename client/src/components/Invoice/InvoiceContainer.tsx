@@ -1,13 +1,13 @@
 "use client";
 import React from "react";
-import { currencyFormatter } from "@/utils/utils";
 import { Card } from "@tremor/react";
 import { Collapse, CollapseProps } from "antd";
-import InvoiceShowProducts from "./InvoiceShowProducts";
-import { PrinterOutlined, FilePdfOutlined } from "@ant-design/icons";
+import { FilePdfOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "@/store/store";
 import { setSelectedInvoiceData } from "@/store/slices/invoiceSlice";
 import { useRouter } from "next/navigation";
+import InvoiceShowProducts from "./InvoiceShowProducts";
+import useCurrencyFormatter from "@/hooks/useCurrencyFormatter";
 
 interface IInvoiceContainerProps {
   data: OrdersType[];
@@ -16,9 +16,10 @@ interface IInvoiceContainerProps {
 const InvoiceContainer = ({ data }: IInvoiceContainerProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { renderCurrency } = useCurrencyFormatter();
 
   const editPDFDocument = async (order: OrdersType) => {
-    await dispatch(setSelectedInvoiceData(order));
+    dispatch(setSelectedInvoiceData(order));
     router.push("/dashboard/invoice/createinvoicepdf");
   };
 
@@ -54,7 +55,7 @@ const InvoiceContainer = ({ data }: IInvoiceContainerProps) => {
         </div>
         <div className="flex justify-between">
           <span className="font-bold">Order Total</span>
-          <span>{currencyFormatter(order.totalPrice, "TRY")}</span>
+          <span>{renderCurrency(order.totalPrice)}</span>
         </div>
         <InvoiceShowProducts order={order} />
       </div>

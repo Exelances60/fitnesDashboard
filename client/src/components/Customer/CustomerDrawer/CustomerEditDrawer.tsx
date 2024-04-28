@@ -7,6 +7,7 @@ import useMessage from "@/hooks/useMessage";
 import { useAppDispatch } from "@/store/store";
 import { setHideDrawer } from "@/store/slices/drawerSlice";
 import CustomerMemberShipStatus from "../CustomerModal/CustomerMemberShipStatus";
+import useCurrencyFormatter from "@/hooks/useCurrencyFormatter";
 
 interface CustomerEditDrawerProps {
   customer: CustomerType;
@@ -17,6 +18,7 @@ const CustomerEditDrawer = ({ customer }: CustomerEditDrawerProps) => {
   const [form] = Form.useForm();
   const showMessage = useMessage();
   const dispatch = useAppDispatch();
+  const { currentCurrencySymbol } = useCurrencyFormatter();
 
   const onFinish = async (values: UpdateCustomerFormType) => {
     if (!userInfo) return;
@@ -97,7 +99,7 @@ const CustomerEditDrawer = ({ customer }: CustomerEditDrawerProps) => {
             name="membershipPrice"
             className="w-full"
           >
-            <InputNumber />
+            <InputNumber suffix={currentCurrencySymbol} />
           </Form.Item>
           <CustomerMemberShipStatus editMode={true} />
         </div>

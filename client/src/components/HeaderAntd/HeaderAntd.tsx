@@ -2,24 +2,24 @@
 import React, { useMemo } from "react";
 import { Layout, message } from "antd";
 import { Menu } from "antd";
-import { useAppSelector } from "@/store/store";
-import { selectMenuKeys, selectUser } from "@/store/slices/userSlice";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { logout, selectMenuKeys, selectUser } from "@/store/slices/userSlice";
 import { LogoutOutlined, SettingOutlined } from "@ant-design/icons";
 import { navMenu } from "@/mock/navMenu";
 import useSetMenuKeys from "@/hooks/useSetMenuKeys";
 import Loading from "@/app/loading";
 import Link from "next/link";
-import GlobalModal from "../GlobalModal/GlobalModal";
-import GlobalDrawer from "../GlobalDrawer/GlobalDrawer";
 import Image from "next/image";
 import useGetUserInfo from "@/hooks/useGetUserInfo";
 import { deleteCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
+import HeaderNavigation from "./HeaderNavigation";
 
 const { Content, Header } = Layout;
 
 const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const { handleChangeMenuKeys } = useSetMenuKeys();
   const menuKeys = useAppSelector(selectMenuKeys);
   const userInfo = useAppSelector(selectUser);
@@ -39,6 +39,7 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
   }, [handleChangeMenuKeys]);
 
   const handleLogout = () => {
+    dispatch(logout());
     deleteCookie("token");
     message.success("Logout successfully");
     router.push("/");
@@ -93,15 +94,22 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
         </Menu>
       </Layout.Sider>
       <Layout>
-        <Header style={{ backgroundColor: "#FFFF" }}>Header</Header>
+        <Header
+          style={{
+            backgroundColor: "#FFFF",
+            display: "flex",
+            justifyContent: "end",
+            alignItems: "center",
+          }}
+        >
+          <HeaderNavigation />
+        </Header>
         <Content
           style={{ margin: "0px 5px 0", backgroundColor: "#F5F6FA" }}
           className="shadow  rounded-md"
         >
           <div className="w-full p-4 box-border min-h-[92vh] overflow-y-auto mt-[10px] max-h-[92vh]">
             {children}
-            <GlobalModal />
-            <GlobalDrawer />
           </div>
         </Content>
       </Layout>

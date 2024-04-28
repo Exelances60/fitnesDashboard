@@ -31,13 +31,6 @@ type MoneyType =
   | "THB"
   | "MYR";
 
-export const currencyFormatter = (number: number, type: MoneyType) => {
-  return Intl.NumberFormat("default", {
-    style: "currency",
-    currency: type,
-  }).format(number);
-};
-
 export const capitalizeFirstLetter = (str: string) => {
   return str.substring(0, 1).toUpperCase() + str.substring(1);
 };

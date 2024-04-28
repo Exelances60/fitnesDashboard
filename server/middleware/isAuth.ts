@@ -1,6 +1,6 @@
 import "dotenv/config";
-import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
+import jwtServices from "../utils/jwtServices";
 declare global {
   namespace Express {
     interface Request {
@@ -22,21 +22,17 @@ export const isAuth = (req: Request, res: Response, next: NextFunction) => {
     throw error;
   }
   const token = authHeader.split(" ")[1];
-  let decodedToken;
   try {
-    decodedToken = jwt.verify(
-      token,
-      process.env.JWT_SECRET as string
-    ) as decocedToken;
+    const decodedToken = jwtServices.verifyToken(token) as decocedToken;
+    if (!decodedToken) {
+      const error = new Error("Not authenticated.") as any;
+      error.statusCode = 401;
+      throw error;
+    }
+    req.userId = decodedToken.ownerId;
+    next();
   } catch (error: any) {
     error.statusCode = 500;
     throw error;
   }
-  if (!decodedToken) {
-    const error = new Error("Not authenticated.") as any;
-    error.statusCode = 401;
-    throw error;
-  }
-  req.userId = decodedToken.ownerId;
-  next();
 };

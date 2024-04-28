@@ -10,6 +10,7 @@ import { useAppDispatch } from "@/store/store";
 import EmployeesEditModal from "./EmployeesEditModal/EmployeesEditModal";
 import DrawerFooterButton from "../DrawerFooterButton";
 import axiosClient from "@/utils/AxiosClient";
+import useMessage from "@/hooks/useMessage";
 
 interface EmployeesTableProps {
   employeeData: IEmployee[];
@@ -20,13 +21,7 @@ const EmployeesTable = ({
   employeeData,
   setEmployeeData,
 }: EmployeesTableProps) => {
-  const positionFilter = employeeData
-    .map((employee) => employee.position || "No Position")
-    .filter(
-      (position, index, self) => !!position && self.indexOf(position) === index
-    )
-    .map((position) => ({ text: position, value: position }));
-
+  const showMessage = useMessage();
   const dispatch = useAppDispatch();
   const { filterDropdown, filterIcon, searchById } =
     useTableFilterSearchDropDown("Search by name");
@@ -54,6 +49,12 @@ const EmployeesTable = ({
       })
     );
   };
+  const positionFilter = employeeData
+    .map((employee) => employee.position || "No Position")
+    .filter(
+      (position, index, self) => !!position && self.indexOf(position) === index
+    )
+    .map((position) => ({ text: position, value: position }));
 
   const filterBySearchEmployees = employeeData.filter((employee) => {
     return employee.name.toLowerCase().includes(searchById.toLowerCase());
@@ -75,25 +76,19 @@ const EmployeesTable = ({
   });
 
   const deleteEmployee = async (record: IEmployee) => {
-    message.loading({ content: "Deleting employee...", key: "deleteEmployee" });
+    showMessage("Deleting Employees", "loading");
     try {
       const response = await axiosClient.delete(
         `/employees/delete-employee/${record._id}`
       );
       if (response.status === 200) {
-        message.success({
-          content: "Employee deleted successfully",
-          key: "deleteEmployee",
-        });
+        showMessage("Employee deleted successfully", "success");
         setEmployeeData((prev) =>
           prev.filter((employee) => employee._id !== record._id)
         );
       }
     } catch (error: any) {
-      message.error({
-        content: error.response.data.message || "Error deleting employee",
-        key: "deleteEmployee",
-      });
+      showMessage(error.message, "error");
     }
   };
 

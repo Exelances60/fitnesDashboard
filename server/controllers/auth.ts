@@ -1,9 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import Owner from "../models/Owner";
 import "dotenv/config";
 import { validationResult } from "express-validator";
 import throwValidationError from "../utils/err/throwValidationError";
-import bcrypt from "bcryptjs";
 import { printValidatorErrors } from "../utils/printValidatorErrors";
 import { UserServices } from "../services/userService";
 
@@ -39,20 +37,11 @@ export const signup = async (
   try {
     const errors = validationResult(req);
     printValidatorErrors(errors);
-    const { email, password } = req.body;
-    const hashedPw = await bcrypt.hash(password, 12);
-
-    const owner = new Owner({
-      email,
-      password: hashedPw,
-      companyName: "test",
-      address: "test",
-      phone: "1234567890",
+    const qrCodeID = await new UserServices().signUpOwner(req);
+    res.status(201).json({
+      message: "Owner create Request sent.",
+      qrCodeID: qrCodeID,
     });
-
-    const result = await owner.save();
-
-    res.status(201).json({ message: "Owner created!", ownerId: result._id });
   } catch (err: any) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -105,6 +94,25 @@ export const uploadOwnerImage = async (
     res.status(201).json({
       message: "Owner Image uploaded.",
       ownerImage: responseOwner.ownerImage,
+    });
+  } catch (error: any) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};
+
+export const getPeddingRegister = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const peddingRegister = await new UserServices().getPeddingRegister(req);
+    res.status(200).json({
+      message: "Pedding Register fetched.",
+      peddingRegister: peddingRegister,
     });
   } catch (error: any) {
     if (!error.statusCode) {

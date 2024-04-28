@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { body } from "express-validator";
 import * as authController from "../controllers/auth";
 import { isAuth } from "../middleware/isAuth";
 import multer from "multer";
@@ -15,11 +14,9 @@ router.post("/login", loginValidator, authController.login);
 
 router.post(
   "/signup",
-  [
-    body("email").isEmail().withMessage("Please enter a valid email address."),
-    body("password").trim().isLength({ min: 5 }),
-    body("companyName").trim().not().isEmpty(),
-  ],
+  multer({ storage: multer.memoryStorage(), fileFilter: fileFilter }).single(
+    "ownerImage"
+  ),
   authController.signup
 );
 
@@ -39,6 +36,11 @@ router.put(
     "ownerImage"
   ),
   authController.uploadOwnerImage
+);
+
+router.get(
+  "/getPeddingRegister/:registerId",
+  authController.getPeddingRegister
 );
 
 export { router as authRoutes };

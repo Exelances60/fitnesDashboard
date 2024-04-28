@@ -1,4 +1,4 @@
-import { currencyFormatter } from "@/utils/utils";
+import useCurrencyFormatter from "@/hooks/useCurrencyFormatter";
 import { motion } from "framer-motion";
 import React from "react";
 
@@ -7,6 +7,7 @@ const OrderChartsSelectedDetails = ({
 }: {
   selected: orderDonutChartType | null;
 }) => {
+  const { renderCurrency } = useCurrencyFormatter();
   return (
     <motion.div
       initial={{ opacity: 0, y: 10, height: 0 }}
@@ -18,7 +19,7 @@ const OrderChartsSelectedDetails = ({
         {selected?.name}
       </h4>
       <p className="text-tremor-content-emphasis dark:text-dark-tremor-content-emphasis">
-        {selected ? currencyFormatter(selected.totalPrice, "TRY") : ""}
+        {selected ? renderCurrency(selected.totalPrice) : ""}
       </p>
       <p>{selected?.orderId}</p>
     </motion.div>

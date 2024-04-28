@@ -7,12 +7,14 @@ import { useRouter } from "next/navigation";
 import { Button, message, Spin } from "antd";
 import axiosClient from "@/utils/AxiosClient";
 import useSelectUserInfo from "@/hooks/useSelectUserInfo";
+import useCurrencyFormatter from "@/hooks/useCurrencyFormatter";
 
 const CreateInvoicePDFPage = () => {
   const userInfo = useSelectUserInfo();
   const router = useRouter();
   const ref = useRef(null);
   const [loading, setLoading] = useState(false);
+  const { renderCurrency } = useCurrencyFormatter();
 
   const selectInvoiceData = useAppSelector(selectSelectedInvoiceData);
   if (!selectInvoiceData) {
@@ -83,7 +85,7 @@ const CreateInvoicePDFPage = () => {
             <div className="w-full flex gap-2">
               <p className="text-xl text-[#6b7290]">Total Price : </p>
               <p className="font-bold pt-1">
-                {selectInvoiceData?.totalPrice} TRY
+                {renderCurrency(selectInvoiceData?.totalPrice || 0)}
               </p>
             </div>
           </div>
@@ -135,10 +137,10 @@ const CreateInvoicePDFPage = () => {
                 </td>
 
                 <td className="py-2 text-lg text-[#6b7290]">
-                  {product.price} TRY
+                  {renderCurrency(product.price)}
                 </td>
                 <td className="py-2 text-lg text-[#6b7290]">
-                  {product.price * selectInvoiceData?.amount} TRY
+                  {renderCurrency(product.price * selectInvoiceData?.amount)}
                 </td>
               </tr>
             ))}
@@ -148,7 +150,7 @@ const CreateInvoicePDFPage = () => {
         <div className="flex justify-between px-10">
           <p className="text-xl text-[#6b7290]">Total Price : </p>
           <p className="font-bold text-[#6b7290] text-lg pt-1">
-            {selectInvoiceData?.totalPrice} TRY
+            {renderCurrency(selectInvoiceData?.totalPrice || 0)}
           </p>
         </div>
         <hr className="my-3" />
@@ -160,10 +162,9 @@ const CreateInvoicePDFPage = () => {
         <div className="flex justify-between px-10">
           <p className="text-xl text-[#6b7290]">Total Price with Tax : </p>
           <p className="font-bold text-[#6b7290] text-lg pt-1">
-            {selectInvoiceData?.totalPrice
-              ? selectInvoiceData.totalPrice
-              : null}{" "}
-            TRY
+            {renderCurrency(
+              selectInvoiceData?.totalPrice ? selectInvoiceData.totalPrice : 0
+            )}{" "}
           </p>
         </div>
         <hr className="my-3" />

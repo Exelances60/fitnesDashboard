@@ -90,7 +90,7 @@ export class CustomerServices {
         parentPhone: req.body.parentPhone ? req.body.parentPhone : null,
       });
       fetchedOwner.customer.push(savedCustomer._id);
-      await fetchedOwner.save();
+      await this.ownerRepository.update<IOwner>(fetchedOwner._id, fetchedOwner);
       return savedCustomer;
     } catch (error: any) {
       throw new Error(error.message);
@@ -149,12 +149,13 @@ export class CustomerServices {
       if (!fetchedOwner) {
         throw new Error("Owner not found");
       }
-      fetchedOwner.customer.filter(
-        (cust) => cust.toString() !== customerId.toString()
-      );
-      await fetchedOwner.save();
+      fetchedOwner.customer = fetchedOwner.customer.filter((cust) => {
+        return cust.toString() !== customerId.toString();
+      });
+
+      await this.ownerRepository.update<IOwner>(fetchedOwner._id, fetchedOwner);
       firebaseStorageServices.deleteImageFromStorage(customer.profilePicture);
-      await customer.deleteOne();
+      await this.customerRepository.delete(customer._id);
     } catch (error: any) {
       throw new Error(error.message);
     }
@@ -235,11 +236,14 @@ export class CustomerServices {
         req.body.customerId
       );
       if (!fetchedCustomer) return throwNotFoundError("Customer not found");
-      const deleteExersice = fetchedCustomer.exercisePlan.filter(
+      fetchedCustomer.exercisePlan = fetchedCustomer.exercisePlan.filter(
         (exersice) => exersice !== req.body.exerciseName
       ) as string[];
-      fetchedCustomer.exercisePlan = deleteExersice;
-      await fetchedCustomer.updateOne(fetchedCustomer);
+
+      await this.customerRepository.update<ICustomer>(
+        fetchedCustomer._id,
+        fetchedCustomer
+      );
     } catch (error: any) {
       throw new Error(error.message);
     }
@@ -266,7 +270,10 @@ export class CustomerServices {
         ...fetchedCustomer.exercisePlan,
         ...notFoundExercises,
       ] as string[];
-      await fetchedCustomer.updateOne(fetchedCustomer);
+      await this.customerRepository.update<ICustomer>(
+        fetchedCustomer._id,
+        fetchedCustomer
+      );
     } catch (error: any) {
       throw new Error(error.message);
     }
@@ -292,7 +299,11 @@ export class CustomerServices {
           ...req.body,
         });
       fetchedCustomer.calendarAcv.push(savedActivity._id);
-      await fetchedCustomer.updateOne(fetchedCustomer);
+      await this.customerRepository.update<ICustomer>(
+        fetchedCustomer._id,
+        fetchedCustomer
+      );
+
       return savedActivity;
     } catch (error: any) {
       throw new Error(error.message);
@@ -309,22 +320,28 @@ export class CustomerServices {
       const fetchedCustomer = await this.customerRepository.findById<ICustomer>(
         customerId
       );
-      if (!fetchedCustomer) return throwNotFoundError("Customer not found");
-      if (!fetchedCustomer.coachPT)
-        return throwBadRequestError("Customer does not have a coach");
+      if (!fetchedCustomer || !fetchedCustomer.coachPT)
+        return throwBadRequestError("Customer or coach not found");
 
       const fetchedEmployee = await this.employeeRepository.findById<IEmployee>(
         fetchedCustomer.coachPT.toString()
       );
       if (!fetchedEmployee) return throwNotFoundError("Employee not found");
 
-      const removeCustomerArray = fetchedEmployee.customers.filter(
+      fetchedEmployee.customers = fetchedEmployee.customers.filter(
         (cust) => cust.toString() !== customerId.toString()
       ) as ObjectId[];
-      fetchedEmployee.customers = removeCustomerArray;
-      await fetchedEmployee.updateOne(fetchedEmployee);
+
+      await this.employeeRepository.update<IEmployee>(
+        fetchedEmployee._id,
+        fetchedEmployee
+      );
       fetchedCustomer.coachPT = null;
-      await fetchedCustomer.updateOne(fetchedCustomer);
+
+      await this.customerRepository.update<ICustomer>(
+        fetchedCustomer._id,
+        fetchedCustomer
+      );
     } catch (error: any) {
       throw new Error(error.message);
     }

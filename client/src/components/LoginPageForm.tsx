@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import axiosClient from "@/utils/AxiosClient";
 import { jwtDecode } from "jwt-decode";
 import { emailRules } from "@/utils/FormRules";
+import Link from "next/link";
 
 const LoginPageForm = () => {
   const router = useRouter();
@@ -34,11 +35,6 @@ const LoginPageForm = () => {
       maxAge: maxAgeInSeconds,
       secure: process.env.NODE_ENV === "production",
     });
-
-    axiosClient.defaults.headers.common[
-      "Authorization"
-    ] = `Bearer ${data.token}`;
-
     setError("");
     message.destroy("login");
     message.success("Login Success");
@@ -100,6 +96,9 @@ const LoginPageForm = () => {
           >
             Login
           </Button>
+          <Link href="/register" className="text-center text-[#4880FF]">
+            Register
+          </Link>
           {error ? <p className="text-red-500">{error}</p> : null}
         </Form>
       </Spin>

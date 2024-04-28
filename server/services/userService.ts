@@ -134,4 +134,26 @@ export class UserServices {
       throw new Error(error);
     }
   }
+
+  async getPeddingRegister(req: Request) {
+    try {
+      const pedingOwner =
+        await this.peddingAccountRepository.findById<IPendingAccount>(
+          req.params.registerId
+        );
+      if (!pedingOwner) throw throwNotFoundError("Pedding Owner not found!");
+      const returnOwnerPending = {
+        email: pedingOwner.email,
+        companyName: pedingOwner.companyName,
+        address: pedingOwner.address,
+        phone: pedingOwner.phone,
+        ownerImage: pedingOwner.ownerImage,
+        _id: pedingOwner._id,
+        status: pedingOwner.status,
+      } as IPendingAccount;
+      return returnOwnerPending;
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }
 }

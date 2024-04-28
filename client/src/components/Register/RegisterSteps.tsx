@@ -1,14 +1,5 @@
 "use client";
-import {
-  Button,
-  Form,
-  message,
-  QRCode,
-  Segmented,
-  Spin,
-  Tooltip,
-  Tour,
-} from "antd";
+import { Button, Form, message, Segmented, Spin, Tooltip, Tour } from "antd";
 import React, { useRef, useState } from "react";
 import RegisterAccountSteps from "./RegisterAccountSteps";
 import RegisterProfileSteps from "./RegisterProfileSteps";
@@ -18,8 +9,9 @@ import { TourProps } from "antd/lib";
 import axiosClient from "@/utils/AxiosClient";
 import { useAppDispatch } from "@/store/store";
 import { showModal } from "@/store/slices/modalSlice";
-import Link from "next/link";
 import ShowRegisterProcesQRCode from "./ShowRegisterProcesQRCode";
+import RegisterApplication from "./RegisterApplication";
+import RegisterFinishSteps from "./RegisterFinishSteps";
 
 interface IFormValues {
   email: string;
@@ -35,11 +27,15 @@ const RegisterSteps = () => {
   const accountRef = useRef(null);
   const profileRef = useRef(null);
   const finishRef = useRef(null);
+  const applicationRef = useRef(null);
+  const applicationInputRef = useRef<HTMLInputElement>(null);
+
   const [current, setCurrent] = useState("Account");
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
   const [form] = Form.useForm();
+
   const steps: TourProps["steps"] = [
     {
       title: "Welcome to Account Registration",
@@ -58,6 +54,12 @@ const RegisterSteps = () => {
       target: () => finishRef.current,
       description:
         "This tab is the final step to finish the registration process and you must see the qr code and using qr code your tracking the registration process",
+    },
+    {
+      title: "Application",
+      target: () => applicationRef.current,
+      description:
+        "This tab is for checking the application status using the application ID",
     },
   ];
 
@@ -97,11 +99,12 @@ const RegisterSteps = () => {
         <Segmented
           size="large"
           value={current}
-          options={["Account", "Profile", "Finish"]}
+          options={["Account", "Profile", "Finish", "Application"]}
           onChange={(value) => {
             setCurrent(value);
           }}
         />
+
         <Tooltip title="Guide" placement="bottomRight">
           <QuestionOutlined
             className="text-2xl font-bold absolute top-0 p-2 left-0"
@@ -111,6 +114,7 @@ const RegisterSteps = () => {
             }}
           />
         </Tooltip>
+
         <Form
           form={form}
           layout="vertical"
@@ -126,30 +130,15 @@ const RegisterSteps = () => {
             <RegisterProfileSteps current={current} ref={profileRef} />
           </div>
 
-          <div
-            ref={finishRef}
-            className={current === "Finish" ? "block" : "hidden"}
-          >
-            <motion.div
-              initial={{ opacity: 0, x: 100 }}
-              animate={{
-                opacity: current === "Finish" ? 1 : 0,
-                x: current === "Finish" ? 0 : 100,
-              }}
-              className="flex flex-col items-center justify-center gap-2 w-full"
-            >
-              <p> Thank you for registering </p>
-              <p>Your account is under review 🔍 </p>
-              <p> We will send you an email or SMS to in 2 days ⌚</p>
-              <Button
-                type="primary"
-                htmlType="submit"
-                className="w-full"
-                form="register"
-              >
-                Finish
-              </Button>
-            </motion.div>
+          <div className={current === "Finish" ? "block" : "hidden"}>
+            <RegisterFinishSteps current={current} ref={finishRef} />
+          </div>
+          <div className={current === "Application" ? "block" : "hidden"}>
+            <RegisterApplication
+              current={current}
+              inputRef={applicationInputRef}
+              divRef={applicationRef}
+            />
           </div>
 
           <Tour
@@ -163,6 +152,8 @@ const RegisterSteps = () => {
                 setCurrent("Profile");
               } else if (index === 2) {
                 setCurrent("Finish");
+              } else if (index === 3) {
+                setCurrent("Application");
               }
             }}
           />

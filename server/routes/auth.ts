@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { body } from "express-validator";
 import * as authController from "../controllers/auth";
 import { isAuth } from "../middleware/isAuth";
 import multer from "multer";
@@ -37,6 +36,11 @@ router.put(
     "ownerImage"
   ),
   authController.uploadOwnerImage
+);
+
+router.get(
+  "/getPeddingRegister/:registerId",
+  authController.getPeddingRegister
 );
 
 export { router as authRoutes };

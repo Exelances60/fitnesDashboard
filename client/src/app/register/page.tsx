@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import PLACEHOLDERIMAGE from "@/../public/dashboard/placeholder.svg";
 import RegisterSteps from "@/components/Register/RegisterSteps";
+import Link from "next/link";
 
 const RegisterPage = () => {
   return (
@@ -13,6 +14,9 @@ const RegisterPage = () => {
             <p className="text-balance text-muted-foreground">
               Create an account to access all features
             </p>
+            <Link href="/" className="text-blue-500 hover:underline">
+              Already have an account?
+            </Link>
           </div>
           <div className="grid gap-4 z-10">
             <RegisterSteps />

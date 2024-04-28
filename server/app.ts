@@ -23,17 +23,19 @@ const StartServer = async () => {
   await App(app);
 
   app.use((error: any, req: Request, res: Response, next: NextFunction) => {
+    let message = error.message;
     const status = error.statusCode || 500; // eğer status kodu yoksa 500 döndürür
-    const message = error.message;
     const data = error.data;
+    if (error.message.includes("Cast to ObjectId failed")) {
+      message = "Invalid id";
+    }
 
-    res.status(status).json({ message: message, data: data });
+    res.status(status).json({ errorMessage: message, data: data });
   });
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
-
 };
 
 StartServer();

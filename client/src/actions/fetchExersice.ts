@@ -1,11 +1,19 @@
 "use server";
 import { cookies } from "next/headers";
 
-export const fetchExersice = async (): Promise<ExerciseType[] | []> => {
+interface IPromiseExersice {
+  exercises: ExerciseType[];
+  errorMessage?: string;
+}
+
+export const fetchExersice = async (): Promise<IPromiseExersice> => {
   const cookiesStore = cookies();
   const token = cookiesStore.get("token")?.value;
   if (!token) {
-    return [];
+    return {
+      exercises: [],
+      errorMessage: "No token found",
+    };
   }
   try {
     const response = await fetch(
@@ -17,10 +25,17 @@ export const fetchExersice = async (): Promise<ExerciseType[] | []> => {
         },
       }
     );
+
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.errorMessage);
+    }
     const { exercises } = await response.json();
     return exercises;
-  } catch (error) {
-    console.error(error);
-    return [];
+  } catch (error: any) {
+    return {
+      exercises: [],
+      errorMessage: error.message,
+    };
   }
 };

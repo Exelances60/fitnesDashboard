@@ -23,17 +23,22 @@ export const fetchEmplooyes = async (): Promise<IEmployeeFetchResponse> => {
     );
 
     if (!response.ok) {
-      throw new Error("Failed to fetch customer");
+      const data = await response.json();
+      throw new Error(data.errorMessage);
     }
     const { employees, totalSalaryIncrease, totalEmployeesCountIncarese } =
       await response.json();
-    return { employees, totalSalaryIncrease, totalEmployeesCountIncarese };
-  } catch (error) {
-    console.error(error);
+    return {
+      employees,
+      totalSalaryIncrease,
+      totalEmployeesCountIncarese,
+    };
+  } catch (error: any) {
     return {
       employees: [],
       totalEmployeesCountIncarese: 0,
       totalSalaryIncrease: 0,
+      errorMessage: error.message,
     };
   }
 };

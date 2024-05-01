@@ -4,10 +4,10 @@ import dbConnection from "./services/DatabaseServices";
 import App from "./services/ExpressAppServices";
 import path from "path";
 import { PORT } from "./config";
+const app = express();
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 const StartServer = async () => {
-  const app = express();
-
   /* app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -17,7 +17,6 @@ const StartServer = async () => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 }); */
-  app.use("/images", express.static(path.join(__dirname, "images")));
 
   await dbConnection();
   await App(app);

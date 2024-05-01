@@ -1,8 +1,7 @@
 "use client";
 import React from "react";
 import { DeleteOutlined } from "@ant-design/icons";
-import { Popconfirm, Tag } from "antd";
-import Image from "next/image";
+import { Image, Popconfirm, Tag } from "antd";
 import { capitalizeFirstLetter } from "@/utils/utils";
 import axiosClient from "@/utils/AxiosClient";
 import useMessage from "@/hooks/useMessage";
@@ -57,12 +56,10 @@ const CustomerExerciseItem = ({
       <div className="flex gap-2 items-center">
         <div className="md:w-16 h-16 w-24 relative overflow-auto hover:scale-110 transform duration-300 ease-in-out">
           <Image
-            src={`https://fitnesdashboard.onrender.com${exercise.gifUrl}`}
-            layout="fill"
+            src={`${process.env.BACK_END_SERVICES}${exercise.gifUrl}`}
             alt={exercise.name}
-            className="rounded-md"
-            quality={70}
-            unoptimized={true}
+            className="rounded-md w-full h-full"
+            preview={false}
           />
         </div>
         <p className="text-sm">{capitalizeFirstLetter(exercise.name)}</p>

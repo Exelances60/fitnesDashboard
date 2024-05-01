@@ -1,6 +1,5 @@
 "use server";
 import { cookies } from "next/headers";
-
 interface IPromiseOwnerInfo {
   owner?: OwnerType;
   errorMessage?: string;
@@ -30,7 +29,6 @@ export const fetchOwnerInfo = async (): Promise<IPromiseOwnerInfo> => {
       throw new Error(data.errorMessage);
     }
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (error: any) {
     return {

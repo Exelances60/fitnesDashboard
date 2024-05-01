@@ -1,9 +1,8 @@
 "use client";
-import { Button, Form, message, Segmented, Spin, Tooltip, Tour } from "antd";
+import { Form, message, Segmented, Spin, Tooltip, Tour } from "antd";
 import React, { useRef, useState } from "react";
 import RegisterAccountSteps from "./RegisterAccountSteps";
 import RegisterProfileSteps from "./RegisterProfileSteps";
-import { motion } from "framer-motion";
 import { QuestionOutlined } from "@ant-design/icons";
 import { TourProps } from "antd/lib";
 import axiosClient from "@/utils/AxiosClient";

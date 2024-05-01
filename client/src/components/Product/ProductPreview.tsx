@@ -48,9 +48,9 @@ const ProductPreview = ({ products }: ProductPreviewProps) => {
         });
       }
       router.refresh();
-    } catch (error) {
+    } catch (error: any) {
       message.error({
-        content: "An error occurred while deleting the product",
+        content: `${error.response.data.errorMessage}`,
         key: "deleteProduct",
         duration: 2,
       });

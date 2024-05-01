@@ -40,4 +40,5 @@ type getOrdersType = {
   orders: OrdersType[] | [];
   chartsData: orderDonutChartType[];
   cardData: CardDataType;
+  errorMessage?: string;
 };

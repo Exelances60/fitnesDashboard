@@ -76,7 +76,7 @@ const OrderUpdateDrawer = ({ selectedOrder }: OrderUpdateDrawerProps) => {
         dispath(setHideDrawer());
       }
     } catch (error: any) {
-      showMessage(error.message || "An error occurred", "error");
+      showMessage(error.response.data.errorMessage || "Failed", "error", 2);
     }
   };
 

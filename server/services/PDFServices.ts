@@ -25,7 +25,6 @@ export class PDFServices {
       await browser.close();
       return pdfBuffer;
     } catch (error: any) {
-      console.log(error);
       throw new Error(error);
     }
   }

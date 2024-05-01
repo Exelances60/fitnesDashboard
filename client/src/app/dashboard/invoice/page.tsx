@@ -1,9 +1,19 @@
 import fetchOrder from "@/actions/fetchOrder";
+import ErrorPage from "@/components/ErrorPage";
 import InvoiceContainer from "@/components/Invoice/InvoiceContainer";
 import React from "react";
 
 const Invoice = async () => {
-  const { orders } = await fetchOrder();
+  const { orders, errorMessage } = await fetchOrder();
+  if (errorMessage) {
+    return (
+      <ErrorPage
+        title="Failed to fetch orders"
+        error={errorMessage}
+        status="404"
+      />
+    );
+  }
   const data = orders.filter((order) => order.status === "Completed");
 
   return (

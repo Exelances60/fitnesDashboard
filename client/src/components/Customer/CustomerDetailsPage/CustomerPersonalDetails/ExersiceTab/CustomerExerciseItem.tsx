@@ -46,8 +46,8 @@ const CustomerExerciseItem = ({
       if (response.status === 200) {
         showMessage("Exersice Deleted", "success", 1);
       }
-    } catch (error) {
-      showMessage("Error Deleting Exercise", "error", 1);
+    } catch (error: any) {
+      showMessage(error.response.data.errorMessage, "error", 2);
     }
   };
 

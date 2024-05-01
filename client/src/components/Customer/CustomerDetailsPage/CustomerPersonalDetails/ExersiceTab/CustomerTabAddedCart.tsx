@@ -45,8 +45,8 @@ const CustomerTabAddedCart = ({
         setAddedDrawer(false);
         dispatch(clearAddedCart());
       }
-    } catch (error) {
-      showMessage("Error in Adding Exercise", "error", 1);
+    } catch (error: any) {
+      showMessage(error.response.data.errorMessage, "error", 2);
     } finally {
       setLoadingButton(false);
     }

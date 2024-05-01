@@ -28,9 +28,14 @@ const fetchOrder = async (): Promise<getOrdersType> => {
         },
       }
     );
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.errorMessage);
+    }
+
     const data = await response.json();
     return data;
-  } catch (error) {
+  } catch (error: any) {
     return {
       orders: [],
       chartsData: [],
@@ -42,6 +47,7 @@ const fetchOrder = async (): Promise<getOrdersType> => {
         increasePercentageForAmount: 0,
         increasePercentageForCompletedSales: 0,
       },
+      errorMessage: error.message,
     };
   }
 };

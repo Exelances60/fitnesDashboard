@@ -39,9 +39,9 @@ const EmployeesEditModal = ({
         });
         dispatch(setHideDrawer());
       }
-    } catch (error) {
+    } catch (error: any) {
       message.error({
-        content: "Error updating employee",
+        content: `${error.response.data.errorMessage}`,
         key: "updateEmployee",
       });
     }

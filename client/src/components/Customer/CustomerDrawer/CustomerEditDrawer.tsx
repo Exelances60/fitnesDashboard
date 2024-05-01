@@ -41,8 +41,8 @@ const CustomerEditDrawer = ({ customer }: CustomerEditDrawerProps) => {
         form.resetFields();
         dispatch(setHideDrawer());
       }
-    } catch (error) {
-      showMessage("Error occured while updating customer", "error", 2);
+    } catch (error: any) {
+      showMessage(error.response.data.errorMessage, "error", 2);
     }
   };
 

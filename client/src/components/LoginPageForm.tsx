@@ -51,8 +51,10 @@ const LoginPageForm = () => {
       }
     } catch (error: any) {
       message.destroy("login");
-      message.error(error.response?.data.message || "Something went wrong");
-      setError(error.response?.data.message || "Something went wrong");
+      message.error(
+        error.response?.data.errorMessage || "Something went wrong"
+      );
+      setError(error.response?.data.errorMessage || "Something went wrong");
     } finally {
       setLoading(false);
     }

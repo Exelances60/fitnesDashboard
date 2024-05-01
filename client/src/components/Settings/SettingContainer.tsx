@@ -5,11 +5,13 @@ import SettingsUpdateForm from "./SettingsUpdateForm";
 import SettingImageUpload from "./SettingImageUpload";
 
 interface SettingContainerProps {
-  ownerInfo: OwnerType;
+  ownerInfo: OwnerType | {};
 }
 
 const SettingContainer = ({ ownerInfo }: SettingContainerProps) => {
-  const [ownerInfoState, setOwnerInfoState] = useState<OwnerType>(ownerInfo);
+  const [ownerInfoState, setOwnerInfoState] = useState<OwnerType>(
+    ownerInfo as OwnerType
+  );
 
   return (
     <Grid

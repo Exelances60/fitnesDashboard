@@ -52,7 +52,7 @@ const CreateInvoicePDFPage = () => {
     } catch (error: any) {
       message.error({
         key: "createPDF",
-        content: error.response.data.message,
+        content: error.response.data.errorMessage,
       });
     } finally {
       setLoading(false);

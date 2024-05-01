@@ -51,8 +51,8 @@ const CustomerAddModal = () => {
         showMessage("Customer Added", "success", 3);
         form.resetFields();
       }
-    } catch (error) {
-      showMessage("Failed to add customer", "error", 3);
+    } catch (error: any) {
+      showMessage(error.response.data.errorMessage, "error", 3);
     } finally {
       setLoading(false);
     }

@@ -28,6 +28,9 @@ const StartServer = async () => {
     if (error.message.includes("Cast to ObjectId failed")) {
       message = "Invalid id";
     }
+    if (error.message.includes("jwt expired")) {
+      message = "Token expired";
+    }
 
     res.status(status).json({ errorMessage: message, data: data });
   });

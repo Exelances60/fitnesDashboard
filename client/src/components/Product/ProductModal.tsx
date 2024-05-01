@@ -57,8 +57,8 @@ const ProductModal = () => {
         setAddProductModal(false);
         showMessage("Product Created", "success");
       }
-    } catch (error) {
-      showMessage("Some error pls try again", "error");
+    } catch (error: any) {
+      showMessage(error.response.data.errorMessage, "error");
     } finally {
       setLoading(false);
     }

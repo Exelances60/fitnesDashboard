@@ -3,8 +3,12 @@ import { fetchOwnerInfo } from "@/actions/fetchOwnerInfo";
 import { useAppDispatch } from "@/store/store";
 import { setUser } from "@/store/slices/userSlice";
 import useSelectUserInfo from "./useSelectUserInfo";
+import { message } from "antd";
+import { useRouter } from "next/navigation";
+import { deleteCookie } from "cookies-next";
 
 const useGetUserInfo = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const userInfoRedux = useSelectUserInfo();
 
@@ -15,11 +19,16 @@ const useGetUserInfo = () => {
       } else {
         const response = await fetchOwnerInfo();
 
+        if (response?.errorMessage) {
+          message.error({ content: response.errorMessage, duration: 2 });
+          const token = deleteCookie("token");
+          return router.push("/");
+        }
         dispatch(setUser(response?.owner));
       }
     };
     fetchUserInfo();
-  }, [userInfoRedux, dispatch]);
+  }, [userInfoRedux, dispatch, router]);
 };
 
 export default useGetUserInfo;

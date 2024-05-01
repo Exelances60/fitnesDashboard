@@ -1,9 +1,8 @@
 "use client";
-import { Button, Form, message, Segmented, Spin, Tooltip, Tour } from "antd";
+import { Form, message, Segmented, Spin, Tooltip, Tour } from "antd";
 import React, { useRef, useState } from "react";
 import RegisterAccountSteps from "./RegisterAccountSteps";
 import RegisterProfileSteps from "./RegisterProfileSteps";
-import { motion } from "framer-motion";
 import { QuestionOutlined } from "@ant-design/icons";
 import { TourProps } from "antd/lib";
 import axiosClient from "@/utils/AxiosClient";
@@ -66,7 +65,10 @@ const RegisterSteps = () => {
   const onFinish = async (values: IFormValues) => {
     setLoading(true);
     if (values.password !== values.confirmPassword) {
-      return message.error("Password and Confirm Password must be the same");
+      return message.error({
+        content: "Password does not match",
+        key: "register",
+      });
     }
     try {
       const formData = new FormData();
@@ -88,7 +90,10 @@ const RegisterSteps = () => {
         })
       );
     } catch (error: any) {
-      message.error(error.message || "Failed to register");
+      message.error({
+        content: error.response.data.errorMessage,
+        key: "register",
+      });
     } finally {
       setLoading(false);
     }

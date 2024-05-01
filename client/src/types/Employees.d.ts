@@ -20,4 +20,5 @@ interface IEmployeeFetchResponse {
   employees: IEmployee[];
   totalSalaryIncrease: number;
   totalEmployeesCountIncarese: number;
+  errorMessage?: string;
 }

@@ -29,8 +29,11 @@ const CustomerCalendarActList = ({
           prev.filter((item) => item._id !== id)
         );
       }
-    } catch (error) {
-      message.error({ content: `${error}`, key: "delete" });
+    } catch (error: any) {
+      message.error({
+        content: `${error.response.data.errorMessage}`,
+        key: "delete",
+      });
     }
   };
 

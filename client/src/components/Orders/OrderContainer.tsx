@@ -63,8 +63,8 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
         orderId,
       });
       if (response.status === 200) showMessage("Order Completed", "success", 1);
-    } catch (error) {
-      showMessage("Try again later pls", "error", 1);
+    } catch (error: any) {
+      showMessage(error.response.data.errorMessage, "error", 2);
     }
   };
   return (

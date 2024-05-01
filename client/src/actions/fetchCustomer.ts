@@ -1,11 +1,16 @@
 "use server";
 import { cookies } from "next/headers";
 
-export const fetchCustomer = async (): Promise<CustomerType[] | []> => {
+interface IPromiseCustomer {
+  error: string;
+  data: CustomerType[];
+}
+
+export const fetchCustomer = async (): Promise<IPromiseCustomer> => {
   const cookiesStore = cookies();
   const token = cookiesStore.get("token")?.value;
   if (!token) {
-    return [];
+    return { error: "Token not found", data: [] };
   }
   try {
     const response = await fetch(
@@ -19,12 +24,12 @@ export const fetchCustomer = async (): Promise<CustomerType[] | []> => {
     );
 
     if (!response.ok) {
-      throw new Error("Failed to fetch customer");
+      const message = await response.json();
+      throw new Error(message.errorMessage);
     }
     const { customers } = await response.json();
-    return customers;
-  } catch (error) {
-    console.error(error);
-    return [];
+    return { error: "", data: customers };
+  } catch (error: any) {
+    return { error: error.message, data: [] };
   }
 };

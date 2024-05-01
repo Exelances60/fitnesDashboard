@@ -88,7 +88,7 @@ const EmployeesTable = ({
         );
       }
     } catch (error: any) {
-      showMessage(error.message, "error");
+      showMessage(error.response.data.errorMessage, "error");
     }
   };
 

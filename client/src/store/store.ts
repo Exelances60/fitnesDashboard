@@ -1,4 +1,4 @@
-import { configureStore, createAction } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import { rootReducer } from "./root-reducer";
 import logger from "redux-logger";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
@@ -14,7 +14,7 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-const middleware = [logger];
+let middleware: any = [];
 
 if (process.env.NODE_ENV !== "production") {
   middleware.push(logger);

@@ -1,8 +1,6 @@
 "use server";
 import { cookies } from "next/headers";
 
-interface PromiseReturn {}
-
 export const fetchFindCustomer = async (customerId: string) => {
   const cookiesStore = cookies();
   const token = cookiesStore.get("token")?.value;
@@ -21,12 +19,12 @@ export const fetchFindCustomer = async (customerId: string) => {
     );
 
     if (!response.ok) {
-      throw new Error("Failed to fetch customer");
+      const message = await response.json();
+      throw new Error(message.errorMessage);
     }
     const { customer } = await response.json();
     return customer;
   } catch (error: any) {
-    console.error(error);
     return { error: error.message };
   }
 };

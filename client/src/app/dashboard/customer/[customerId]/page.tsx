@@ -1,6 +1,6 @@
 import { fetchFindCustomer } from "@/actions/fetchFindCustomer";
 import CustomerDetailsContainer from "@/components/Customer/CustomerDetailsPage/CustomerDetailsContainer";
-import Link from "next/link";
+import ErrorPage from "@/components/ErrorPage";
 import React from "react";
 
 const CustomerDetails = async ({
@@ -10,13 +10,8 @@ const CustomerDetails = async ({
 }) => {
   const [customer] = await Promise.all([fetchFindCustomer(params.customerId)]);
 
-  if (!customer) {
-    return (
-      <div className="flex flex-col">
-        Customer not found
-        <Link href="/dashboard/customer">Go back to customer list</Link>
-      </div>
-    );
+  if (customer.error) {
+    return <ErrorPage error={customer.error} title="Error" status="error" />;
   }
 
   return (

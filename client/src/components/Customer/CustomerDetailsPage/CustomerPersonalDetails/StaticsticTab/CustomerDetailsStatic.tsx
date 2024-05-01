@@ -97,8 +97,11 @@ const CustomerDetailsStatic = ({ customer }: { customer: CustomerType }) => {
         });
         setOpenDrawer(false);
       }
-    } catch (error) {
-      message.error({ content: "Failed to Add Plan", key: "addPlan" });
+    } catch (error: any) {
+      message.error({
+        content: error.response.data.errorMessage,
+        key: "addPlan",
+      });
     }
   };
 

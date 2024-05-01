@@ -65,7 +65,10 @@ const RegisterSteps = () => {
   const onFinish = async (values: IFormValues) => {
     setLoading(true);
     if (values.password !== values.confirmPassword) {
-      return message.error("Password and Confirm Password must be the same");
+      return message.error({
+        content: "Password does not match",
+        key: "register",
+      });
     }
     try {
       const formData = new FormData();
@@ -87,7 +90,10 @@ const RegisterSteps = () => {
         })
       );
     } catch (error: any) {
-      message.error(error.message || "Failed to register");
+      message.error({
+        content: error.response.data.errorMessage,
+        key: "register",
+      });
     } finally {
       setLoading(false);
     }

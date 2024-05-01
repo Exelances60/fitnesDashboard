@@ -36,21 +36,30 @@ class FirebaseStorageServices implements FirebaseStorageServicesInterface {
     file: Express.Multer.File,
     path: string
   ): Promise<string> {
-    if (!file) {
-      return "";
+    try {
+      if (!file) {
+        return "";
+      }
+      const fileName = path + file.originalname + "-" + Date.now();
+      const storageRef = ref(this.storageDatabase, fileName);
+      const snapshot = await uploadBytesResumable(storageRef, file.buffer, {
+        contentType: file?.mimetype,
+      });
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      return downloadURL;
+    } catch (error: any) {
+      throw new Error(error.message);
     }
-    const fileName = path + file.originalname + "-" + Date.now();
-    const storageRef = ref(this.storageDatabase, fileName);
-    const snapshot = await uploadBytesResumable(storageRef, file.buffer, {
-      contentType: file?.mimetype,
-    });
-    const downloadURL = await getDownloadURL(snapshot.ref);
-    return downloadURL;
   }
   async deleteImageFromStorage(fileName: string): Promise<void> {
-    const storageRef = ref(this.storageDatabase, fileName);
-    await deleteObject(storageRef);
-    return;
+    try {
+      const storageRef = ref(this.storageDatabase, fileName);
+      if (!storageRef) return;
+      await deleteObject(storageRef);
+      return;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
   }
 }
 

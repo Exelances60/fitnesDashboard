@@ -12,14 +12,6 @@ const router = Router();
 
 router.post("/login", loginValidator, authController.login);
 
-router.post(
-  "/signup",
-  multer({ storage: multer.memoryStorage(), fileFilter: fileFilter }).single(
-    "ownerImage"
-  ),
-  authController.signup
-);
-
 router.get("/ownerInfo", isAuth, authController.getOwnerInfo);
 
 router.put(
@@ -36,6 +28,14 @@ router.put(
     "ownerImage"
   ),
   authController.uploadOwnerImage
+);
+
+router.post(
+  "/signup",
+  multer({ storage: multer.memoryStorage(), fileFilter: fileFilter }).single(
+    "ownerImage"
+  ),
+  authController.signup
 );
 
 router.get(

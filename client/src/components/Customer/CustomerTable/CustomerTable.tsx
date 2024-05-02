@@ -66,6 +66,7 @@ const CustomerTable = ({ customers }: CustomerTableProps) => {
     <Table
       dataSource={diplayCustomers}
       pagination={{ pageSize: 10 }}
+      rowKey="_id"
       className="overflow-x-auto"
     >
       <Table.Column

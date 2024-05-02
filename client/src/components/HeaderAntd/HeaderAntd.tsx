@@ -1,8 +1,8 @@
 "use client";
-import React, { useMemo } from "react";
+import React from "react";
 import { Layout } from "antd";
 import { Menu } from "antd";
-import { useAppDispatch, useAppSelector } from "@/store/store";
+import { useAppSelector } from "@/store/store";
 import { selectMenuKeys, selectUser } from "@/store/slices/userSlice";
 import { navMenu } from "@/mock/navMenu";
 import useSetMenuKeys from "@/hooks/useSetMenuKeys";
@@ -10,7 +10,6 @@ import Loading from "@/app/loading";
 import Link from "next/link";
 import Image from "next/image";
 import useGetUserInfo from "@/hooks/useGetUserInfo";
-import { useRouter } from "next/navigation";
 import HeaderNavigation from "./HeaderNavigation";
 
 const { Content, Header } = Layout;
@@ -21,15 +20,18 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
   const userInfo = useAppSelector(selectUser);
   useGetUserInfo();
 
-  const menuItems = useMemo(() => {
-    return navMenu.map((item) => (
-      <Menu.Item key={item.key} icon={item.icon} onClick={handleChangeMenuKeys}>
+  const menuItems = navMenu.map((item) => {
+    return {
+      key: item.key,
+      onClick: handleChangeMenuKeys,
+      icon: item.icon,
+      label: (
         <Link href={`http://localhost:3000/${item.path}`} passHref>
           <div className="flex items-center gap-5">{item.name}</div>
         </Link>
-      </Menu.Item>
-    ));
-  }, [handleChangeMenuKeys]);
+      ),
+    };
+  });
 
   if (!userInfo) {
     return <Loading />;
@@ -59,10 +61,12 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
             <div className="text-2xl font-bold">{userInfo?.companyName}</div>
           </div>
         </div>
-        <Menu theme="light" mode="inline" defaultSelectedKeys={[menuKeys]}>
-          {menuItems}
-          <hr className="my-5" />
-        </Menu>
+        <Menu
+          theme="light"
+          mode="inline"
+          defaultSelectedKeys={[menuKeys]}
+          items={menuItems}
+        />
       </Layout.Sider>
       <Layout>
         <Header

@@ -5,12 +5,14 @@ import SettingsUpdateForm from "./SettingsUpdateForm";
 import SettingImageUpload from "./SettingImageUpload";
 import { Tabs, TabsProps } from "antd";
 import ProfileTabContainer from "./Profile/ProfileTabContainer";
+import useGetScreenSize from "@/hooks/useGetScreenSize";
 
 interface SettingContainerProps {
   ownerInfo: OwnerType | {};
 }
 
 const SettingContainer = ({ ownerInfo }: SettingContainerProps) => {
+  const screens = useGetScreenSize();
   const [ownerInfoState, setOwnerInfoState] = useState<OwnerType>(
     ownerInfo as OwnerType
   );
@@ -53,7 +55,7 @@ const SettingContainer = ({ ownerInfo }: SettingContainerProps) => {
         items={tabItems}
         defaultValue="profile"
         className="w-full h-full"
-        tabPosition="left"
+        tabPosition={screens.xs ? "top" : "left"}
       />
     </Grid>
   );

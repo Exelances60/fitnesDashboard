@@ -7,7 +7,12 @@ import axiosClient from "@/utils/AxiosClient";
 import CustomerMemberShipStatus from "./CustomerMemberShipStatus";
 import CustomerAddAge from "./CustomerAddAge";
 import { renderFormItem } from "@/utils/renderForTables/Customers/renderCustomerFormItem";
-import { justRequired, maxBodyWeight, maxHeight } from "@/utils/FormRules";
+import {
+  justRequired,
+  maxBodyWeight,
+  maxHeight,
+  phoneRules,
+} from "@/utils/FormRules";
 
 const CustomerAddModal = () => {
   const [form] = Form.useForm();
@@ -90,7 +95,15 @@ const CustomerAddModal = () => {
         </Form.Item>
         <div className="flex gap-4">
           {renderFormItem("Name", "name", "Enter Name", "text", null)}
-          {renderFormItem("Phone", "phone", "Enter Phone", "tel", "+90")}
+          <Form.Item
+            label="Phone"
+            name="phone"
+            required
+            className="w-full"
+            rules={phoneRules}
+          >
+            <Input type="tel" addonBefore="+90" />
+          </Form.Item>
         </div>
         <CustomerAddAge />
         <div className="flex gap-4">

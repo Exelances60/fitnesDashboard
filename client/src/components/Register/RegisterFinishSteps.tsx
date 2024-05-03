@@ -1,6 +1,8 @@
 import React, { forwardRef } from "react";
 import { motion } from "framer-motion";
 import { Button } from "antd";
+import RegisterWaitPhoto from "@/../public/undraw_wait_in_line_o2aq.svg";
+import Image from "next/image";
 
 interface IRegisterFinishStepsProps {
   current: string;
@@ -21,6 +23,13 @@ const RegisterFinishSteps = forwardRef<
         }}
         className="flex flex-col items-center justify-center gap-2 w-full"
       >
+        <Image
+          src={RegisterWaitPhoto}
+          alt="placeholder"
+          width={300}
+          height={300}
+          className="my-2"
+        />
         <p> Thank you for registering </p>
         <p>Your account is under review 🔍 </p>
         <p> We will send you an email or SMS to in 2 days ⌚</p>

@@ -2,7 +2,7 @@ import { logout, selectUser } from "@/store/slices/userSlice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { Avatar, Dropdown, message } from "antd";
 import { MenuProps } from "antd/lib";
-import { SettingOutlined, LoginOutlined } from "@ant-design/icons";
+import { UserOutlined, LoginOutlined } from "@ant-design/icons";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { deleteCookie } from "cookies-next";
@@ -21,7 +21,7 @@ const ProfileCardNavi = () => {
 
   const onClick: MenuProps["onClick"] = ({ key }) => {
     switch (key) {
-      case "Settings":
+      case "Profile":
         router.push("/dashboard/settings");
         break;
       case "Logout":
@@ -34,9 +34,9 @@ const ProfileCardNavi = () => {
 
   const items: MenuProps["items"] = [
     {
-      key: "Settings",
-      label: "Settings",
-      icon: <SettingOutlined />,
+      key: "Profile",
+      label: "Profile",
+      icon: <UserOutlined />,
     },
     {
       key: "Logout",

@@ -16,6 +16,7 @@ const SettingContainer = ({ ownerInfo }: SettingContainerProps) => {
   const [ownerInfoState, setOwnerInfoState] = useState<OwnerType>(
     ownerInfo as OwnerType
   );
+
   const tabItems: TabsProps["items"] = [
     {
       key: "profile",

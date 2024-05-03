@@ -7,7 +7,7 @@ const useFetchCustomerDataForClient = () => {
     const fetchCustomerData = async () => {
       const { data, error } = await fetchCustomer();
       if (error) {
-        return <div>{error}</div>;
+        return { data: [] };
       }
       setCustomerData(data);
     };

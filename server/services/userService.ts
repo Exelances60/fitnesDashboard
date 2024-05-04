@@ -35,7 +35,8 @@ export class UserServices {
         password,
         user.password
       );
-      if (!isPasswordMatch) return throwBadRequestError("Wrong password!");
+      if (!isPasswordMatch)
+        return throwBadRequestError("Password is incorrect. Please try again.");
       const token = jwtServices.signToken({
         email: user.email,
         ownerId: user._id.toString(),
@@ -81,7 +82,20 @@ export class UserServices {
         req.body
       );
       if (!fetchedOwner) return throwNotFoundError("Owner not found!");
-      return fetchedOwner;
+      const responseOwner = {
+        email: fetchedOwner.email,
+        companyName: fetchedOwner.companyName,
+        address: fetchedOwner.address,
+        phone: fetchedOwner.phone,
+        ownerImage: fetchedOwner.ownerImage,
+        productCategory: fetchedOwner.productCategory,
+        memberShipList: fetchedOwner.memberShipList,
+        memberShipPrice: fetchedOwner.memberShipPrice,
+        _id: fetchedOwner._id,
+        memberShipMonths: fetchedOwner.memberShipMonths,
+      } as IOwner;
+
+      return responseOwner;
     } catch (error: any) {
       throw new Error(error);
     }

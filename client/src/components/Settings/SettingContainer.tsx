@@ -1,27 +1,35 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { Grid } from "@tremor/react";
 import SettingsUpdateForm from "./SettingsUpdateForm";
 import SettingImageUpload from "./SettingImageUpload";
 import { Tabs, TabsProps } from "antd";
 import ProfileTabContainer from "./Profile/ProfileTabContainer";
-import useGetScreenSize from "@/hooks/useGetScreenSize";
+import { useGetScreenSize } from "@/hooks/useGetScreenSize";
+import { useAppSelector } from "@/store/store";
+import { selectUser } from "@/store/slices/userSlice";
+import ErrorPage from "../ErrorPage";
 
-interface SettingContainerProps {
-  ownerInfo: OwnerType | {};
-}
-
-const SettingContainer = ({ ownerInfo }: SettingContainerProps) => {
+const SettingContainer = () => {
   const screens = useGetScreenSize();
-  const [ownerInfoState, setOwnerInfoState] = useState<OwnerType>(
-    ownerInfo as OwnerType
-  );
+  const ownerInfoStateRedux = useAppSelector(selectUser);
+
+  if (!ownerInfoStateRedux) {
+    return (
+      <ErrorPage
+        title="Error"
+        error="Owner Info not found"
+        status="404"
+        key={404}
+      />
+    );
+  }
 
   const tabItems: TabsProps["items"] = [
     {
       key: "profile",
       label: "Profile",
-      children: <ProfileTabContainer ownerInfo={ownerInfoState} />,
+      children: <ProfileTabContainer ownerInfo={ownerInfoStateRedux} />,
     },
     {
       key: "settings",
@@ -29,16 +37,10 @@ const SettingContainer = ({ ownerInfo }: SettingContainerProps) => {
       children: (
         <>
           <div className="w-full items-center  h-full flex flex-col gap-2">
-            <SettingImageUpload
-              ownerInfo={ownerInfoState}
-              setOwnerInfoState={setOwnerInfoState}
-            />
+            <SettingImageUpload ownerInfo={ownerInfoStateRedux} />
           </div>
           <div className="flex flex-col items-center justify-center">
-            <SettingsUpdateForm
-              ownerInfo={ownerInfoState}
-              setOwnerInfoState={setOwnerInfoState}
-            />
+            <SettingsUpdateForm ownerInfo={ownerInfoStateRedux} />
           </div>
         </>
       ),

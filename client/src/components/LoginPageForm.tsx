@@ -1,8 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Form, Input, message, Spin } from "antd";
-import { getCookie, setCookie } from "cookies-next";
-import { useRouter } from "next/navigation";
+import { setCookie } from "cookies-next";
+import { useRouter, useSearchParams } from "next/navigation";
 import axiosClient from "@/utils/AxiosClient";
 import { jwtDecode } from "jwt-decode";
 import { emailRules } from "@/utils/FormRules";
@@ -10,16 +10,9 @@ import Link from "next/link";
 
 const LoginPageForm = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    const token = getCookie("token");
-    if (token) {
-      message.info({ content: "You are already logged in", key: "login" });
-      router.push("/dashboard");
-    }
-  }, [router]);
 
   const calculateMaxAge = (expirationTime: number) => {
     const currentTime = new Date().getTime();
@@ -38,7 +31,8 @@ const LoginPageForm = () => {
     setError("");
     message.destroy("login");
     message.success("Login Success");
-    router.push("/dashboard");
+    const nextUrl = searchParams.get("next");
+    router.push(nextUrl ? nextUrl : "/dashboard");
   };
 
   const onFinish = async (values: { email: string; password: string }) => {
@@ -54,6 +48,7 @@ const LoginPageForm = () => {
       message.error(
         error.response?.data.errorMessage || "Something went wrong"
       );
+
       setError(error.response?.data.errorMessage || "Something went wrong");
     } finally {
       setLoading(false);

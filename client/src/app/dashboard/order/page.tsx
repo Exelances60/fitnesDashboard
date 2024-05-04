@@ -3,6 +3,7 @@ import ErrorPage from "@/components/ErrorPage";
 import OrderChats from "@/components/Orders/OrderCharts/OrderChats";
 import OrderContainer from "@/components/Orders/OrderContainer";
 import OrdersCards from "@/components/Orders/OrdersCards";
+import { message } from "antd";
 import React from "react";
 
 const Order = async () => {
@@ -16,7 +17,6 @@ const Order = async () => {
       />
     );
   }
-
   return (
     <div className="flex flex-col gap-2">
       <OrdersCards cardData={cardData} />

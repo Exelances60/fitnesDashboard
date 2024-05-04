@@ -16,7 +16,14 @@ import {
 export default async (app: Application) => {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
-  app.use(cors());
+  const corsOptions = {
+    origin: "http://localhost:3000",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+  };
+
+  app.use(cors(corsOptions));
   app.use(helmet());
 
   app.use("/auth", authRoutes);

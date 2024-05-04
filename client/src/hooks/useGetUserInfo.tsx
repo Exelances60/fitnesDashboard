@@ -21,7 +21,7 @@ const useGetUserInfo = () => {
 
         if (response?.errorMessage) {
           message.error({ content: response.errorMessage, duration: 2 });
-          const token = deleteCookie("token");
+          deleteCookie("token");
           return router.push("/");
         }
         dispatch(setUser(response?.owner));

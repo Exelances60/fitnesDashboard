@@ -9,13 +9,9 @@ import useMessage from "@/hooks/useMessage";
 
 interface SettingImageUploadProps {
   ownerInfo: OwnerType;
-  setOwnerInfoState: React.Dispatch<React.SetStateAction<OwnerType>>;
 }
 
-const SettingImageUpload = ({
-  ownerInfo,
-  setOwnerInfoState,
-}: SettingImageUploadProps) => {
+const SettingImageUpload = ({ ownerInfo }: SettingImageUploadProps) => {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
@@ -33,10 +29,6 @@ const SettingImageUpload = ({
           formData
         );
         if (response.status === 201) {
-          setOwnerInfoState((prev) => ({
-            ...prev,
-            ownerImage: response.data.ownerImage,
-          }));
           dispatch(
             setUser({ ...ownerInfo, ownerImage: response.data.ownerImage })
           );

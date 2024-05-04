@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 interface UserState {
-  user: OwnerType | null;
+  user: OwnerType;
   menuKeys: "dashboard" | "users" | "products" | "orders" | "settings";
 }
 

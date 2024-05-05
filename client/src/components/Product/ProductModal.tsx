@@ -148,6 +148,7 @@ const ProductModal = () => {
               <Upload
                 listType="picture"
                 maxCount={1}
+                fileList={file ? [file] : []}
                 onChange={(info) => {
                   setFile(info.file.originFileObj);
                 }}

@@ -116,7 +116,6 @@ const OrderUpdateDrawer = ({ selectedOrder }: OrderUpdateDrawerProps) => {
             required
           >
             <Select
-              defaultValue={selectedOrder?.status}
               style={{ width: 250 }}
               placement="bottomRight"
               options={[

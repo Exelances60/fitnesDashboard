@@ -15,6 +15,7 @@ const EmployeesEditModal = ({
   setEmployeeData,
 }: EmployeesEditModalProps) => {
   const dispatch = useAppDispatch();
+  const [form] = Form.useForm();
   const onFinish = async (values: IEmployee) => {
     message.info({ content: "Updating employee", key: "updateEmployee" });
 
@@ -50,6 +51,7 @@ const EmployeesEditModal = ({
   return (
     <Form
       layout="vertical"
+      form={form}
       onFinish={onFinish}
       initialValues={{
         ...employee,
@@ -57,7 +59,7 @@ const EmployeesEditModal = ({
       }}
       id="editEmployeeForm"
     >
-      <EmployeesAddForm editMode={true} employee={employee} />
+      <EmployeesAddForm editMode={true} employee={employee} form={form} />
     </Form>
   );
 };

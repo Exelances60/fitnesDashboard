@@ -21,16 +21,18 @@ const CustomerDetailsModal = ({ customer }: CustomerEditModalProps) => {
           {customer.profilePicture ? (
             <Image
               src={`${customer.profilePicture}`}
-              layout="fill"
+              fill
               className="object-cover rounded-md"
               alt="profilePicture"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           ) : (
             <Image
               src={NOUSERPHOTE}
-              layout="fill"
+              fill
               className="object-cover rounded-md"
               alt="profilePicture"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           )}
         </div>
@@ -39,46 +41,48 @@ const CustomerDetailsModal = ({ customer }: CustomerEditModalProps) => {
       <div className="flex flex-col items-start justify-start gap-3">
         <p className="flex gap-2">
           📧 Email:
-          <p className="font-bold">{customer.email}</p>
+          <span className="font-bold">{customer.email}</span>
         </p>
         <p className="flex gap-2">
-          📞 Phone: <p className="font-bold">+90{customer.phone}</p>
+          📞 Phone: <span className="font-bold">+90{customer.phone}</span>
         </p>
         {customer.age < 18 ? (
           <p className="flex gap-2">
-            📞 Parent Name: <p className="font-bold">{customer.parentPhone}</p>
+            📞 Parent Name:{" "}
+            <span className="font-bold">{customer.parentPhone}</span>
           </p>
         ) : null}
 
         <p className="flex gap-2">
-          🧬 Age: <p className="font-bold">{customer.age}</p>
+          🧬 Age: <span className="font-bold">{customer.age}</span>
         </p>
         <p className="flex gap-2">
-          🔩 BodyWeight: <p className="font-bold">{customer.bodyWeight} KG</p>
+          🔩 BodyWeight:{" "}
+          <span className="font-bold">{customer.bodyWeight} KG</span>
         </p>
         <p className="flex gap-2">
-          📏 Height: <p className="font-bold">{customer.height}</p>
+          📏 Height: <span className="font-bold">{customer.height}</span>
         </p>
         <p className="flex gap-2">
           📄 Member Ship Details :
-          <p className="font-bold">{customer.membershipType} Months</p>
-          <p className="font-bold">
+          <span className="font-bold">{customer.membershipType} Months</span>
+          <span className="font-bold">
             {capitalizeFirstLetter(customer.membershipStatus)}
-          </p>
+          </span>
         </p>
         <p className="flex gap-2">
           💵 Membership Price
-          <p className="font-bold">
+          <span className="font-bold">
             {renderCurrency(customer.membershipPrice)}
-          </p>
+          </span>
         </p>
         <p className="flex gap-2">
           🥋 Coach:
-          <p className="font-bold">
+          <span className="font-bold">
             {typeof customer.coachPT === "string"
               ? customer.coachPT
               : capitalizeFirstLetter(customer.coachPT?.name || "")}
-          </p>
+          </span>
         </p>
       </div>
 

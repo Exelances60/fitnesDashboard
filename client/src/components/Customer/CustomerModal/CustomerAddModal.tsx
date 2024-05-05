@@ -88,6 +88,7 @@ const CustomerAddModal = () => {
             name="profilePicture"
             listType="picture-card"
             maxCount={1}
+            fileList={image ? [image] : []}
             onChange={(info: any) => setImage(info.file.originFileObj)}
           >
             <Button icon={<Icon.UploadOutlined />}>Upload</Button>

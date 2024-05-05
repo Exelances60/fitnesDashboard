@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Empty, Form, Input, Select, Upload } from "antd";
+import { Card, Empty, Form, FormInstance, Input, Select, Upload } from "antd";
 import {
   EuroCircleOutlined,
   MailOutlined,
@@ -15,16 +15,6 @@ import {
 import { allUniverstyList } from "@/mock/allUniverstyList";
 import Image from "next/image";
 import useCurrencyFormatter from "@/hooks/useCurrencyFormatter";
-
-const ProfilePictureUpload = () => (
-  <Form.Item label="Profile Picture" name="profilePicture">
-    <Upload name="profilePicture" listType="picture-card" maxCount={1}>
-      <div>
-        <div>+</div>
-      </div>
-    </Upload>
-  </Form.Item>
-);
 
 const ProfileImage = ({ src }: { src: string }) => (
   <Image
@@ -60,10 +50,25 @@ const CustomerCard = ({
 interface EmployeesAddFormProps {
   editMode: boolean;
   employee?: IEmployee;
+  form: FormInstance<any>;
 }
 
-const EmployeesAddForm = ({ editMode, employee }: EmployeesAddFormProps) => {
+const EmployeesAddForm = ({
+  editMode,
+  employee,
+  form,
+}: EmployeesAddFormProps) => {
   const { currentCurrencySymbol } = useCurrencyFormatter();
+  const ProfilePictureUpload = () => (
+    <Form.Item label="Profile Picture" name="profilePicture">
+      <Upload name="profilePicture" listType="picture-card" maxCount={1}>
+        <div>
+          <div>+</div>
+        </div>
+      </Upload>
+    </Form.Item>
+  );
+
   return (
     <>
       {!editMode ? (
@@ -184,7 +189,12 @@ const EmployeesAddForm = ({ editMode, employee }: EmployeesAddFormProps) => {
           required
           rules={justRequired}
         >
-          <Upload name="documents" listType="picture-card" maxCount={6}>
+          <Upload
+            name="documents"
+            listType="picture-card"
+            maxCount={6}
+            fileList={form.getFieldValue("documents") || []}
+          >
             <div>
               <div>+</div>
             </div>

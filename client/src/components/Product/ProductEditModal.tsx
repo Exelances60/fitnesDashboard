@@ -81,7 +81,6 @@ const ProductEditModal = () => {
       ]}
     >
       <Form
-        initialValues={product}
         form={form}
         onFinish={handleFinish}
         id="editProductForm"
@@ -109,9 +108,9 @@ const ProductEditModal = () => {
         </Form.Item>
         <Form.Item label="Image" name="image">
           <Upload
-            action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
             listType="picture"
             maxCount={1}
+            fileList={file ? [file] : []}
             onChange={(info) => {
               setFile(info.file.originFileObj);
             }}

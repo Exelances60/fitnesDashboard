@@ -23,6 +23,7 @@ export default function LoginPage() {
           src={PLACEHOLDERIMAGE}
           alt="placeholder"
           fill
+          className="resim"
           style={{ objectFit: "cover" }}
         />
       </div>

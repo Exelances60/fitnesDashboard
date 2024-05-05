@@ -1,73 +1,79 @@
-import { logout, selectUser } from "@/store/slices/userSlice";
-import { useAppDispatch, useAppSelector } from "@/store/store";
-import { Avatar, Dropdown, message } from "antd";
-import { MenuProps } from "antd/lib";
+import React, { useEffect, useRef, useState } from "react";
+import { selectUser } from "@/store/slices/userSlice";
+import { useAppSelector } from "@/store/store";
+import { Avatar } from "antd";
 import { UserOutlined, LoginOutlined } from "@ant-design/icons";
-import React from "react";
-import { useRouter } from "next/navigation";
-import { deleteCookie } from "cookies-next";
+import { motion } from "framer-motion";
+import ProfileCardOption from "./ProfileCardOption";
+
+const wrapperVariants = {
+  open: {
+    scaleY: 1,
+    transition: {
+      when: "beforeChildren",
+      staggerChildren: 0.1,
+    },
+  },
+  closed: {
+    scaleY: 0,
+    transition: {
+      when: "afterChildren",
+      staggerChildren: 0.1,
+    },
+  },
+};
 
 const ProfileCardNavi = () => {
+  const [open, setOpen] = useState(false);
   const userInfo = useAppSelector(selectUser);
-  const dispatch = useAppDispatch();
-  const router = useRouter();
+  const dropdownRef = useRef<HTMLUListElement>(null);
 
-  const handleLogout = () => {
-    dispatch(logout());
-    deleteCookie("token");
-    message.success("Logout successfully");
-    router.push("/");
-  };
-
-  const onClick: MenuProps["onClick"] = ({ key }) => {
-    switch (key) {
-      case "Profile":
-        router.push("/dashboard/settings");
-        break;
-      case "Logout":
-        handleLogout();
-        break;
-      default:
-        break;
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setOpen(false);
+      }
     }
-  };
 
-  const items: MenuProps["items"] = [
-    {
-      key: "Profile",
-      label: "Profile",
-      icon: <UserOutlined />,
-    },
-    {
-      key: "Logout",
-      label: "Logout",
-      icon: <LoginOutlined />,
-    },
-  ];
-
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
   return (
     <>
-      <Dropdown
-        menu={{ items, onClick }}
-        placement="bottomRight"
-        trigger={["click"]}
-        arrow={{ pointAtCenter: true }}
-        overlayClassName="bg-white shadow-lg rounded-md"
-        dropdownRender={(menu) => (
-          <div>
-            <div className="p-2 text-center text-gray-500 text-sm">
-              {userInfo?.companyName}
-            </div>
-            {menu}
-          </div>
-        )}
-      >
-        <Avatar
-          size={32}
-          src={userInfo?.ownerImage}
-          className="shadow-lg cursor-pointer hover:scale-105 ease-in duration-300"
-        />
-      </Dropdown>
+      <div className="flex items-center justify-center bg-white z-10">
+        <motion.div animate={open ? "open" : "closed"} className="relative">
+          <Avatar
+            size={32}
+            onClick={() => setOpen(!open)}
+            src={userInfo?.ownerImage}
+            className="shadow-lg cursor-pointer hover:scale-105 ease-in duration-300"
+          />
+
+          <motion.ul
+            ref={dropdownRef}
+            initial={wrapperVariants.closed}
+            variants={wrapperVariants}
+            style={{ originY: "top", translateX: "-50%" }}
+            className="flex flex-col gap-2 p-2 rounded-lg bg-white shadow-xl absolute top-[110%] -left-[100%] w-48 overflow-hidden"
+          >
+            <ProfileCardOption
+              setOpen={setOpen}
+              Icon={UserOutlined}
+              text="Profile"
+            />
+            <ProfileCardOption
+              setOpen={setOpen}
+              Icon={LoginOutlined}
+              text="Logout"
+            />
+          </motion.ul>
+        </motion.div>
+      </div>
     </>
   );
 };

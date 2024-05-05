@@ -4,6 +4,7 @@ import Link from "next/link";
 import heyImage from "@/../public/hey.png";
 import Image from "next/image";
 import { Montserrat } from "next/font/google";
+import { motion } from "framer-motion";
 
 const inter = Montserrat({ subsets: ["latin"] });
 
@@ -15,7 +16,13 @@ export default function Error({
   reset: () => void;
 }) {
   return (
-    <div className={inter.className}>
+    <motion.div
+      initial={{ opacity: 0, y: 100 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      exit={{ opacity: 0, y: 100 }}
+      className={inter.className}
+    >
       <div className="flex flex-col items-center gap-14 w-full justify-center h-[800px]">
         <Image src={heyImage} alt="hey" width={200} height={200} />
         <h1 className="text-4xl font-bold text-gray-500">
@@ -23,16 +30,12 @@ export default function Error({
         </h1>
         <p className="text-lg text-red-500">Error : {error.message}</p>
 
-        <div className="w-52 h-14  border-2 border-black rounded-full flex justify-center items-center">
-          <Link href="/dashboard" className="text-base uppercase text-black">
-            Go Home
-          </Link>
-          <div className="absolute w-9 h-9 left-15 top-2">
-            <div className="w-9 h-2 border-black transform rotate-45"></div>
-            <div className="w-9 h-2 border-black transform -rotate-45"></div>
-          </div>
-        </div>
+        <Link href="/dashboard" className="text-base uppercase text-black">
+          <button className="rounded-2xl border-2 border-dashed border-black bg-white px-6 py-3 font-semibold uppercase text-black transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_black] active:translate-x-[0px] active:translate-y-[0px] active:rounded-2xl active:shadow-none">
+            Go back to dashboard
+          </button>
+        </Link>
       </div>
-    </div>
+    </motion.div>
   );
 }

@@ -4,7 +4,6 @@ import ProductPreview from "@/components/Product/ProductPreview";
 import React from "react";
 
 const Product = async () => {
-  console.log("Product page");
   const products = await fetchProducts();
 
   return (

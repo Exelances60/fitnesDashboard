@@ -42,7 +42,12 @@ const NavigationCurrency = () => {
   return (
     <>
       <motion.div whileTap={{ scale: 0.9 }} className="flex items-center gap-5">
-        <Dropdown menu={{ items: moneyChangeDropdown }} trigger={["click"]}>
+        <Dropdown
+          menu={{ items: moneyChangeDropdown }}
+          trigger={["click"]}
+          placement="bottomCenter"
+          arrow={{ pointAtCenter: true }}
+        >
           <MoneyCollectOutlined className="text-2xl" />
         </Dropdown>
       </motion.div>

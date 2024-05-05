@@ -1,6 +1,5 @@
 import LoginPageForm from "@/components/LoginPageForm";
-import Image from "next/image";
-import PLACEHOLDERIMAGE from "@/../public/dashboard/placeholder.svg";
+import LoginRightSide from "@/components/LoginRightSide";
 
 export default function LoginPage() {
   return (
@@ -18,15 +17,7 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-      <div className="hidden bg-muted lg:block relative bg-blue-400">
-        <Image
-          src={PLACEHOLDERIMAGE}
-          alt="placeholder"
-          fill
-          className="resim"
-          style={{ objectFit: "cover" }}
-        />
-      </div>
+      <LoginRightSide />
     </div>
   );
 }

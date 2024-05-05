@@ -45,7 +45,6 @@ const ProfileCardOption = ({
   text: string;
   Icon: React.ElementType;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  event?: (text: string) => void;
 }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();

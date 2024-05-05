@@ -16,10 +16,9 @@ export const fetchProducts = async (): Promise<productsType[]> => {
         },
       }
     );
-
     const data = await response.json();
     return data.products;
   } catch (error: any) {
-    return [];
+    throw new Error(error.message);
   }
 };

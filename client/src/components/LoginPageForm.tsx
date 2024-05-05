@@ -23,7 +23,6 @@ const LoginPageForm = () => {
   const handleSuccess = (data: any) => {
     const user = jwtDecode(data.token) as jwtUserDecode;
     const maxAgeInSeconds = calculateMaxAge(user.exp * 1000);
-
     setCookie("token", data.token, {
       maxAge: maxAgeInSeconds,
       secure: process.env.NODE_ENV === "production",

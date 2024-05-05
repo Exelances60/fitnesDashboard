@@ -84,4 +84,16 @@ export const navMenu = [
     path: "dashboard/invoice",
     key: "invoice",
   },
+  {
+    name: "Events",
+    icon: (
+      <Icons.CalendarOutlined
+        style={{
+          fontSize: "20px",
+        }}
+      />
+    ),
+    path: "dashboard/events",
+    key: "events",
+  },
 ];

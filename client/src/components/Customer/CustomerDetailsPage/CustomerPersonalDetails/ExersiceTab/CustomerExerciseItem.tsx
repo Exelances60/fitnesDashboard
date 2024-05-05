@@ -54,7 +54,7 @@ const CustomerExerciseItem = ({
   return (
     <div className="flex flex-col gap-2 hover:bg-gray-200 rounded-md p-2 ease-in duration-300">
       <div className="flex gap-2 items-center">
-        <div className="md:w-16 h-16 w-24 relative overflow-auto hover:scale-110 transform duration-300 ease-in-out">
+        <div className="md:w-16 h-16 w-24 relative  hover:scale-110 transform duration-300 ease-in-out">
           <Image
             src={`${process.env.BACK_END_SERVICES}${exercise.gifUrl}`}
             alt={exercise.name}

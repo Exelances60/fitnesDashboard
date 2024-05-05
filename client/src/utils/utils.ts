@@ -1,36 +1,3 @@
-type MoneyType =
-  | "USD"
-  | "EUR"
-  | "GBP"
-  | "JPY"
-  | "CNY"
-  | "RUB"
-  | "KRW"
-  | "INR"
-  | "BRL"
-  | "CAD"
-  | "AUD"
-  | "MXN"
-  | "IDR"
-  | "TRY"
-  | "ZAR"
-  | "HKD"
-  | "PHP"
-  | "SGD"
-  | "NOK"
-  | "SEK"
-  | "DKK"
-  | "CHF"
-  | "CZK"
-  | "PLN"
-  | "HUF"
-  | "RON"
-  | "HRK"
-  | "BGN"
-  | "NZD"
-  | "THB"
-  | "MYR";
-
 export const capitalizeFirstLetter = (str: string) => {
   return str.substring(0, 1).toUpperCase() + str.substring(1);
 };

@@ -11,8 +11,9 @@ const CustomerDetailsShort = ({ customer }: { customer: CustomerType }) => {
         <div className="w-full h-[200px] relative">
           <Image
             src="https://react-material.fusetheme.com/assets/images/cards/19-640x480.jpg"
-            layout="fill"
-            objectFit="cover"
+            fill
+            style={{ objectFit: "cover" }}
+            priority
             alt="Customer Image"
             className="rounded-t-md"
           />
@@ -20,8 +21,10 @@ const CustomerDetailsShort = ({ customer }: { customer: CustomerType }) => {
         <div className="relative md:bottom-20 bottom-[80px] md:h-32 h-28 rounded-full md:w-32 w-28 border-4 border-white ">
           <Image
             src={`${customer.profilePicture}`}
-            layout="fill"
-            objectFit="cover"
+            fill
+            style={{ objectFit: "cover" }}
+            priority
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             alt="Customer Image"
             className="rounded-full"
           />

@@ -1,9 +1,9 @@
 "use client";
+import React from "react";
 import Map from "@/components/Map";
 import useCurrencyFormatter from "@/hooks/useCurrencyFormatter";
 import { capitalizeFirstLetter } from "@/utils/utils";
 import { Descriptions, Badge, DescriptionsProps } from "antd";
-import React from "react";
 
 const CustomerPersonalDetails = ({ customer }: { customer: CustomerType }) => {
   const { renderCurrency } = useCurrencyFormatter();
@@ -27,7 +27,7 @@ const CustomerPersonalDetails = ({ customer }: { customer: CustomerType }) => {
     {
       key: "4",
       label: `Parent Phone Number`,
-      children: <>{customer.parentPhone || "N/A"}</>,
+      children: <span>{customer.parentPhone || "N/A"}</span>,
       span: 2,
     },
     {

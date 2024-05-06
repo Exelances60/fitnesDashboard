@@ -3,14 +3,9 @@ import React from "react";
 import CustomerContainerHeader from "./CustomerContainerHeader";
 import CustomerTable from "./CustomerTable/CustomerTable";
 import { fetchCustomer } from "@/actions/fetchCustomer";
-import ErrorPage from "../ErrorPage";
 
 const CustomerContainer = async () => {
   const { data, error } = await fetchCustomer();
-
-  if (error) {
-    return <ErrorPage error={error} title="Error" status="error" />;
-  }
 
   return (
     <Card className="overflow-auto flex flex-col gap-2">

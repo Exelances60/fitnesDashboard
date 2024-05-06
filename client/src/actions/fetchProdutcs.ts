@@ -1,11 +1,11 @@
 "use server";
 import { cookies } from "next/headers";
 
-export const fetchProducts = async (): Promise<productsType[]> => {
+export const fetchProducts = async () => {
   const cookiesStore = cookies();
   const token = cookiesStore.get("token")?.value;
   if (!token) {
-    return [];
+    throw new Error("Token not found");
   }
   try {
     const response = await fetch(

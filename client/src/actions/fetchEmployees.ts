@@ -1,15 +1,11 @@
 "use server";
 import { cookies } from "next/headers";
 
-export const fetchEmplooyes = async (): Promise<IEmployeeFetchResponse> => {
+export const fetchEmplooyes = async () => {
   const cookiesStore = cookies();
   const token = cookiesStore.get("token")?.value;
   if (!token) {
-    return {
-      employees: [],
-      totalSalaryIncrease: 0,
-      totalEmployeesCountIncarese: 0,
-    };
+    throw new Error("Token not found");
   }
   try {
     const response = await fetch(
@@ -34,11 +30,6 @@ export const fetchEmplooyes = async (): Promise<IEmployeeFetchResponse> => {
       totalEmployeesCountIncarese,
     };
   } catch (error: any) {
-    return {
-      employees: [],
-      totalEmployeesCountIncarese: 0,
-      totalSalaryIncrease: 0,
-      errorMessage: error.message,
-    };
+    throw new Error(error.message);
   }
 };

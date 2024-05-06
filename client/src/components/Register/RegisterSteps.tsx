@@ -129,24 +129,17 @@ const RegisterSteps = () => {
           onFinish={onFinish}
           name="register"
         >
-          <div className={current === "Account" ? "block" : "hidden"}>
-            <RegisterAccountSteps current={current} ref={accountRef} />
-          </div>
+          <RegisterAccountSteps current={current} ref={accountRef} />
 
-          <div className={current === "Profile" ? "block" : "hidden"}>
-            <RegisterProfileSteps current={current} ref={profileRef} />
-          </div>
+          <RegisterProfileSteps current={current} ref={profileRef} />
 
-          <div className={current === "Finish" ? "block" : "hidden"}>
-            <RegisterFinishSteps current={current} ref={finishRef} />
-          </div>
-          <div className={current === "Application" ? "block" : "hidden"}>
-            <RegisterApplication
-              current={current}
-              inputRef={applicationInputRef}
-              divRef={applicationRef}
-            />
-          </div>
+          <RegisterFinishSteps current={current} ref={finishRef} />
+
+          <RegisterApplication
+            current={current}
+            inputRef={applicationInputRef}
+            divRef={applicationRef}
+          />
 
           <Tour
             open={open}

@@ -30,10 +30,6 @@ export const fetchRegisterAccount = async (
     const data = await response.json();
     return data;
   } catch (error: any) {
-    return {
-      peddingRegister: undefined,
-      message: "",
-      errorMessage: error.message,
-    };
+    throw new Error(error.message);
   }
 };

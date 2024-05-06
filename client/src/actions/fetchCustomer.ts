@@ -6,7 +6,7 @@ interface IPromiseCustomer {
   data: CustomerType[];
 }
 
-export const fetchCustomer = async (): Promise<IPromiseCustomer> => {
+export const fetchCustomer = async () => {
   const cookiesStore = cookies();
   const token = cookiesStore.get("token")?.value;
   if (!token) {
@@ -30,6 +30,6 @@ export const fetchCustomer = async (): Promise<IPromiseCustomer> => {
     const { customers } = await response.json();
     return { error: "", data: customers };
   } catch (error: any) {
-    return { error: error.message, data: [] };
+    return { error: error.message };
   }
 };

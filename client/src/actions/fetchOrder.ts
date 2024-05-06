@@ -1,22 +1,11 @@
 "use server";
 import { cookies } from "next/headers";
 
-const fetchOrder = async (): Promise<getOrdersType> => {
+const fetchOrder = async () => {
   const cookiesStore = cookies();
   const token = cookiesStore.get("token")?.value;
   if (!token) {
-    return {
-      orders: [],
-      chartsData: [],
-      cardData: {
-        totalOrders: 0,
-        totalSalesPrice: 0,
-        increasePercentageForSales: 0,
-        totalSalesCompleted: 0,
-        increasePercentageForAmount: 0,
-        increasePercentageForCompletedSales: 0,
-      },
-    };
+    throw new Error("Token not found");
   }
 
   try {
@@ -36,19 +25,7 @@ const fetchOrder = async (): Promise<getOrdersType> => {
     const data = await response.json();
     return data;
   } catch (error: any) {
-    return {
-      orders: [],
-      chartsData: [],
-      cardData: {
-        totalOrders: 0,
-        totalSalesPrice: 0,
-        increasePercentageForSales: 0,
-        totalSalesCompleted: 0,
-        increasePercentageForAmount: 0,
-        increasePercentageForCompletedSales: 0,
-      },
-      errorMessage: error.message,
-    };
+    throw new Error(error.message);
   }
 };
 

@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 
 const LoginRightSide = () => {
   return (
-    <div className="relative hidden md:flex flex-auto items-center justify-center h-full overflow-hidden">
+    <div className="relative hidden lg:flex flex-auto items-center justify-center h-full overflow-hidden">
       <Image
         src={PLACEHOLDERIMAGE}
         alt="placeholder"

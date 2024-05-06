@@ -45,7 +45,7 @@ const NavigationCurrency = () => {
         <Dropdown
           menu={{ items: moneyChangeDropdown }}
           trigger={["click"]}
-          placement="bottomCenter"
+          placement="bottom"
           arrow={{ pointAtCenter: true }}
         >
           <MoneyCollectOutlined className="text-2xl" />

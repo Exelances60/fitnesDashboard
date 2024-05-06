@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import axiosClient from "@/utils/AxiosClient";
 import { jwtDecode } from "jwt-decode";
 import { emailRules } from "@/utils/FormRules";
+import { motion } from "framer-motion";
 import Link from "next/link";
 
 const LoginPageForm = () => {
@@ -55,7 +56,11 @@ const LoginPageForm = () => {
   };
 
   return (
-    <>
+    <motion.div
+      initial={{ y: 50, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.8 }}
+    >
       <Spin spinning={loading}>
         <Form
           className="flex flex-col gap-[10px] justify-center w-full"
@@ -98,7 +103,7 @@ const LoginPageForm = () => {
           {error ? <p className="text-red-500">{error}</p> : null}
         </Form>
       </Spin>
-    </>
+    </motion.div>
   );
 };
 

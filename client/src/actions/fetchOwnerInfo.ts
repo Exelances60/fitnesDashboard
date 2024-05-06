@@ -1,17 +1,11 @@
 "use server";
 import { cookies } from "next/headers";
-interface IPromiseOwnerInfo {
-  owner?: OwnerType;
-  errorMessage?: string;
-}
 
-export const fetchOwnerInfo = async (): Promise<IPromiseOwnerInfo> => {
+export const fetchOwnerInfo = async () => {
   const cookiesStore = cookies();
   const token = cookiesStore.get("token")?.value;
   if (!token) {
-    return {
-      errorMessage: "No token found",
-    };
+    throw new Error("Token not found");
   }
   try {
     const response = await fetch(
@@ -31,8 +25,6 @@ export const fetchOwnerInfo = async (): Promise<IPromiseOwnerInfo> => {
     const data = await response.json();
     return data;
   } catch (error: any) {
-    return {
-      errorMessage: error.message,
-    };
+    throw new Error(error.message);
   }
 };

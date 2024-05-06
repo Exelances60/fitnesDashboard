@@ -5,7 +5,7 @@ export const fetchFindCustomer = async (customerId: string) => {
   const cookiesStore = cookies();
   const token = cookiesStore.get("token")?.value;
   if (!token) {
-    return [];
+    throw new Error("Token not found");
   }
   try {
     const response = await fetch(
@@ -25,6 +25,6 @@ export const fetchFindCustomer = async (customerId: string) => {
     const { customer } = await response.json();
     return customer;
   } catch (error: any) {
-    return { error: error.message };
+    throw new Error(error.message);
   }
 };

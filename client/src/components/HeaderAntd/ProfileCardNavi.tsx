@@ -26,36 +26,19 @@ const wrapperVariants = {
 const ProfileCardNavi = () => {
   const [open, setOpen] = useState(false);
   const userInfo = useAppSelector(selectUser);
-  const dropdownRef = useRef<HTMLUListElement>(null);
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setOpen(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [dropdownRef]);
   return (
     <>
       <div className="flex items-center justify-center bg-white z-10">
         <motion.div animate={open ? "open" : "closed"} className="relative">
           <Avatar
             size={32}
-            onClick={() => setOpen(!open)}
+            onClick={() => setOpen((pv) => !pv)}
             src={userInfo?.ownerImage}
-            className="shadow-lg cursor-pointer hover:scale-105 ease-in duration-300"
+            className="shadow-lg cursor-pointer  ease-in duration-300"
           />
 
           <motion.ul
-            ref={dropdownRef}
             initial={wrapperVariants.closed}
             variants={wrapperVariants}
             style={{ originY: "top", translateX: "-50%" }}

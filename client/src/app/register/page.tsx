@@ -3,6 +3,7 @@ import Image from "next/image";
 import PLACEHOLDERIMAGE from "@/../public/dashboard/placeholder.svg";
 import RegisterSteps from "@/components/Register/RegisterSteps";
 import Link from "next/link";
+import LoginRightSide from "@/components/LoginRightSide";
 
 const RegisterPage = () => {
   return (
@@ -23,14 +24,7 @@ const RegisterPage = () => {
           </div>
         </div>
       </div>
-      <div className="hidden bg-muted lg:block relative bg-blue-400">
-        <Image
-          src={PLACEHOLDERIMAGE}
-          alt="placeholder"
-          fill
-          style={{ objectFit: "cover" }}
-        />
-      </div>
+      <LoginRightSide />
     </div>
   );
 };

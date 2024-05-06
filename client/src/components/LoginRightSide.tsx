@@ -10,7 +10,7 @@ import {
 } from "@ant-design/icons";
 import { motion } from "framer-motion";
 
-const LoginRightSide = () => {
+const LoginRightSide = ({ register }: { register: boolean }) => {
   return (
     <div className="relative hidden lg:flex flex-auto items-center justify-center h-full overflow-hidden">
       <Image
@@ -59,8 +59,9 @@ const LoginRightSide = () => {
             transition={{ delay: 0, duration: 0.5 }}
             className="text-md text-gray-300"
           >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-            quidem, doloribus, quae voluptates fugit, autem
+            {register
+              ? "This is the register page  Lorem ipsum dolor sit amet consectetur adipisicing elit."
+              : "This is the login page  Lorem ipsum dolor sit amet consectetur adipisicing elit."}
           </motion.p>
           <motion.div
             initial={{ y: 10, opacity: 0 }}

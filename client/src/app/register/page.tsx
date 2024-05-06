@@ -24,7 +24,7 @@ const RegisterPage = () => {
           </div>
         </div>
       </div>
-      <LoginRightSide />
+      <LoginRightSide register={true} />
     </div>
   );
 };

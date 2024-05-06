@@ -17,7 +17,7 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-      <LoginRightSide />
+      <LoginRightSide register={false} />
     </div>
   );
 }

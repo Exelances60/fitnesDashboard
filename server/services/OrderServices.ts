@@ -87,6 +87,9 @@ export class OrderServices {
           totalPrice: order.totalPrice,
           amountOrder: order.amount,
           orderId: order._id,
+          orderImages: order.products
+            .map((product) => product.imageUrl)
+            .join(", "),
         })
       );
 

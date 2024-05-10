@@ -1,11 +1,16 @@
 import { Rule } from "antd/es/form";
 
-export const emailRules: Rule[] = [{ type: "email" }, { required: true }];
+export const justRequired: Rule[] = [
+  { required: true, message: "This field is required" },
+];
 
-export const justRequired: Rule[] = [{ required: true }];
+export const emailRules: Rule[] = [
+  { type: "email", message: "The input is not valid E-mail!" },
+  ...justRequired,
+];
 
 export const productDescriptionRules: Rule[] = [
-  { required: true },
+  ...justRequired,
   { min: 10, message: "Description or too short" },
 ];
 
@@ -73,7 +78,7 @@ export const minAmount: Rule[] = [
 ];
 
 export const phoneRules: Rule[] = [
-  { required: true },
+  ...justRequired,
   { min: 10, message: "Min 10 characters" },
   { max: 10, message: "Max 10 characters" },
 ];

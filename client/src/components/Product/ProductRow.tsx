@@ -49,8 +49,9 @@ const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
       <TableCell>{renderCurrency(product.price)}</TableCell>
       <TableCell>{product.amount} pcs</TableCell>
       <TableCell>{product.category}</TableCell>
-      <TableCell className="md:w-[200px] ">
+      <TableCell className="md:w-[200px]">
         <Button
+          className="mr-2"
           type="primary"
           onClick={handleClickEditButton}
           icon={
@@ -67,6 +68,9 @@ const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
           }
         >
           Edit
+        </Button>
+        <Button type="primary" ghost>
+          Details
         </Button>
         <Button
           className="ml-2"

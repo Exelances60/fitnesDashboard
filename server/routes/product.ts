@@ -1,6 +1,5 @@
 import { Router } from "express";
 import * as productController from "../controllers/product";
-import { body } from "express-validator";
 import { isAuth } from "../middleware/isAuth";
 import multer from "multer";
 import { fileFilter } from "../utils/MulterFileFilter";

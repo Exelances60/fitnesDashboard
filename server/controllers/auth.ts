@@ -121,3 +121,23 @@ export const getPeddingRegister = async (
     next(error);
   }
 };
+
+export const verifyToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const token = req.body.token;
+    await new UserServices().verifyToken(token);
+    res.status(200).json({
+      success: true,
+      message: "Token verified.",
+    });
+  } catch (error: any) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};

@@ -43,4 +43,6 @@ router.get(
   authController.getPeddingRegister
 );
 
+router.post("/verify", authController.verifyToken);
+
 export { router as authRoutes };

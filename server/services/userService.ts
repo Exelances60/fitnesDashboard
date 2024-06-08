@@ -169,4 +169,20 @@ export class UserServices {
       throw new Error(error);
     }
   }
+
+  async verifyToken(token: string) {
+    try {
+      const decodedToken = jwtServices.verifyToken(token) as {
+        _id: string;
+        email: string;
+      };
+      if (!decodedToken) throw throwBadRequestError("Token not valid!");
+      const owner = await this.ownerRepository.findById<IOwner>(
+        decodedToken._id
+      );
+      if (!owner) throw throwBadRequestError("Owner not found!");
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }
 }

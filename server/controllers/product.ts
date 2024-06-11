@@ -70,12 +70,34 @@ export const updateProduct = async (
   try {
     const errors = validationResult(req);
     printValidatorErrors(errors);
-    await new ProductServices().updateProduct(req);
-    res.status(200).json({ message: "Product updated!", status: 200 });
+    const product = await new ProductServices().updateProduct(req);
+    res
+      .status(200)
+      .json({ message: "Product updated!", status: 200, product: product });
   } catch (err: any) {
     if (!err.statusCode) {
       err.statusCode = 500;
     }
     next(err);
+  }
+};
+
+export const getProduct = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const product = await new ProductServices().getProduct(req);
+    res.status(200).json({
+      message: "Product fetched successfully.",
+      product: product,
+      status: 200,
+    });
+  } catch (error: any) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
   }
 };

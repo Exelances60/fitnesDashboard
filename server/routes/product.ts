@@ -37,4 +37,6 @@ router.put(
   productController.updateProduct
 );
 
+router.get("/get-product/:productId", isAuth, productController.getProduct);
+
 export { router as productRoutes };

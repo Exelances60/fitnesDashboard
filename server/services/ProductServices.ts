@@ -29,13 +29,14 @@ export class ProductServices {
       );
       const product = await this.productRepository.create<IProduct>({
         ...req.body,
+        ownerId: req.userId,
         name: req.body.productName,
         imageUrl: dowlandURL,
         price: +req.body.price,
         amount: +req.body.amount,
       });
       const owner = await this.ownerRepository.findById<IOwner>(
-        req.body.ownerId
+        req.body.ownerId || req.userId
       );
       if (!owner) throw new Error("Owner not found");
       owner.product.push(product._id);
@@ -117,13 +118,27 @@ export class ProductServices {
         firebaseStorageServices.deleteImageFromStorage(product.imageUrl);
       }
 
-      await this.productRepository.update<IProduct>(product._id, {
-        ...req.body,
-        imageUrl,
-        price: +req.body.price,
-        amount: +req.body.amount,
-      });
+      const newProduct = await this.productRepository.update<IProduct>(
+        product._id,
+        {
+          ...req.body,
+          imageUrl,
+          price: +req.body.price,
+          amount: +req.body.amount,
+        }
+      );
 
+      return newProduct;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+  async getProduct(req: Request): Promise<IProduct> {
+    try {
+      const product = await this.productRepository.findById<IProduct>(
+        req.params.productId
+      );
+      if (!product) return throwNotFoundError("Product not found.");
       return product;
     } catch (error: any) {
       throw new Error(error.message);

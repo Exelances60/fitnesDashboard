@@ -5,7 +5,7 @@ export const fetchOwnerInfo = async () => {
   const cookiesStore = cookies();
   const token = cookiesStore.get("token")?.value;
   if (!token) {
-    throw new Error("Token not found");
+    return null;
   }
   try {
     const response = await fetch(

@@ -13,13 +13,12 @@ export const verifyToken = async (token?: string) => {
     if (!token) {
       return null;
     }
-    const data = await jwtVerify(token, process.env.JWT_SECRET as any);
+    const data = await jwtVerify(token, getJwtSecretKey());
     return data;
   } catch (error) {
     return null;
   }
 };
-4;
 export const decodeToken = async (token?: string) => {
   try {
     if (!token) {

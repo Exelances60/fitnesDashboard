@@ -26,7 +26,7 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
       onClick: handleChangeMenuKeys,
       icon: item.icon,
       label: (
-        <Link href={`http://localhost:3000/${item.path}`} passHref>
+        <Link href={`https://fitnes-dashboard-azba.vercel.app/${item.path}`} passHref>
           <div className="flex items-center gap-5">{item.name}</div>
         </Link>
       ),

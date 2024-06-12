@@ -17,7 +17,7 @@ export default async (app: Application) => {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   const corsOptions = {
-    origin: "http://localhost:3000" || "http://localhost:3000",
+    origin: "http://localhost:4200" || "http://localhost:3000",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     preflightContinue: false,
     optionsSuccessStatus: 204,

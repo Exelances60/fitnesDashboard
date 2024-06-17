@@ -29,19 +29,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.productRoutes = void 0;
 const express_1 = require("express");
 const productController = __importStar(require("../controllers/product"));
-const express_validator_1 = require("express-validator");
 const isAuth_1 = require("../middleware/isAuth");
 const multer_1 = __importDefault(require("multer"));
 const MulterFileFilter_1 = require("../utils/MulterFileFilter");
+const Product_1 = require("../Validator/Product");
 const router = (0, express_1.Router)();
 exports.productRoutes = router;
-router.post("/add-product", isAuth_1.isAuth, (0, multer_1.default)({ storage: multer_1.default.memoryStorage(), fileFilter: MulterFileFilter_1.fileFilter }).single("image"), productController.addProduct);
+router.post("/add-product", isAuth_1.isAuth, (0, multer_1.default)({ storage: multer_1.default.memoryStorage(), fileFilter: MulterFileFilter_1.fileFilter }).single("image"), Product_1.addProductValidator, productController.addProduct);
 router.get("/get-products", isAuth_1.isAuth, productController.getProducts);
 router.delete("/delete-product/:productId", isAuth_1.isAuth, productController.deleteProduct);
-router.put("/update-product/:productId", isAuth_1.isAuth, (0, multer_1.default)({ storage: multer_1.default.memoryStorage(), fileFilter: MulterFileFilter_1.fileFilter }).single("image"), productController.updateProduct);
-router.post("/add-product-category", [
-    (0, express_validator_1.body)("category")
-        .isLength({ min: 3 })
-        .withMessage("Category name must be at least 3 characters long."),
-], isAuth_1.isAuth, productController.addProductCategory);
+router.put("/update-product/:productId", isAuth_1.isAuth, (0, multer_1.default)({ storage: multer_1.default.memoryStorage(), fileFilter: MulterFileFilter_1.fileFilter }).single("image"), Product_1.updateProductValidator, productController.updateProduct);
+router.get("/get-product/:productId", isAuth_1.isAuth, productController.getProduct);
 //# sourceMappingURL=product.js.map

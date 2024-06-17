@@ -37,7 +37,6 @@ const ownerSchema = new ModelSchema({
     ],
     role: {
         type: String,
-        required: true,
     },
     product: [
         {

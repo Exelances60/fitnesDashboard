@@ -38,11 +38,6 @@ router.post(
   authController.signup
 );
 
-router.get(
-  "/getPeddingRegister/:registerId",
-  authController.getPeddingRegister
-);
-
 router.post("/verify", authController.verifyToken);
 
 export { router as authRoutes };

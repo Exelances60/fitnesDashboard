@@ -17,21 +17,33 @@ class FirebaseStorageServices {
         this.storageDatabase = (0, storage_1.getStorage)(this.app);
     }
     async uploadImageToStorage(file, path) {
-        if (!file) {
-            return "";
+        try {
+            if (!file) {
+                return "";
+            }
+            const fileName = path + file.originalname + "-" + Date.now();
+            const storageRef = (0, storage_1.ref)(this.storageDatabase, fileName);
+            const snapshot = await (0, storage_1.uploadBytesResumable)(storageRef, file.buffer, {
+                contentType: file?.mimetype,
+            });
+            const downloadURL = await (0, storage_1.getDownloadURL)(snapshot.ref);
+            return downloadURL;
         }
-        const fileName = path + file.originalname + "-" + Date.now();
-        const storageRef = (0, storage_1.ref)(this.storageDatabase, fileName);
-        const snapshot = await (0, storage_1.uploadBytesResumable)(storageRef, file.buffer, {
-            contentType: file?.mimetype,
-        });
-        const downloadURL = await (0, storage_1.getDownloadURL)(snapshot.ref);
-        return downloadURL;
+        catch (error) {
+            throw new Error(error.message);
+        }
     }
     async deleteImageFromStorage(fileName) {
-        const storageRef = (0, storage_1.ref)(this.storageDatabase, fileName);
-        await (0, storage_1.deleteObject)(storageRef);
-        return;
+        try {
+            const storageRef = (0, storage_1.ref)(this.storageDatabase, fileName);
+            if (!storageRef)
+                return;
+            await (0, storage_1.deleteObject)(storageRef);
+            return;
+        }
+        catch (error) {
+            throw new Error(error.message);
+        }
     }
 }
 const firebaseStorageServices = new FirebaseStorageServices();

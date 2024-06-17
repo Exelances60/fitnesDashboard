@@ -27,7 +27,7 @@ class CustomerServices {
      */
     async getCustomer(_id) {
         try {
-            const customer = await this.customerRepository.findOwnerIdWithPopulate(_id, "coachPT", "name email phone profilePicture");
+            const customer = await this.customerRepository.findOwnerIdWithPopulate(_id);
             if (!customer)
                 return (0, throwNotFoundError_1.default)("Customer not found");
             return customer;
@@ -64,6 +64,7 @@ class CustomerServices {
                 parentPhone: req.body.parentPhone ? req.body.parentPhone : null,
             });
             fetchedOwner.customer.push(savedCustomer._id);
+            await this.ownerRepository.update(fetchedOwner._id, fetchedOwner);
             return savedCustomer;
         }
         catch (error) {
@@ -112,10 +113,12 @@ class CustomerServices {
             if (!fetchedOwner) {
                 throw new Error("Owner not found");
             }
-            fetchedOwner.customer.filter((cust) => cust.toString() !== customerId.toString());
-            await fetchedOwner.save();
+            fetchedOwner.customer = fetchedOwner.customer.filter((cust) => {
+                return cust.toString() !== customerId.toString();
+            });
+            await this.ownerRepository.update(fetchedOwner._id, fetchedOwner);
             FirebaseServices_1.default.deleteImageFromStorage(customer.profilePicture);
-            await customer.deleteOne();
+            await this.customerRepository.delete(customer._id);
         }
         catch (error) {
             throw new Error(error.message);
@@ -190,9 +193,8 @@ class CustomerServices {
             const fetchedCustomer = await this.customerRepository.findById(req.body.customerId);
             if (!fetchedCustomer)
                 return (0, throwNotFoundError_1.default)("Customer not found");
-            const deleteExersice = fetchedCustomer.exercisePlan.filter((exersice) => exersice !== req.body.exerciseName);
-            fetchedCustomer.exercisePlan = deleteExersice;
-            await fetchedCustomer.updateOne(fetchedCustomer);
+            fetchedCustomer.exercisePlan = fetchedCustomer.exercisePlan.filter((exersice) => exersice !== req.body.exerciseName);
+            await this.customerRepository.update(fetchedCustomer._id, fetchedCustomer);
         }
         catch (error) {
             throw new Error(error.message);
@@ -208,16 +210,12 @@ class CustomerServices {
             const fetchedCustomer = await this.customerRepository.findById(req.body.customerId);
             if (!fetchedCustomer)
                 return (0, throwNotFoundError_1.default)("Customer not found");
-            const newExercises = req.body.exerciseName.filter((exercise) => {
-                return typeof exercise === "string"
-                    ? !fetchedCustomer.exercisePlan.includes(exercise)
-                    : undefined;
-            });
+            const notFoundExercises = req.body.exerciseName.filter((exercise) => !fetchedCustomer.exercisePlan.includes(exercise));
             fetchedCustomer.exercisePlan = [
                 ...fetchedCustomer.exercisePlan,
-                ...newExercises,
+                ...notFoundExercises,
             ];
-            await fetchedCustomer.updateOne(fetchedCustomer);
+            await this.customerRepository.update(fetchedCustomer._id, fetchedCustomer);
         }
         catch (error) {
             throw new Error(error.message);
@@ -236,13 +234,13 @@ class CustomerServices {
             if (!fetchedCustomer)
                 return (0, throwNotFoundError_1.default)("Customer not found");
             const savedActivity = await this.calendarAcvRepository.create({
-                planText,
-                planType,
+                text: planText,
+                type: planType,
                 customerId,
                 ...req.body,
             });
             fetchedCustomer.calendarAcv.push(savedActivity._id);
-            await fetchedCustomer.updateOne(fetchedCustomer);
+            await this.customerRepository.update(fetchedCustomer._id, fetchedCustomer);
             return savedActivity;
         }
         catch (error) {
@@ -258,17 +256,15 @@ class CustomerServices {
     async deleteCustomerCoach(customerId) {
         try {
             const fetchedCustomer = await this.customerRepository.findById(customerId);
-            if (!fetchedCustomer)
-                return (0, throwNotFoundError_1.default)("Customer not found");
-            if (!fetchedCustomer.coachPT)
-                return (0, throwBadRequestError_1.default)("Customer does not have a coach");
+            if (!fetchedCustomer || !fetchedCustomer.coachPT)
+                return (0, throwBadRequestError_1.default)("Customer or coach not found");
             const fetchedEmployee = await this.employeeRepository.findById(fetchedCustomer.coachPT.toString());
             if (!fetchedEmployee)
                 return (0, throwNotFoundError_1.default)("Employee not found");
-            fetchedEmployee.customers.filter((cust) => cust.toString() !== customerId.toString());
-            await fetchedEmployee.updateOne(fetchedEmployee);
+            fetchedEmployee.customers = fetchedEmployee.customers.filter((cust) => cust.toString() !== customerId.toString());
+            await this.employeeRepository.update(fetchedEmployee._id, fetchedEmployee);
             fetchedCustomer.coachPT = null;
-            await fetchedCustomer.updateOne(fetchedCustomer);
+            await this.customerRepository.update(fetchedCustomer._id, fetchedCustomer);
         }
         catch (error) {
             throw new Error(error.message);

@@ -3,12 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uploadOwnerImage = exports.updateOwner = exports.getOwnerInfo = exports.signup = exports.login = void 0;
-const Owner_1 = __importDefault(require("../models/Owner"));
+exports.verifyToken = exports.getPeddingRegister = exports.uploadOwnerImage = exports.updateOwner = exports.getOwnerInfo = exports.signup = exports.login = void 0;
 require("dotenv/config");
 const express_validator_1 = require("express-validator");
 const throwValidationError_1 = __importDefault(require("../utils/err/throwValidationError"));
-const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const printValidatorErrors_1 = require("../utils/printValidatorErrors");
 const userService_1 = require("../services/userService");
 const login = async (req, res, next) => {
@@ -33,17 +31,11 @@ const signup = async (req, res, next) => {
     try {
         const errors = (0, express_validator_1.validationResult)(req);
         (0, printValidatorErrors_1.printValidatorErrors)(errors);
-        const { email, password } = req.body;
-        const hashedPw = await bcryptjs_1.default.hash(password, 12);
-        const owner = new Owner_1.default({
-            email,
-            password: hashedPw,
-            companyName: "test",
-            address: "test",
-            phone: "1234567890",
+        const qrCodeID = await new userService_1.UserServices().signUpOwner(req);
+        res.status(201).json({
+            message: "Owner create Request sent.",
+            qrCodeID: qrCodeID,
         });
-        const result = await owner.save();
-        res.status(201).json({ message: "Owner created!", ownerId: result._id });
     }
     catch (err) {
         if (!err.statusCode) {
@@ -99,4 +91,37 @@ const uploadOwnerImage = async (req, res, next) => {
     }
 };
 exports.uploadOwnerImage = uploadOwnerImage;
+const getPeddingRegister = async (req, res, next) => {
+    try {
+        const peddingRegister = await new userService_1.UserServices().getPeddingRegister(req);
+        res.status(200).json({
+            message: "Pedding Register fetched.",
+            peddingRegister: peddingRegister,
+        });
+    }
+    catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+};
+exports.getPeddingRegister = getPeddingRegister;
+const verifyToken = async (req, res, next) => {
+    try {
+        const token = req.body.token;
+        await new userService_1.UserServices().verifyToken(token);
+        res.status(200).json({
+            success: true,
+            message: "Token verified.",
+        });
+    }
+    catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+};
+exports.verifyToken = verifyToken;
 //# sourceMappingURL=auth.js.map

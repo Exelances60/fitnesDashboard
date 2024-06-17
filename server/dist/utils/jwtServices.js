@@ -26,6 +26,22 @@ class JwtServices {
             throw new Error("Could not sign token");
         }
     }
+    async hashPassword(password) {
+        try {
+            return await bcryptjs_1.default.hash(password, 12);
+        }
+        catch (error) {
+            throw new Error("Could not hash password");
+        }
+    }
+    verifyToken(token) {
+        try {
+            return jsonwebtoken_1.default.verify(token, this.secret);
+        }
+        catch (error) {
+            throw new Error("Could not verify token");
+        }
+    }
 }
 const jwtServices = new JwtServices();
 exports.default = jwtServices;

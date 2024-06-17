@@ -28,36 +28,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authRoutes = void 0;
 const express_1 = require("express");
-const express_validator_1 = require("express-validator");
 const authController = __importStar(require("../controllers/auth"));
 const isAuth_1 = require("../middleware/isAuth");
 const multer_1 = __importDefault(require("multer"));
 const MulterFileFilter_1 = require("../utils/MulterFileFilter");
+const AuthValidate_1 = require("../Validator/AuthValidate");
 const router = (0, express_1.Router)();
 exports.authRoutes = router;
-router.post("/login", [
-    (0, express_validator_1.body)("email").isEmail().withMessage("Please enter a valid email address."),
-    (0, express_validator_1.body)("password")
-        .trim()
-        .isLength({ min: 5 })
-        .withMessage("Password is required.& min length is 5."),
-], authController.login);
-router.post("/signup", [
-    (0, express_validator_1.body)("email").isEmail().withMessage("Please enter a valid email address."),
-    (0, express_validator_1.body)("password").trim().isLength({ min: 5 }),
-    (0, express_validator_1.body)("companyName").trim().not().isEmpty(),
-], authController.signup);
+router.post("/login", AuthValidate_1.loginValidator, authController.login);
 router.get("/ownerInfo", isAuth_1.isAuth, authController.getOwnerInfo);
-router.put("/update-owner", isAuth_1.isAuth, [
-    (0, express_validator_1.body)("email")
-        .isEmail()
-        .withMessage("Please enter a valid email address.")
-        .normalizeEmail(),
-    (0, express_validator_1.body)("phone")
-        .matches(/^[0-9]{10}$/)
-        .withMessage("Please enter a valid phone number.")
-        .trim(),
-    (0, express_validator_1.body)("memberShipPrice").isInt().withMessage("Please enter a valid price."),
-], authController.updateOwner);
+router.put("/update-owner", isAuth_1.isAuth, AuthValidate_1.updateOwnerValidator, authController.updateOwner);
 router.put("/uploadOwnerImage", isAuth_1.isAuth, (0, multer_1.default)({ storage: multer_1.default.memoryStorage(), fileFilter: MulterFileFilter_1.fileFilter }).single("ownerImage"), authController.uploadOwnerImage);
+router.post("/signup", (0, multer_1.default)({ storage: multer_1.default.memoryStorage(), fileFilter: MulterFileFilter_1.fileFilter }).single("ownerImage"), authController.signup);
+router.get("/getPeddingRegister/:registerId", authController.getPeddingRegister);
+router.post("/verify", authController.verifyToken);
 //# sourceMappingURL=auth.js.map

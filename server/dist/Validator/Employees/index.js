@@ -1,17 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateEmployeeValidator = exports.assignCustomerValidator = exports.createEmployeesValidator = exports.customeAgeValidator = void 0;
+exports.updateEmployeeValidator = exports.assignCustomerValidator = exports.createEmployeesValidator = void 0;
 const express_validator_1 = require("express-validator");
-const customeAgeValidator = (value) => {
-    if (+value < 18) {
-        throw new Error("Age must be greater than 18");
-    }
-    else if (+value > 80) {
-        throw new Error("Age must be less than 60");
-    }
-    return true;
-};
-exports.customeAgeValidator = customeAgeValidator;
+const BaseCustomValidator_1 = require("../BaseCustomValidator");
 exports.createEmployeesValidator = [
     (0, express_validator_1.body)("name")
         .isString()
@@ -29,7 +20,7 @@ exports.createEmployeesValidator = [
         .isLength({ min: 10 })
         .withMessage("Phone less than 10")
         .notEmpty(),
-    (0, express_validator_1.body)("age").custom(exports.customeAgeValidator).isInt().notEmpty(),
+    (0, express_validator_1.body)("age").custom(BaseCustomValidator_1.customeAgeValidator).isInt().notEmpty(),
     (0, express_validator_1.body)("hireDate").notEmpty().withMessage("Hire date is required"),
     (0, express_validator_1.body)("salary")
         .custom((value) => {
@@ -49,12 +40,8 @@ exports.assignCustomerValidator = [
 exports.updateEmployeeValidator = [
     (0, express_validator_1.body)("name").isLength({ min: 2 }).withMessage("Name less than 2").notEmpty(),
     (0, express_validator_1.body)("email").isEmail().withMessage("Email not valid").notEmpty(),
-    (0, express_validator_1.body)("phone")
-        .isLength({ min: 10 })
-        .withMessage("Phone less than 10")
-        .isInt()
-        .notEmpty(),
-    (0, express_validator_1.body)("age").custom(exports.customeAgeValidator).isInt().notEmpty(),
+    (0, express_validator_1.body)("phone").custom(BaseCustomValidator_1.customePhoneValidator).isInt().notEmpty(),
+    (0, express_validator_1.body)("age").custom(BaseCustomValidator_1.customeAgeValidator).isInt().notEmpty(),
     (0, express_validator_1.body)("hireDate").notEmpty().withMessage("Hire date is required"),
     (0, express_validator_1.body)("salary").isInt().notEmpty().withMessage("Salary is required"),
 ];

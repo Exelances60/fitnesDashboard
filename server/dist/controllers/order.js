@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.orderCompleted = exports.updateOrder = exports.getOrders = exports.createOrder = void 0;
+exports.createOrderInvoice = exports.orderCompleted = exports.updateOrder = exports.getOrders = exports.createOrder = void 0;
 require("dotenv/config");
 const calculatePreviousMonthSales_1 = require("../services/businessLogic/calculatePreviousMonthSales");
 const OrderServices_1 = require("../services/OrderServices");
+const PDFServices_1 = require("../services/PDFServices");
 const createOrder = async (req, res, next) => {
     try {
         /*    const errors = validationResult(req);
@@ -42,13 +43,19 @@ const getOrders = async (req, res, next) => {
         const increasePercentageForSales = (0, calculatePreviousMonthSales_1.calculatePreviousMonthSales)(ordersWithProducts);
         const previousMonthAmount = (0, calculatePreviousMonthSales_1.calculatePreviousMonthAmount)(ordersWithProducts);
         const increasePercentageForCompletedSales = (0, calculatePreviousMonthSales_1.calculatePreviosMonthComplateSales)(ordersWithProducts);
+        const currentMonthAmount = (0, calculatePreviousMonthSales_1.calculateCurrentMonthAmount)(ordersWithProducts);
+        const increasePercentageForAmount = ((ordersWithProducts.length - previousMonthAmount) /
+            previousMonthAmount) *
+            100 ===
+            Infinity
+            ? currentMonthAmount * 100
+            : ((ordersWithProducts.length - previousMonthAmount) /
+                previousMonthAmount) *
+                100;
         const totalSalesPrice = ordersWithProducts.reduce((acc, order) => acc + order.totalPrice, 0);
         const totalSalesCompleted = ordersWithProducts
             .filter((order) => order.status === "Completed")
             .reduce((acc, order) => acc + order.totalPrice, 0);
-        const increasePercentageForAmount = ((ordersWithProducts.length - previousMonthAmount) /
-            previousMonthAmount) *
-            100;
         res.status(200).json({
             message: "Fetched orders successfully.",
             orders: ordersWithProducts,
@@ -110,4 +117,22 @@ const orderCompleted = async (req, res, next) => {
     }
 };
 exports.orderCompleted = orderCompleted;
+const createOrderInvoice = async (req, res, next) => {
+    try {
+        const { htmlString } = req.body;
+        const pdf = await new PDFServices_1.PDFServices().htmlToPdf(htmlString);
+        res.status(200).json({
+            message: "Invoice created successfully!",
+            status: 200,
+            pdf,
+        });
+    }
+    catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+};
+exports.createOrderInvoice = createOrderInvoice;
 //# sourceMappingURL=order.js.map

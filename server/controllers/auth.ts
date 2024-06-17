@@ -40,7 +40,6 @@ export const signup = async (
     const qrCodeID = await new UserServices().signUpOwner(req);
     res.status(201).json({
       message: "Owner create Request sent.",
-      qrCodeID: qrCodeID,
     });
   } catch (err: any) {
     if (!err.statusCode) {
@@ -94,25 +93,6 @@ export const uploadOwnerImage = async (
     res.status(201).json({
       message: "Owner Image uploaded.",
       ownerImage: responseOwner.ownerImage,
-    });
-  } catch (error: any) {
-    if (!error.statusCode) {
-      error.statusCode = 500;
-    }
-    next(error);
-  }
-};
-
-export const getPeddingRegister = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const peddingRegister = await new UserServices().getPeddingRegister(req);
-    res.status(200).json({
-      message: "Pedding Register fetched.",
-      peddingRegister: peddingRegister,
     });
   } catch (error: any) {
     if (!error.statusCode) {

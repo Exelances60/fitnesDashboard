@@ -20,8 +20,8 @@ class OrderServices {
             if (!product)
                 return (0, throwNotFoundError_1.default)("Product not found.");
             product.amount = product.amount - req.body.amount;
-            await product.updateOne(product);
-            const totalPrice = req.body.price * req.body.amount;
+            await this.productRepository.update(req.body.productId, product);
+            const totalPrice = (req.body.price * req.body.amount * 1.08).toFixed(2);
             const order = await this.orderRepository.create({
                 totalPrice,
                 orderOwnerEmail: req.body.email,
@@ -36,7 +36,7 @@ class OrderServices {
             if (!owner)
                 return (0, throwNotFoundError_1.default)("Owner not found.");
             owner.orders.push(order._id);
-            await owner.updateOne(owner);
+            await this.ownerRepository.update(owner._id, owner);
             return order;
         }
         catch (error) {
@@ -72,6 +72,9 @@ class OrderServices {
                 totalPrice: order.totalPrice,
                 amountOrder: order.amount,
                 orderId: order._id,
+                orderImages: order.products
+                    .map((product) => product.imageUrl)
+                    .join(", "),
             }));
             return { ordersWithProducts, chartsData };
         }
@@ -98,7 +101,7 @@ class OrderServices {
             if (order.status === "Completed")
                 return (0, throwNotFoundError_1.default)("Order already completed.");
             order.status = "Completed";
-            await order.updateOne(order);
+            await this.orderRepository.update(order._id, order);
         }
         catch (error) {
             throw new Error(error.message);

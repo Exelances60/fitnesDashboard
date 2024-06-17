@@ -1,5 +1,4 @@
 import { useRouter } from "next/navigation";
-import { deleteCookie } from "cookies-next";
 import { useAppDispatch } from "@/store/store";
 import { logout } from "@/store/slices/userSlice";
 import { message } from "antd";
@@ -51,8 +50,8 @@ const ProfileCardOption = ({
 
   const handleLogout = () => {
     dispatch(logout());
-    deleteCookie("token");
     message.success("Logout successfully");
+    router.refresh();
     router.push("/");
   };
 

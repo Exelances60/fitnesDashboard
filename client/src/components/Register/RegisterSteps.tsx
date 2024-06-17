@@ -6,7 +6,6 @@ import RegisterProfileSteps from "./RegisterProfileSteps";
 import { QuestionOutlined } from "@ant-design/icons";
 import { TourProps } from "antd/lib";
 import axiosClient from "@/utils/AxiosClient";
-import RegisterApplication from "./RegisterApplication";
 import RegisterFinishSteps from "./RegisterFinishSteps";
 import { useRouter } from "next/navigation";
 
@@ -24,8 +23,6 @@ const RegisterSteps = () => {
   const accountRef = useRef(null);
   const profileRef = useRef(null);
   const finishRef = useRef(null);
-  const applicationRef = useRef(null);
-  const applicationInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   const [current, setCurrent] = useState("Account");
@@ -51,12 +48,6 @@ const RegisterSteps = () => {
       target: () => finishRef.current,
       description:
         "This tab is the final step to finish the registration process and you must see the qr code and using qr code your tracking the registration process",
-    },
-    {
-      title: "Application",
-      target: () => applicationRef.current,
-      description:
-        "This tab is for checking the application status using the application ID",
     },
   ];
 
@@ -97,11 +88,11 @@ const RegisterSteps = () => {
   return (
     <>
       <Spin spinning={loading} fullscreen />
-      <div className="flex flex-col items-center justify-center gap-2 w-full">
+      <div className="flex flex-col gap-2 w-full">
         <Segmented
           size="large"
           value={current}
-          options={["Account", "Profile", "Finish", "Application"]}
+          options={["Account", "Profile", "Finish"]}
           onChange={(value) => {
             setCurrent(value);
           }}
@@ -130,12 +121,6 @@ const RegisterSteps = () => {
 
           <RegisterFinishSteps current={current} ref={finishRef} />
 
-          <RegisterApplication
-            current={current}
-            inputRef={applicationInputRef}
-            divRef={applicationRef}
-          />
-
           <Tour
             open={open}
             onClose={() => setOpen(false)}
@@ -147,8 +132,6 @@ const RegisterSteps = () => {
                 setCurrent("Profile");
               } else if (index === 2) {
                 setCurrent("Finish");
-              } else if (index === 3) {
-                setCurrent("Application");
               }
             }}
           />

@@ -14,6 +14,7 @@ export const fetchProducts = async () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        cache: "no-cache",
       }
     );
     const data = await response.json();

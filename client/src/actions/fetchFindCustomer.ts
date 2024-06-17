@@ -15,6 +15,7 @@ export const fetchFindCustomer = async (customerId: string) => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        cache: "no-cache",
       }
     );
 

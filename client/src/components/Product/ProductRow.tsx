@@ -69,9 +69,6 @@ const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
         >
           Edit
         </Button>
-        <Button type="primary" ghost>
-          Details
-        </Button>
         <Button
           className="ml-2"
           type="primary"

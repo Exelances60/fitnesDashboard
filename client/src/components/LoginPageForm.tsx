@@ -72,7 +72,7 @@ const LoginPageForm = () => {
               type="text"
               placeholder="Email"
               value={""}
-              className="w-full h-[50px] px-[20px] bg-[#F0F2F5] rounded-[10px]"
+              className="w-full h-[50px] px-[10px] bg-[#F0F2F5] rounded-[10px]"
             />
           </Form.Item>
 
@@ -85,7 +85,7 @@ const LoginPageForm = () => {
               type="password"
               placeholder="Password"
               value={""}
-              className="w-full h-[50px] px-[20px] bg-[#F0F2F5] rounded-[10px]"
+              className="w-full h-[50px] px-[10px] bg-[#F0F2F5] rounded-[10px]"
             />
           </Form.Item>
           <Button

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
+import { deleteCookie } from "cookies-next";
 interface UserState {
   user: OwnerType | null;
   menuKeys: "dashboard" | "users" | "products" | "orders" | "settings";
@@ -22,6 +23,7 @@ export const userSlice = createSlice({
     },
     logout: (state) => {
       state.user = null;
+      deleteCookie("token");
       state.menuKeys = "dashboard";
     },
   },

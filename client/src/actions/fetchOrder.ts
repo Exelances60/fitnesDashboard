@@ -15,6 +15,7 @@ const fetchOrder = async () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        cache: "no-cache",
       }
     );
     if (!response.ok) {

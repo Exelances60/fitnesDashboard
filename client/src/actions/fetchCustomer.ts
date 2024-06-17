@@ -20,6 +20,7 @@ export const fetchCustomer = async () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        cache: "no-cache",
       }
     );
 

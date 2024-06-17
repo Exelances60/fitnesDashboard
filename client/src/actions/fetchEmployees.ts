@@ -15,6 +15,7 @@ export const fetchEmplooyes = async () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        cache: "no-cache",
       }
     );
 

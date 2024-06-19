@@ -8,7 +8,7 @@ import { persistReducer, persistStore } from "redux-persist";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["navigationReducer"],
+  whitelist: ["navigationReducer", "dashboardReducer"],
   debug: false,
 };
 

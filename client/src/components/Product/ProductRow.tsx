@@ -49,6 +49,13 @@ const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
       <TableCell>{renderCurrency(product.price)}</TableCell>
       <TableCell>{product.amount} pcs</TableCell>
       <TableCell>{product.category}</TableCell>
+      <TableCell>
+        {new Date(product.createdAt).toLocaleString("tr-TR", {
+          year: "numeric",
+          month: "numeric",
+          day: "2-digit",
+        })}
+      </TableCell>
       <TableCell className="md:w-[200px]">
         <Button
           className="mr-2"

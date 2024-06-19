@@ -27,6 +27,7 @@ const ProductTable = ({
             <TableHeaderCell>Price</TableHeaderCell>
             <TableHeaderCell>Amount</TableHeaderCell>
             <TableHeaderCell>Category</TableHeaderCell>
+            <TableHeaderCell>Created At</TableHeaderCell>
             <TableHeaderCell>Action</TableHeaderCell>
           </TableRow>
         </TableHead>

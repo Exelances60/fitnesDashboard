@@ -19,7 +19,7 @@ const treeData = [
         title: "Product Amount",
       },
       {
-        value: "Product Stock",
+        value: "productStock",
         title: "Product Stock",
       },
     ],
@@ -83,7 +83,6 @@ const DashboardChartsSelect = ({
   const onChange = (newValue: string) => {
     dispatch(setChartsType(newValue));
   };
-
   const fetchChartsData = async (value: string) => {
     try {
       const response = await axiosClient.get(`/dashboard/charts/${value}`);
@@ -107,7 +106,7 @@ const DashboardChartsSelect = ({
   }, [selectValue]);
 
   return (
-    <div className="flex justify-end">
+    <div className="flex justify-end pr-2">
       <TreeSelect
         className="lg:w-1/3 w-full"
         value={selectValue}

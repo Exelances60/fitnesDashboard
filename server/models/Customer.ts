@@ -25,6 +25,8 @@ export interface ICustomer extends Document {
   ownerId: Types.ObjectId;
   profilePicture: string;
   calendarAcv: Types.ObjectId[];
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const customerSchema = new ModelSchema<ICustomer>(

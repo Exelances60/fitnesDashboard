@@ -66,7 +66,7 @@ const EmployeesAddDrawer = ({ setEmployeeData }: EmployeesAddDrawerProps) => {
           form={form}
           onFinish={onFinish}
         >
-          <EmployeesAddForm editMode={false} form={form} />
+          <EmployeesAddForm editMode={false} />
         </Form>
       </Spin>
     </div>

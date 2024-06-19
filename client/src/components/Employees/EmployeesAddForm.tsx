@@ -50,14 +50,9 @@ const CustomerCard = ({
 interface EmployeesAddFormProps {
   editMode: boolean;
   employee?: IEmployee;
-  form: FormInstance<any>;
 }
 
-const EmployeesAddForm = ({
-  editMode,
-  employee,
-  form,
-}: EmployeesAddFormProps) => {
+const EmployeesAddForm = ({ editMode, employee }: EmployeesAddFormProps) => {
   const { currentCurrencySymbol } = useCurrencyFormatter();
   const ProfilePictureUpload = () => (
     <Form.Item label="Profile Picture" name="profilePicture">
@@ -189,12 +184,7 @@ const EmployeesAddForm = ({
           required
           rules={justRequired}
         >
-          <Upload
-            name="documents"
-            listType="picture-card"
-            maxCount={6}
-            fileList={form.getFieldValue("documents") || []}
-          >
+          <Upload name="documents" listType="picture-card" maxCount={6}>
             <div>
               <div>+</div>
             </div>

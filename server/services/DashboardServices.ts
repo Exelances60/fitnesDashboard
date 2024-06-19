@@ -5,44 +5,29 @@ import { EmployeesServices } from "./EmployeesServices";
 import { ISameMonth } from "../types/Order";
 import { IOrder } from "../models/Order";
 import { IProduct } from "../models/Product";
+import { IEmployee } from "../models/Employees";
+import { CustomerServices } from "./CustomerServices";
+import { ICustomer } from "../models/Customer";
 
-const mappedTotalSales = <T extends { createdAt: Date; totalPrice: number }>(
+const mappedTotal = <
+  T extends { createdAt: Date; totalPrice?: number; amount?: number }
+>(
   data: T[],
-  getValue: (value: T) => number
+  getFilter: (value: T) => any,
+  getValueFuc: (value: T) => number
 ) => {
   const sameMonth: ISameMonth[] = data.reduce((acc, value) => {
-    const date = new Date(value.createdAt).toLocaleString("tr-TR", {
+    const date = new Date(getFilter(value)).toLocaleDateString("en-US", {
       month: "2-digit",
       year: "numeric",
     });
     const monthSplit = date.split(" ")[0];
     const monthEntry = acc.find((month) => month.month === monthSplit);
-
+    const getValue = getValueFuc(value);
     if (monthEntry) {
-      monthEntry.total += value.totalPrice;
+      monthEntry.total += getValue;
     } else {
-      acc.push({ month: monthSplit, total: value.totalPrice });
-    }
-    return acc;
-  }, [] as ISameMonth[]);
-
-  return sameMonth;
-};
-
-const mappedTotalAmount = <T extends { createdAt: Date; amount: number }>(
-  data: T[]
-) => {
-  const sameMonth: ISameMonth[] = data.reduce((acc, value) => {
-    const date = new Date(value.createdAt).toLocaleString("tr-TR", {
-      month: "2-digit",
-      year: "numeric",
-    });
-    const monthSplit = date.split(" ")[0];
-    const monthEntry = acc.find((month) => month.month === monthSplit);
-    if (monthEntry) {
-      monthEntry.total += 1;
-    } else {
-      acc.push({ month: monthSplit, total: 1 });
+      acc.push({ month: monthSplit, total: getValue });
     }
     return acc;
   }, [] as ISameMonth[]);
@@ -54,11 +39,13 @@ export class DashboardServices {
   private productServices: ProductServices;
   private orderServices: OrderServices;
   private employeesServices: EmployeesServices;
+  private customerServices: CustomerServices;
 
   constructor() {
     this.productServices = new ProductServices();
     this.orderServices = new OrderServices();
     this.employeesServices = new EmployeesServices();
+    this.customerServices = new CustomerServices();
   }
 
   async getDashboard(req: Request) {
@@ -95,25 +82,93 @@ export class DashboardServices {
           chartData = data.ordersWithProducts.filter(
             (order) => order.status === "Completed"
           );
-          sameMonth = mappedTotalSales<IOrder>(chartData);
+          sameMonth = mappedTotal<IOrder>(
+            chartData,
+            (order) => order.createdAt,
+            (order) => order.totalPrice
+          );
         }
         if (chartType === "orderAmount") {
           chartData = data.ordersWithProducts;
-          sameMonth = mappedTotalAmount<IOrder>(chartData);
+          sameMonth = mappedTotal<IOrder>(
+            chartData,
+            (order) => order.createdAt,
+            (order) => 1
+          );
         }
         if (chartType === "orderSales") {
           chartData = data.ordersWithProducts;
-          sameMonth = mappedTotalSales<IOrder>(chartData);
+          sameMonth = mappedTotal<IOrder>(
+            chartData,
+            (order) => order.createdAt,
+            (order) => order.totalPrice
+          );
         }
       }
+
       if (chartType.includes("product")) {
         const data = await this.productServices.getProducts(req);
         if (chartType.includes("productAmount")) {
           chartData = data;
-          sameMonth = mappedTotalAmount<IProduct>(chartData);
+          sameMonth = mappedTotal<IProduct>(
+            chartData,
+            (product) => product.createdAt,
+            (product) => 1
+          );
         }
-        if (chartType.includes("productSales")) {
+        if (chartType.includes("productStock")) {
           chartData = data;
+          sameMonth = mappedTotal<IProduct>(
+            chartData,
+            (product) => product.createdAt,
+            (product) => product.amount
+          );
+        }
+      }
+
+      if (chartType.includes("employee")) {
+        const data = await this.employeesServices.getEmployees(
+          req.userId as string
+        );
+
+        if (chartType.includes("employeeAmount")) {
+          chartData = data;
+          sameMonth = mappedTotal<IEmployee>(
+            chartData,
+            (employee) => employee.hireDate,
+            (employee) => 1
+          );
+        }
+
+        if (chartType.includes("employeeSalary")) {
+          chartData = data;
+          sameMonth = mappedTotal<IEmployee>(
+            chartData,
+            (employee) => employee.hireDate,
+            (employee) => employee.salary
+          );
+        }
+      }
+
+      if (chartType.includes("customer")) {
+        const data = await this.customerServices.getCustomer(
+          req.userId as string
+        );
+        if (chartType.includes("customerAmount")) {
+          chartData = data;
+          sameMonth = mappedTotal<ICustomer>(
+            chartData,
+            (customer) => customer.createdAt,
+            (customer) => 1
+          );
+        }
+        if (chartType.includes("customerSales")) {
+          chartData = data;
+          sameMonth = mappedTotal<ICustomer>(
+            chartData,
+            (customer) => customer.createdAt,
+            (customer) => customer.membershipPrice
+          );
         }
       }
 

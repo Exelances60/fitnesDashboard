@@ -1,35 +1,57 @@
-"use client";
-import { AreaChart, Card } from "@tremor/react";
 import React from "react";
+import { AreaChart, LineChart, BarChart } from "@tremor/react";
+import { useAppSelector } from "@/store/store";
+import {
+  selectChartsMode,
+  selectChartsType,
+} from "@/store/slices/dashboardSlice";
 
-const data = [
-  {
-    date: "Jan 20",
-    value: 100,
-  },
-  {
-    date: "Feb 23",
-    value: 120,
-  },
-  {
-    date: "Enes 30",
-    value: 130,
-  },
-];
+interface DashboardChartsProps {
+  data: {
+    date: string;
+    value: number;
+  }[];
+}
 
-const DashboardCharts = () => {
+const DashboardCharts = ({ data }: DashboardChartsProps) => {
+  const selectedView = useAppSelector(selectChartsMode);
+  console.log(selectedView);
   return (
-    <Card>
-      <AreaChart
-        className="h-96 w-full"
-        data={data}
-        colors={["indigo-300"]}
-        index="date"
-        yAxisWidth={30}
-        categories={["value"]}
-        title="Sales"
-      ></AreaChart>
-    </Card>
+    <>
+      {selectedView === "area" && (
+        <AreaChart
+          className="h-96 w-full"
+          data={data}
+          colors={["indigo-300"]}
+          index="date"
+          yAxisWidth={60}
+          categories={["value"]}
+          title="Dashboard Charts"
+        ></AreaChart>
+      )}
+      {selectedView === "line" && (
+        <LineChart
+          className="h-96 w-full"
+          data={data}
+          colors={["indigo-300"]}
+          index="date"
+          yAxisWidth={60}
+          categories={["value"]}
+          title="Dashboard Charts"
+        ></LineChart>
+      )}
+      {selectedView === "bar" && (
+        <BarChart
+          className="h-96 w-full"
+          data={data}
+          colors={["indigo-300"]}
+          index="date"
+          yAxisWidth={60}
+          categories={["value"]}
+          title="Dashboard Charts"
+        ></BarChart>
+      )}
+    </>
   );
 };
 

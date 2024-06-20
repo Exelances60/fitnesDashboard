@@ -37,4 +37,5 @@ router.post("/create-order", isAuth_1.isAuth, Order_1.createOrderValidator, orde
 router.get("/get-orders", isAuth_1.isAuth, orderController.getOrders);
 router.put("/update-order", isAuth_1.isAuth, orderController.updateOrder);
 router.post("/ordercompleted", isAuth_1.isAuth, orderController.orderCompleted);
+router.post("/createOrderInvoice", isAuth_1.isAuth, orderController.createOrderInvoice);
 //# sourceMappingURL=order.js.map

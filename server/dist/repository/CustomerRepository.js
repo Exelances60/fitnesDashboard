@@ -10,11 +10,11 @@ class CustomerRepository extends Repository_1.default {
     constructor() {
         super(Customer_1.default);
     }
-    async findOwnerIdWithPopulate(id, populateModel, populateField) {
+    async findOwnerIdWithPopulate(id) {
         try {
             const result = await Customer_1.default.find({ ownerId: id }).populate({
-                path: populateModel,
-                select: populateField,
+                path: "coachPT",
+                select: "name email phone profilePicture",
             });
             if (!result) {
                 throw new Error("Not found");

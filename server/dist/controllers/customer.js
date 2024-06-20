@@ -8,12 +8,11 @@ const express_validator_1 = require("express-validator");
 const throwValidationError_1 = __importDefault(require("../utils/err/throwValidationError"));
 const throwBadRequestError_1 = __importDefault(require("../utils/err/throwBadRequestError"));
 const CustomerServices_1 = require("../services/CustomerServices");
+const printValidatorErrors_1 = require("../utils/printValidatorErrors");
 const addCustomer = async (req, res, next) => {
     try {
         const errors = (0, express_validator_1.validationResult)(req);
-        if (!errors.isEmpty()) {
-            (0, throwValidationError_1.default)("Validation failed, entered data is incorrect.");
-        }
+        (0, printValidatorErrors_1.printValidatorErrors)(errors);
         const responseCustomer = await new CustomerServices_1.CustomerServices().addCustomer(req);
         res.status(201).json({
             message: "Customer created successfully!",
@@ -31,7 +30,7 @@ const getCustomer = async (req, res, next) => {
         const ownerId = req.userId;
         if (!ownerId)
             return (0, throwBadRequestError_1.default)("Owner not found.");
-        const fetchedCustomer = new CustomerServices_1.CustomerServices().getCustomer(ownerId);
+        const fetchedCustomer = await new CustomerServices_1.CustomerServices().getCustomer(ownerId);
         res.status(200).json({
             message: "Fetched customer successfully!",
             customers: fetchedCustomer,
@@ -46,6 +45,7 @@ exports.getCustomer = getCustomer;
 const updateCustomer = async (req, res, next) => {
     try {
         const errors = (0, express_validator_1.validationResult)(req);
+        (0, printValidatorErrors_1.printValidatorErrors)(errors);
         if (!errors.isEmpty()) {
             (0, throwValidationError_1.default)("Validation failed, entered data is incorrect.");
         }

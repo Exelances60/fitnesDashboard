@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Card } from "@tremor/react";
-import { Collapse, CollapseProps } from "antd";
+import { Collapse, CollapseProps, Empty } from "antd";
 import { FilePdfOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "@/store/store";
 import { setSelectedInvoiceData } from "@/store/slices/invoiceSlice";
@@ -64,7 +64,14 @@ const InvoiceContainer = ({ data }: IInvoiceContainerProps) => {
 
   return (
     <Card className="flex flex-col gap-2 min-h-[810px]">
-      <Collapse items={items} />
+      {data.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-full">
+          <h1 className="text-2xl">No Invoice Found</h1>
+          <Empty />
+        </div>
+      ) : (
+        <Collapse items={items} />
+      )}
     </Card>
   );
 };

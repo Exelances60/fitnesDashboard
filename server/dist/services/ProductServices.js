@@ -24,16 +24,17 @@ class ProductServices {
             const dowlandURL = await FirebaseServices_1.default.uploadImageToStorage(req.file, "products/");
             const product = await this.productRepository.create({
                 ...req.body,
+                ownerId: req.userId,
                 name: req.body.productName,
                 imageUrl: dowlandURL,
                 price: +req.body.price,
                 amount: +req.body.amount,
             });
-            const owner = await this.ownerRepository.findById(req.body.ownerId);
+            const owner = await this.ownerRepository.findById(req.body.ownerId || req.userId);
             if (!owner)
                 throw new Error("Owner not found");
             owner.product.push(product._id);
-            await owner.updateOne(owner);
+            await this.ownerRepository.update(owner._id, owner);
             return product;
         }
         catch (error) {
@@ -65,7 +66,7 @@ class ProductServices {
                 productId: product._id,
             });
             const ordersHaveProductImage = fetchedOrders.filter((order) => order.orderImage === product.imageUrl);
-            const result = await this.productRepository.delete(product._id.toString());
+            const result = await this.productRepository.delete(product._id);
             if (!result)
                 return (0, throwNotFoundError_1.default)("Product not found");
             if (!ordersHaveProductImage.length) {
@@ -74,7 +75,7 @@ class ProductServices {
             const filtredProduct = owner.product.filter((prod) => {
                 return prod.toString() !== product._id.toString();
             });
-            await owner.updateOne({
+            await this.ownerRepository.update(owner._id, {
                 product: filtredProduct,
             });
         }
@@ -98,27 +99,24 @@ class ProductServices {
             if (imageUrl !== product.imageUrl && product.imageUrl) {
                 FirebaseServices_1.default.deleteImageFromStorage(product.imageUrl);
             }
-            await product.updateOne({
+            const newProduct = await this.productRepository.update(product._id, {
                 ...req.body,
                 imageUrl,
                 price: +req.body.price,
                 amount: +req.body.amount,
             });
-            return product;
+            return newProduct;
         }
         catch (error) {
             throw new Error(error.message);
         }
     }
-    async addProductCategory(req) {
+    async getProduct(req) {
         try {
-            if (!req.body.category)
-                return (0, throwValidationError_1.default)("Category must be filled.");
-            const owner = await this.ownerRepository.findById(req.body.ownerId);
-            if (!owner)
-                return (0, throwNotFoundError_1.default)("Owner not found.");
-            owner.productCategory?.push(req.body.category);
-            await owner.updateOne(owner);
+            const product = await this.productRepository.findById(req.params.productId);
+            if (!product)
+                return (0, throwNotFoundError_1.default)("Product not found.");
+            return product;
         }
         catch (error) {
             throw new Error(error.message);

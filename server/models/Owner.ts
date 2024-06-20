@@ -25,6 +25,7 @@ const ownerSchema = new ModelSchema<IOwner>({
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   password: {
     type: String,

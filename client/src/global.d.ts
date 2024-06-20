@@ -26,6 +26,7 @@ declare namespace Global {
     imageUrl: string;
     ownerId: string;
     category: string;
+    createdAt: string;
   };
 
   export type ordersType = {

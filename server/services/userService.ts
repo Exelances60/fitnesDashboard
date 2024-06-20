@@ -12,11 +12,9 @@ import { Types } from "mongoose";
 
 export class UserServices {
   private ownerRepository: OwnerRepository;
-  private peddingAccountRepository: PeddingAccountRepository;
 
   constructor() {
     this.ownerRepository = new OwnerRepository();
-    this.peddingAccountRepository = new PeddingAccountRepository();
   }
 
   /**
@@ -133,38 +131,20 @@ export class UserServices {
     try {
       const bcryptPassword = await jwtServices.hashPassword(req.body.password);
       req.body.password = bcryptPassword;
-      if (req.body.ownerImage && req.file) {
+      if (req.file) {
         const uploadImage = await firebaseStorageServices.uploadImageToStorage(
           req.file,
-          "pendingOwner/"
+          "owner/"
         );
         req.body.ownerImage = uploadImage;
       }
-      const pendingOwner =
-        await this.peddingAccountRepository.create<IPendingAccount>(req.body);
-      return pendingOwner._id;
-    } catch (error: any) {
-      throw new Error(error);
-    }
-  }
-
-  async getPeddingRegister(req: Request) {
-    try {
-      const pedingOwner =
-        await this.peddingAccountRepository.findById<IPendingAccount>(
-          req.params.registerId
-        );
-      if (!pedingOwner) throw throwNotFoundError("Pedding Owner not found!");
-      const returnOwnerPending = {
-        email: pedingOwner.email,
-        companyName: pedingOwner.companyName,
-        address: pedingOwner.address,
-        phone: pedingOwner.phone,
-        ownerImage: pedingOwner.ownerImage,
-        _id: pedingOwner._id,
-        status: pedingOwner.status,
-      } as IPendingAccount;
-      return returnOwnerPending;
+      const newOwner = await this.ownerRepository.create<IOwner>({
+        ...req.body,
+        role: "owner",
+        ownerImage: req.body.ownerImage,
+      });
+      if (!newOwner) return throwBadRequestError("Owner not created!");
+      return newOwner._id;
     } catch (error: any) {
       throw new Error(error);
     }

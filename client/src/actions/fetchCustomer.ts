@@ -20,9 +20,9 @@ export const fetchCustomer = async () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        cache: "no-cache",
       }
     );
-
     if (!response.ok) {
       const message = await response.json();
       throw new Error(message.errorMessage);

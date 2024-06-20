@@ -1,10 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addProductCategory = exports.updateProduct = exports.deleteProduct = exports.getProducts = exports.addProduct = void 0;
+exports.getProduct = exports.updateProduct = exports.deleteProduct = exports.getProducts = exports.addProduct = void 0;
 require("dotenv/config");
 const ProductServices_1 = require("../services/ProductServices");
+const express_validator_1 = require("express-validator");
+const printValidatorErrors_1 = require("../utils/printValidatorErrors");
 const addProduct = async (req, res, next) => {
     try {
+        const errors = (0, express_validator_1.validationResult)(req);
+        (0, printValidatorErrors_1.printValidatorErrors)(errors);
         const result = await new ProductServices_1.ProductServices().createProduct(req);
         res.status(201).json({
             message: "Product created successfully!",
@@ -52,8 +56,12 @@ const deleteProduct = async (req, res, next) => {
 exports.deleteProduct = deleteProduct;
 const updateProduct = async (req, res, next) => {
     try {
-        await new ProductServices_1.ProductServices().updateProduct(req);
-        res.status(200).json({ message: "Product updated!", status: 200 });
+        const errors = (0, express_validator_1.validationResult)(req);
+        (0, printValidatorErrors_1.printValidatorErrors)(errors);
+        const product = await new ProductServices_1.ProductServices().updateProduct(req);
+        res
+            .status(200)
+            .json({ message: "Product updated!", status: 200, product: product });
     }
     catch (err) {
         if (!err.statusCode) {
@@ -63,12 +71,13 @@ const updateProduct = async (req, res, next) => {
     }
 };
 exports.updateProduct = updateProduct;
-const addProductCategory = async (req, res, next) => {
+const getProduct = async (req, res, next) => {
     try {
-        await new ProductServices_1.ProductServices().addProductCategory(req);
-        res.status(201).json({
-            message: "Category added successfully!",
-            status: 201,
+        const product = await new ProductServices_1.ProductServices().getProduct(req);
+        res.status(200).json({
+            message: "Product fetched successfully.",
+            product: product,
+            status: 200,
         });
     }
     catch (error) {
@@ -78,5 +87,5 @@ const addProductCategory = async (req, res, next) => {
         next(error);
     }
 };
-exports.addProductCategory = addProductCategory;
+exports.getProduct = getProduct;
 //# sourceMappingURL=product.js.map

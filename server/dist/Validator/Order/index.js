@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createOrderValidator = void 0;
 const express_validator_1 = require("express-validator");
 const Product_1 = __importDefault(require("../../models/Product"));
+const BaseCustomValidator_1 = require("../BaseCustomValidator");
 exports.createOrderValidator = [
     (0, express_validator_1.body)("productName")
         .isString()
@@ -46,9 +47,7 @@ exports.createOrderValidator = [
         .notEmpty()
         .withMessage("Address must be not empty"),
     (0, express_validator_1.body)("phone")
-        .isString()
-        .isLength({ min: 10 })
-        .withMessage("Phone length must be greater than 10")
+        .custom(BaseCustomValidator_1.customePhoneValidator)
         .notEmpty()
         .withMessage("Phone must be not empty"),
 ];

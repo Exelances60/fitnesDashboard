@@ -16,60 +16,59 @@ const RegisterProfileSteps = React.forwardRef<
 >(({ current }, ref) => {
   return (
     <>
-      {current === "Profile" && (
-        <div ref={ref}>
-          <motion.div
-            initial={{ opacity: 0, x: 100 }}
-            animate={{
-              opacity: 1,
-              x: 0,
-            }}
-            exit={{ opacity: 0, x: -100 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="w-full flex justify-center items-center">
-              <Form.Item
-                name="ownerImage"
-                className="w-full h-full  border-gray-300 rounded-lg"
-                getValueFromEvent={(e) => {
-                  if (Array.isArray(e)) {
-                    return e;
-                  }
-                  return e && e.fileList;
-                }}
-              >
-                <Dragger
-                  name="file"
-                  multiple={false}
-                  maxCount={1}
-                  className="w-full h-full"
-                >
-                  <div className="flex flex-col items-center justify-center gap-2">
-                    <CloudUploadOutlined
-                      className="text-4xl"
-                      twoToneColor="#1890ff"
-                    />
-                    <p className="text-sm text-gray-500">Upload Company Logo</p>
-                  </div>
-                </Dragger>
-              </Form.Item>
-            </div>
+      <div ref={ref}>
+        <motion.div
+          initial={{ opacity: 0, x: 100 }}
+          animate={{
+            opacity: 1,
+            x: 0,
+          }}
+          exit={{ opacity: 0, x: -100 }}
+          transition={{ duration: 0.3 }}
+          className={current === "Profile" ? "block" : "hidden"}
+        >
+          <div className="w-full flex justify-center items-center">
             <Form.Item
-              name="companyName"
-              label="Company Name"
-              rules={[...justRequired]}
+              name="ownerImage"
+              className="w-full h-full  border-gray-300 rounded-lg"
+              getValueFromEvent={(e) => {
+                if (Array.isArray(e)) {
+                  return e;
+                }
+                return e && e.fileList;
+              }}
             >
-              <Input placeholder="Enter The Company Name" />
+              <Dragger
+                name="file"
+                multiple={false}
+                maxCount={1}
+                className="w-full h-full"
+              >
+                <div className="flex flex-col items-center justify-center gap-2">
+                  <CloudUploadOutlined
+                    className="text-4xl"
+                    twoToneColor="#1890ff"
+                  />
+                  <p className="text-sm text-gray-500">Upload Company Logo</p>
+                </div>
+              </Dragger>
             </Form.Item>
-            <Form.Item name="address" label="Address" rules={[...justRequired]}>
-              <Input placeholder="Enter The Address" />
-            </Form.Item>
-            <Form.Item name="phone" label="Phone" rules={[...phoneRules]}>
-              <Input placeholder="Enter The Phone" />
-            </Form.Item>
-          </motion.div>
-        </div>
-      )}
+          </div>
+          <Form.Item
+            name="companyName"
+            label="Company Name"
+            rules={[...justRequired]}
+          >
+            <Input placeholder="Enter The Company Name" />
+          </Form.Item>
+          <Form.Item name="address" label="Address" rules={[...justRequired]}>
+            <Input placeholder="Enter The Address" />
+          </Form.Item>
+          <Form.Item name="phone" label="Phone" rules={[...phoneRules]}>
+            <Input placeholder="Enter The Phone" />
+          </Form.Item>
+        </motion.div>
+      </div>
     </>
   );
 });

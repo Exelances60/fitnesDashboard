@@ -37,11 +37,11 @@ const ProfileCardNavi = () => {
             src={userInfo?.ownerImage}
             className="shadow-lg cursor-pointer  ease-in duration-300"
           />
-
           <motion.ul
             initial={wrapperVariants.closed}
             variants={wrapperVariants}
             style={{ originY: "top", translateX: "-50%" }}
+            onMouseLeave={() => setOpen(false)}
             className="flex flex-col gap-2 p-2 rounded-lg bg-white shadow-xl absolute top-[110%] -left-[100%] w-48 overflow-hidden"
           >
             <ProfileCardOption

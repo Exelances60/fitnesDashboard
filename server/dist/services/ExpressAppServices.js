@@ -10,7 +10,13 @@ const routes_1 = require("../routes");
 exports.default = async (app) => {
     app.use(body_parser_1.default.json());
     app.use(body_parser_1.default.urlencoded({ extended: true }));
-    app.use((0, cors_1.default)());
+    const corsOptions = {
+        origin: "http://localhost:3000" || "http://localhost:3000",
+        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+        preflightContinue: false,
+        optionsSuccessStatus: 204,
+    };
+    app.use((0, cors_1.default)(corsOptions));
     app.use((0, helmet_1.default)());
     app.use("/auth", routes_1.authRoutes);
     app.use("/dashboard", routes_1.dashboardRoutes);

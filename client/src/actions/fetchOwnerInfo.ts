@@ -15,6 +15,7 @@ export const fetchOwnerInfo = async () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        cache: "no-cache",
       }
     );
 

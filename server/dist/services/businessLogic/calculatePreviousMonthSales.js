@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.calculatePreviosMonthComplateSales = exports.calculateCurrentComplateSales = exports.calculatePreviousMonthAmount = exports.calculatePreviousMonthSales = exports.calculateCurrentMonthSales = void 0;
+exports.calculatePreviosMonthComplateSales = exports.calculateCurrentComplateSales = exports.calculateCurrentMonthAmount = exports.calculatePreviousMonthAmount = exports.calculatePreviousMonthSales = exports.calculateCurrentMonthSales = void 0;
 const calculateCurrentMonthSales = (ordersWithProducts) => {
     const currentDate = new Date();
     return ordersWithProducts
@@ -35,6 +35,14 @@ const calculatePreviousMonthAmount = (ordersWithProducts) => {
     }).length;
 };
 exports.calculatePreviousMonthAmount = calculatePreviousMonthAmount;
+const calculateCurrentMonthAmount = (ordersWithProducts) => {
+    const currentDate = new Date();
+    return ordersWithProducts.filter((order) => {
+        const orderDate = new Date(order.createdAt);
+        return orderDate.getMonth() === currentDate.getMonth();
+    }).length;
+};
+exports.calculateCurrentMonthAmount = calculateCurrentMonthAmount;
 const calculateCurrentComplateSales = (ordersWithProducts) => {
     const currentDate = new Date();
     return ordersWithProducts

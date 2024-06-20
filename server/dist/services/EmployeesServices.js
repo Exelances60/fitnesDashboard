@@ -49,7 +49,7 @@ class EmployeesServices {
             if (!fetchedOwner)
                 return (0, throwNotFoundError_1.default)("Owner not found");
             fetchedOwner.employees.push(employee._id);
-            await fetchedOwner.save();
+            await this.ownerRepository.update(fetchedOwner._id, fetchedOwner);
             return employee;
         }
         catch (error) {
@@ -90,8 +90,8 @@ class EmployeesServices {
                 return (0, throwValidationError_1.default)("Customer already assigned to this employee");
             }
             employee.customers.push(req.body.customerId);
-            await employee.updateOne(employee);
-            await customer.updateOne({
+            await this.employeeRepository.update(employee._id, employee);
+            await this.customerRepository.update(customer._id, {
                 coachPT: employee._id,
             });
         }
@@ -123,8 +123,9 @@ class EmployeesServices {
                 if (!customers)
                     return (0, throwNotFoundError_1.default)("Customers not found");
                 customers.forEach(async (customer) => {
-                    customer.coachPT = null;
-                    await customer.save();
+                    await this.customerRepository.update(customer._id, {
+                        coachPT: null,
+                    });
                 });
             }
             if (employee.profilePicture) {

@@ -6,11 +6,8 @@ import RegisterProfileSteps from "./RegisterProfileSteps";
 import { QuestionOutlined } from "@ant-design/icons";
 import { TourProps } from "antd/lib";
 import axiosClient from "@/utils/AxiosClient";
-import { useAppDispatch } from "@/store/store";
-import { showModal } from "@/store/slices/modalSlice";
-import ShowRegisterProcesQRCode from "./ShowRegisterProcesQRCode";
-import RegisterApplication from "./RegisterApplication";
 import RegisterFinishSteps from "./RegisterFinishSteps";
+import { useRouter } from "next/navigation";
 
 interface IFormValues {
   email: string;
@@ -26,13 +23,11 @@ const RegisterSteps = () => {
   const accountRef = useRef(null);
   const profileRef = useRef(null);
   const finishRef = useRef(null);
-  const applicationRef = useRef(null);
-  const applicationInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   const [current, setCurrent] = useState("Account");
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const dispatch = useAppDispatch();
   const [form] = Form.useForm();
 
   const steps: TourProps["steps"] = [
@@ -53,12 +48,6 @@ const RegisterSteps = () => {
       target: () => finishRef.current,
       description:
         "This tab is the final step to finish the registration process and you must see the qr code and using qr code your tracking the registration process",
-    },
-    {
-      title: "Application",
-      target: () => applicationRef.current,
-      description:
-        "This tab is for checking the application status using the application ID",
     },
   ];
 
@@ -81,14 +70,11 @@ const RegisterSteps = () => {
       formData.append("address", values.address);
       formData.append("phone", values.phone);
       const response = await axiosClient.postForm("/auth/signup", formData);
-      return dispatch(
-        showModal({
-          children: (
-            <ShowRegisterProcesQRCode qrCodeID={response.data.qrCodeID} />
-          ),
-          title: "Registration Successful",
-        })
-      );
+      message.success({
+        content: response.data.message,
+        key: "register",
+      });
+      router.push("/");
     } catch (error: any) {
       message.error({
         content: error.response.data.errorMessage,
@@ -102,11 +88,11 @@ const RegisterSteps = () => {
   return (
     <>
       <Spin spinning={loading} fullscreen />
-      <div className="flex flex-col items-center justify-center gap-2 w-full">
+      <div className="flex flex-col gap-2 w-full">
         <Segmented
           size="large"
           value={current}
-          options={["Account", "Profile", "Finish", "Application"]}
+          options={["Account", "Profile", "Finish"]}
           onChange={(value) => {
             setCurrent(value);
           }}
@@ -135,12 +121,6 @@ const RegisterSteps = () => {
 
           <RegisterFinishSteps current={current} ref={finishRef} />
 
-          <RegisterApplication
-            current={current}
-            inputRef={applicationInputRef}
-            divRef={applicationRef}
-          />
-
           <Tour
             open={open}
             onClose={() => setOpen(false)}
@@ -152,8 +132,6 @@ const RegisterSteps = () => {
                 setCurrent("Profile");
               } else if (index === 2) {
                 setCurrent("Finish");
-              } else if (index === 3) {
-                setCurrent("Application");
               }
             }}
           />

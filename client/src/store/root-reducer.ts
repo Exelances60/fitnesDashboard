@@ -6,6 +6,7 @@ import { drawerReducer } from "./slices/drawerSlice";
 import { customerDetailsReducer } from "./slices/customerDetailsSlice";
 import { invoiceReducer } from "./slices/invoiceSlice";
 import { navigationReducer } from "./slices/navigationSlice";
+import { dashboardReducer } from "./slices/dashboardSlice";
 
 export const rootReducer = combineReducers({
   user: userReducer,
@@ -15,4 +16,5 @@ export const rootReducer = combineReducers({
   customerDetailsReducer: customerDetailsReducer,
   invoiceReducer: invoiceReducer,
   navigationReducer: navigationReducer,
+  dashboardReducer: dashboardReducer,
 });

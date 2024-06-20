@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import { IEmployee } from "../models/Employees";
 import { Request } from "express";
 import { EmployeeRepository } from "../repository/EmployeeRepository";
@@ -55,8 +56,10 @@ export class EmployeesServices {
             })
         );
       }
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
       const employee = await this.employeeRepository.create<IEmployee>({
         ...req.body,
+        password: hashedPassword,
         profilePicture: downloadURLProfilePicture,
         documents: dowlandsDocuments,
         customers: [],

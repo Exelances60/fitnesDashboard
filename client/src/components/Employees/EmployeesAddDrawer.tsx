@@ -32,6 +32,7 @@ const EmployeesAddDrawer = ({ setEmployeeData }: EmployeesAddDrawerProps) => {
     formData.append("name", newValues.name);
     formData.append("phone", newValues.phone);
     formData.append("email", newValues.email);
+    formData.append("password", newValues.password);
     formData.append("age", newValues.age);
     formData.append("position", newValues.position);
     formData.append("address", newValues.address);

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import { Layout } from "antd";
-import { Menu } from "antd";
+import { Layout, Menu } from "antd";
+import type { MenuProps } from "antd";
 import { useAppSelector } from "@/store/store";
 import { selectMenuKeys, selectUser } from "@/store/slices/userSlice";
 import { navMenu } from "@/mock/navMenu";
@@ -11,6 +11,9 @@ import Link from "next/link";
 import Image from "next/image";
 import useGetUserInfo from "@/hooks/useGetUserInfo";
 import HeaderNavigation from "./HeaderNavigation";
+import useGetTokenPayload from "@/hooks/useGetTokenPayload";
+
+type MenuItem = Required<MenuProps>["items"][number];
 
 const { Content, Header } = Layout;
 
@@ -18,18 +21,32 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
   const { handleChangeMenuKeys } = useSetMenuKeys();
   const menuKeys = useAppSelector(selectMenuKeys);
   const userInfo = useAppSelector(selectUser);
+  const tokenPayload = useGetTokenPayload();
   useGetUserInfo();
 
-  const menuItems = navMenu.map((item) => {
+  const menuItems: MenuItem[] = navMenu.map((item) => {
+    const disable = tokenPayload?.role
+      ? !item.role?.includes(tokenPayload.role)
+      : true;
+
     return {
       key: item.key,
       onClick: handleChangeMenuKeys,
       icon: item.icon,
       label: (
-        <Link href={`http://localhost:3000/${item.path}`} passHref>
+        <Link
+          href={
+            disable && item.role ? "#" : `http://localhost:3000/${item.path}`
+          }
+          passHref
+        >
           <div className="flex items-center gap-5">{item.name}</div>
         </Link>
       ),
+      disabled: item.role ? disable : false,
+      onTitleClick: () => {
+        console.log("Title clicked");
+      },
     };
   });
 

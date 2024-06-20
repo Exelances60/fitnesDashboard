@@ -93,7 +93,7 @@ export default class RepositoryBase<T extends Model<any>> {
       }
       return result;
     } catch (error: any) {
-      throw new Error(error);
+      return false as any;
     }
   }
 }

@@ -1,6 +1,15 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { verifyToken } from "./utils/JwtServices";
+import {
+  customersRole,
+  employeesRole,
+  eventsRole,
+  inboxRole,
+  invoiceRole,
+  ordersRole,
+  productsRole,
+} from "./mock/navMenu";
 
 const AUTH_PAGES = ["/", "/register"];
 
@@ -13,18 +22,65 @@ export async function middleware(request: NextRequest, response: NextResponse) {
   const path = nextUrl.pathname;
   const isAuthPageRequest = isAuthPage(path);
   const tokenValid = await verifyToken(token);
+  const sendDashboard = NextResponse.redirect(new URL("/dashboard", url));
 
   if (isAuthPageRequest) {
     if (!tokenValid) {
       return NextResponse.next();
     }
-    return NextResponse.redirect(new URL("/dashboard", url));
+    return sendDashboard;
   }
 
   if (!tokenValid) {
     const serachParams = new URLSearchParams(nextUrl.searchParams);
     serachParams.set("next", path);
     return NextResponse.redirect(new URL(`/?${serachParams.toString()}`, url));
+  }
+  const role = (tokenValid.payload as unknown as jwtUserDecode).role as string;
+  const customerWithId = path.match(/\/dashboard\/customer\/\d+/);
+
+  if (customerWithId && !customersRole.includes(role)) {
+    return sendDashboard;
+  }
+
+  switch (path) {
+    case "/dashboard/products":
+      if (!productsRole.includes(role)) {
+        return sendDashboard;
+      }
+      break;
+    case "/dashboard/inbox":
+      if (!inboxRole.includes(role)) {
+        return sendDashboard;
+      }
+      break;
+    case "/dashboard/order":
+      if (!ordersRole.includes(role)) {
+        return sendDashboard;
+      }
+      break;
+    case "/dashboard/employees":
+      if (!employeesRole.includes(role)) {
+        return sendDashboard;
+      }
+      break;
+    case "/dashboard/customer":
+      if (!customersRole.includes(role)) {
+        return sendDashboard;
+      }
+      break;
+    case "/dashboard/invoice":
+      if (!invoiceRole.includes(role)) {
+        return sendDashboard;
+      }
+      break;
+    case "/dashboard/events":
+      if (!eventsRole.includes(role)) {
+        return sendDashboard;
+      }
+      break;
+    default:
+      break;
   }
 
   return NextResponse.next();

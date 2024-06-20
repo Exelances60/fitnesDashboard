@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { selectUser } from "@/store/slices/userSlice";
 import { useAppSelector } from "@/store/store";
 import { Avatar } from "antd";
 import { UserOutlined, LoginOutlined } from "@ant-design/icons";
 import { motion } from "framer-motion";
 import ProfileCardOption from "./ProfileCardOption";
+import useGetTokenPayload from "@/hooks/useGetTokenPayload";
 
 const wrapperVariants = {
   open: {
@@ -26,6 +27,7 @@ const wrapperVariants = {
 const ProfileCardNavi = () => {
   const [open, setOpen] = useState(false);
   const userInfo = useAppSelector(selectUser);
+  const tokenPayload = useGetTokenPayload();
 
   return (
     <>
@@ -34,7 +36,11 @@ const ProfileCardNavi = () => {
           <Avatar
             size={32}
             onClick={() => setOpen((pv) => !pv)}
-            src={userInfo?.ownerImage}
+            src={
+              tokenPayload?.employeeImage
+                ? tokenPayload?.employeeImage
+                : userInfo?.ownerImage
+            }
             className="shadow-lg cursor-pointer  ease-in duration-300"
           />
           <motion.ul

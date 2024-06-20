@@ -1,10 +1,9 @@
 interface jwtUserDecode {
   email: string;
   ownerId: string;
-  companyName: string;
+  role?: string;
   iat: number;
   exp: number;
-  productCategory: string[];
   _id: string;
-  ownerImage: string;
+  employeeImage?: string;
 }

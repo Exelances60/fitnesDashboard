@@ -10,6 +10,7 @@ export interface IEmployee extends Document {
   name: string;
   phone: string;
   email: string;
+  password: string;
   age: number;
   position: string;
   address: string;
@@ -38,6 +39,11 @@ const employeeSchema = new ModelSchema<IEmployee>(
     },
     email: {
       type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
     },
     age: {
       type: Number,

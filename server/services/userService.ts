@@ -6,15 +6,17 @@ import throwNotFoundError from "../utils/err/throwNotFoundError";
 import jwtServices from "../utils/jwtServices";
 import firebaseStorageServices from "../utils/FirebaseServices";
 import { IUpdateOwnerRequest } from "../dto/AuthDTO";
-import { PeddingAccountRepository } from "../repository/PeddingAccountRepository";
-import { IPendingAccount } from "../models/PendingAccounts";
 import { Types } from "mongoose";
+import { IEmployee } from "../models/Employees";
+import { EmployeeRepository } from "../repository/EmployeeRepository";
 
 export class UserServices {
   private ownerRepository: OwnerRepository;
+  private employeeRepository: EmployeeRepository;
 
   constructor() {
     this.ownerRepository = new OwnerRepository();
+    this.employeeRepository = new EmployeeRepository();
   }
 
   /**
@@ -27,20 +29,43 @@ export class UserServices {
   async Login(email: string, password: string): Promise<string> {
     try {
       const user = await this.ownerRepository.findOne<IOwner>({ email });
-      if (!user)
-        return throwNotFoundError("A user with this email could not be found.");
-      const isPasswordMatch = await jwtServices.comparePassword(
-        password,
-        user.password
-      );
-      if (!isPasswordMatch)
-        return throwBadRequestError("Password is incorrect. Please try again.");
-      const token = jwtServices.signToken({
-        email: user.email,
-        ownerId: user._id.toString(),
-        _id: user._id.toString(),
-      });
-      return token;
+      if (user) {
+        const isPasswordMatch = await jwtServices.comparePassword(
+          password,
+          user.password
+        );
+        if (!isPasswordMatch)
+          return throwBadRequestError(
+            "Password is incorrect. Please try again."
+          );
+        const token = jwtServices.signToken({
+          email: user.email,
+          ownerId: user._id.toString(),
+          _id: user._id.toString(),
+          role: user.role,
+        });
+        return token;
+      } else {
+        const employee = await this.employeeRepository.findOne<IEmployee>({
+          email,
+        });
+        const isPasswordMatch = await jwtServices.comparePassword(
+          password,
+          employee.password
+        );
+        if (!isPasswordMatch)
+          return throwBadRequestError(
+            "Password is incorrect. Please try again."
+          );
+        const token = jwtServices.signToken({
+          email: employee.email,
+          role: employee.position,
+          ownerId: employee.ownerId.toString(),
+          _id: employee._id.toString(),
+          employeeImage: employee.profilePicture,
+        });
+        return token;
+      }
     } catch (error: any) {
       throw new Error(error);
     }

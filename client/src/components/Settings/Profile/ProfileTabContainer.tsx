@@ -10,7 +10,7 @@ interface IProfileTabContainerProps {
 
 const ProfileTabContainer = ({ ownerInfo }: IProfileTabContainerProps) => {
   const customerData = useFetchCustomerDataForClient();
-  const employeeData = useFetchEmployeesForClient();
+  const { employeeData } = useFetchEmployeesForClient();
 
   return (
     <Spin spinning={!customerData || !employeeData}>

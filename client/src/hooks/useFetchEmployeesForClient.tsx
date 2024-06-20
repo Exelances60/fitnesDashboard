@@ -11,7 +11,7 @@ const useFetchEmployeesForClient = () => {
     };
     fetchEmployeeData();
   }, []);
-  return employeeData;
+  return { employeeData, setEmployeeData };
 };
 
 export default useFetchEmployeesForClient;

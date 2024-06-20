@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import { TreeSelect } from "antd";
 import axiosClient from "@/utils/AxiosClient";
 import { useAppDispatch, useAppSelector } from "@/store/store";
@@ -6,6 +6,7 @@ import { selectChartsType, setChartsType } from "@/store/slices/dashboardSlice";
 
 interface DashboardChartsSelectProps {
   setChartsData: React.Dispatch<React.SetStateAction<any>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const treeData = [
@@ -77,6 +78,7 @@ const treeData = [
 
 const DashboardChartsSelect = ({
   setChartsData,
+  setLoading,
 }: DashboardChartsSelectProps) => {
   const selectValue = useAppSelector(selectChartsType);
   const dispatch = useAppDispatch();
@@ -84,6 +86,7 @@ const DashboardChartsSelect = ({
     dispatch(setChartsType(newValue));
   };
   const fetchChartsData = async (value: string) => {
+    setLoading(true);
     try {
       const response = await axiosClient.get(`/dashboard/charts/${value}`);
       setChartsData(
@@ -96,6 +99,8 @@ const DashboardChartsSelect = ({
       );
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 

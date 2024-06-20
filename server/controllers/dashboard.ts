@@ -24,6 +24,7 @@ export const getCharts = async (
 ) => {
   try {
     const dashboard = await new DashboardServices().getCharts(req);
+
     res.status(200).json({
       chartsData: dashboard,
       message: "Charts fetched successfully",

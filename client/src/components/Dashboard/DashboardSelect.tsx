@@ -12,8 +12,6 @@ import { useAppDispatch } from "@/store/store";
 import { setHideDrawer } from "@/store/slices/drawerSlice";
 import { Divider } from "antd";
 import { setChartsMode, setFastTable } from "@/store/slices/dashboardSlice";
-import ProductPreview from "../Product/ProductPreview";
-import useProduct from "@/hooks/useProduct";
 
 const data = [
   {

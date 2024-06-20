@@ -59,7 +59,7 @@ const EmployeesEditModal = ({
       }}
       id="editEmployeeForm"
     >
-      <EmployeesAddForm editMode={true} employee={employee} form={form} />
+      <EmployeesAddForm editMode={true} employee={employee} />
     </Form>
   );
 };

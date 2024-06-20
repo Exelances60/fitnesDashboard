@@ -12,8 +12,6 @@ import { useAppDispatch } from "@/store/store";
 import { setHideDrawer } from "@/store/slices/drawerSlice";
 import { Divider } from "antd";
 import { setChartsMode, setFastTable } from "@/store/slices/dashboardSlice";
-import ProductPreview from "../Product/ProductPreview";
-import useProduct from "@/hooks/useProduct";
 
 const data = [
   {
@@ -97,7 +95,7 @@ const DashboardSelect = () => {
         <motion.div
           initial={{ x: 150, opacity: 0.3 }}
           animate={{ x: 0, opacity: 1 }}
-          transition={{ delay: index * 0.15, duration: 0.5 }}
+          transition={{ delay: index * 0.12, duration: 0.5 }}
           key={index}
           className="flex items-center bg-white rounded-lg shadow-lg p-5 cursor-pointer hover:scale-105 transform transition duration-300"
           onClick={() => {

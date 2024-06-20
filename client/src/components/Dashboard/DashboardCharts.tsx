@@ -15,7 +15,6 @@ interface DashboardChartsProps {
 
 const DashboardCharts = ({ data }: DashboardChartsProps) => {
   const selectedView = useAppSelector(selectChartsMode);
-  console.log(selectedView);
   return (
     <>
       {selectedView === "area" && (

@@ -14,9 +14,6 @@ export async function middleware(request: NextRequest, response: NextResponse) {
   const isAuthPageRequest = isAuthPage(path);
   const tokenValid = await verifyToken(token);
 
-  console.log("Token Valid:", tokenValid);
-  console.log("Is Auth Page Request:", isAuthPageRequest);
-
   if (isAuthPageRequest) {
     if (!tokenValid) {
       return NextResponse.next();

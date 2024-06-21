@@ -43,6 +43,7 @@ export class UserServices {
           ownerId: user._id.toString(),
           _id: user._id.toString(),
           role: user.role,
+          image: user.ownerImage,
         });
         return token;
       } else {
@@ -62,7 +63,7 @@ export class UserServices {
           role: employee.position,
           ownerId: employee.ownerId.toString(),
           _id: employee._id.toString(),
-          employeeImage: employee.profilePicture,
+          image: employee.profilePicture,
         });
         return token;
       }

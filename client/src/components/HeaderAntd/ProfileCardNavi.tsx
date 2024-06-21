@@ -37,9 +37,7 @@ const ProfileCardNavi = () => {
             size={32}
             onClick={() => setOpen((pv) => !pv)}
             src={
-              tokenPayload?.employeeImage
-                ? tokenPayload?.employeeImage
-                : userInfo?.ownerImage
+              tokenPayload?.image ? tokenPayload?.image : userInfo?.ownerImage
             }
             className="shadow-lg cursor-pointer  ease-in duration-300"
           />

@@ -4,20 +4,11 @@ import dbConnection from "./services/DatabaseServices";
 import App from "./services/ExpressAppServices";
 import path from "path";
 import { PORT } from "./config";
+import { socket } from "./utils/socket";
 const app = express();
 app.use("/images", express.static(path.join(__dirname, "images")));
 
 const StartServer = async () => {
-  /* app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "OPTIONS, GET, POST, PUT, PATCH, DELETE"
-  );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  next();
-}); */
-
   await dbConnection();
   await App(app);
 
@@ -35,9 +26,10 @@ const StartServer = async () => {
     res.status(status).json({ errorMessage: message, data: data });
   });
 
-  app.listen(PORT, () => {
+  const server = app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
+  socket(server);
 };
 
 StartServer();

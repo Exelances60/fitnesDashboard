@@ -11,6 +11,7 @@ import {
   exercisesRoutes,
   orderRoutes,
   productRoutes,
+  inboxRoutes,
 } from "../routes";
 
 export default async (app: Application) => {
@@ -34,6 +35,7 @@ export default async (app: Application) => {
   app.use("/exercises", exercisesRoutes);
   app.use("/calendarAct", calendarActRoutes);
   app.use("/employees", employeeRoutes);
+  app.use("/inbox", inboxRoutes);
 
   return app;
 };

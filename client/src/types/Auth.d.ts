@@ -5,5 +5,5 @@ interface jwtUserDecode {
   iat: number;
   exp: number;
   _id: string;
-  employeeImage?: string;
+  image: string;
 }

@@ -1,7 +1,7 @@
 import * as Icons from "@ant-design/icons";
 
 export const productsRole = ["owner", "trainer"];
-export const inboxRole = ["owner"];
+export const inboxRole = ["owner", "trainer"];
 export const ordersRole = ["owner"];
 export const employeesRole = ["owner", "finance", "admin", "management"];
 export const customersRole = ["owner", "trainer"];
@@ -43,7 +43,7 @@ export const navMenu = [
         }}
       />
     ),
-    path: "/inbox",
+    path: "dashboard/inbox",
     key: "inbox",
     role: inboxRole,
   },

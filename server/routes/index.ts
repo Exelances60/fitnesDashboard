@@ -6,3 +6,4 @@ export * from "./customer";
 export * from "./exercises";
 export * from "./calenderAct";
 export * from "./employees";
+export * from "./inbox";

@@ -14,6 +14,7 @@ import {
   ordersRole,
   productsRole,
 } from "@/mock/navMenu";
+import NoPermission from "@/app/dashboard/403/page";
 
 const DashboardFastTable = () => {
   const fastTable = useAppSelector(selectFastTable);
@@ -25,9 +26,10 @@ const DashboardFastTable = () => {
 
   const notAuthorized = () => {
     return (
-      <div className="flex items-center justify-center h-40 text-2xl text-red-500">
+      <NoPermission />
+      /*   <div className="flex items-center justify-center h-40 text-2xl text-red-500">
         Not Authorized for this table
-      </div>
+      </div> */
     );
   };
 
@@ -62,7 +64,12 @@ const DashboardFastTable = () => {
     }
   };
 
-  return <Card>{renderContent()}</Card>;
+  return (
+    <Card>
+      <h1 className="text-lg mb-2 text-gray-900">Fast Table</h1>
+      {renderContent()}
+    </Card>
+  );
 };
 
 export default DashboardFastTable;

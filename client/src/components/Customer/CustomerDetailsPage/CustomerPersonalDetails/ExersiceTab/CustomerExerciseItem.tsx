@@ -88,7 +88,7 @@ const CustomerExerciseItem = ({
       </div>
 
       <div className="flex gap-4">
-        <p className="text-sm">{renderInstructions()}</p>
+        <div className="text-sm">{renderInstructions()}</div>
       </div>
     </div>
   );

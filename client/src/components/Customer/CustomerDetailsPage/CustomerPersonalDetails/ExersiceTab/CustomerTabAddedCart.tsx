@@ -8,22 +8,34 @@ import React, { useState } from "react";
 import CustomerTabAddDrawerItem from "./CustomerTabAddDrawerItem";
 import useMessage from "@/hooks/useMessage";
 import axiosClient from "@/utils/AxiosClient";
+import useGetTokenPayload from "@/hooks/useGetTokenPayload";
 
 interface CustomerTabAddedCartProps {
   addedDrawer: boolean;
   setAddedDrawer: React.Dispatch<React.SetStateAction<boolean>>;
-  customerId: string;
+  customer: CustomerType;
 }
 
 const CustomerTabAddedCart = ({
   addedDrawer,
   setAddedDrawer,
-  customerId,
+  customer,
 }: CustomerTabAddedCartProps) => {
+  const logginUserToken = useGetTokenPayload();
   const addedCartItem = useAppSelector(selectAddedCart);
   const dispatch = useAppDispatch();
   const [loadingButton, setLoadingButton] = useState<boolean>(false);
   const showMessage = useMessage();
+
+  const isAuthorized = () => {
+    return (
+      logginUserToken?.role === "owner" ||
+      logginUserToken?._id ===
+        (typeof customer.coachPT === "string"
+          ? customer.coachPT
+          : customer.coachPT?._id)
+    );
+  };
 
   const handleSave = async () => {
     if (addedCartItem.length <= 0) {
@@ -31,8 +43,15 @@ const CustomerTabAddedCart = ({
       return showMessage("Not Added Any Exercise", "info", 1);
     }
 
+    if (!isAuthorized()) {
+      return showMessage("You are not allowed to add exercise", "error", 2);
+    }
+
     const exerciseNames = addedCartItem.map((item) => item.name);
-    const requestBody = { exerciseName: exerciseNames, customerId };
+    const requestBody = {
+      exerciseName: exerciseNames,
+      customerId: customer._id,
+    };
 
     setLoadingButton(true);
     try {

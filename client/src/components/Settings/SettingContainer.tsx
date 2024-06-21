@@ -9,9 +9,11 @@ import { useGetScreenSize } from "@/hooks/useGetScreenSize";
 import { useAppSelector } from "@/store/store";
 import { selectUser } from "@/store/slices/userSlice";
 import ErrorPage from "../ErrorPage";
+import useGetTokenPayload from "@/hooks/useGetTokenPayload";
 
 const SettingContainer = () => {
   const screens = useGetScreenSize();
+  const userInfo = useGetTokenPayload();
   const ownerInfoStateRedux = useAppSelector(selectUser);
 
   if (!ownerInfoStateRedux) {
@@ -34,6 +36,7 @@ const SettingContainer = () => {
     {
       key: "settings",
       label: "Settings",
+      disabled: userInfo?.role !== "owner",
       children: (
         <>
           <div className="w-full items-center  h-full flex flex-col gap-2">

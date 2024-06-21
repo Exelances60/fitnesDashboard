@@ -20,12 +20,12 @@ import { useReactToPrint } from "react-to-print";
 
 interface CustomerExerciseListProps {
   bodyPart: { [bodyPart: string]: ExerciseType[] };
-  customerId: string;
+  customer: CustomerType;
 }
 
 const CustomerExerciseList = ({
   bodyPart,
-  customerId,
+  customer,
 }: CustomerExerciseListProps) => {
   const dispatch = useAppDispatch();
   const deleteMood = useAppSelector(selectDeleteMood);
@@ -37,7 +37,7 @@ const CustomerExerciseList = ({
   const openAddExerciseModal = () => {
     dispatch(
       setShowDrawer({
-        children: <CustomerTabExerciseAddDrawer customerId={customerId} />,
+        children: <CustomerTabExerciseAddDrawer customer={customer} />,
         title: "Add Exercise",
         footer: null,
       })
@@ -57,14 +57,14 @@ const CustomerExerciseList = ({
       </div>
       <div className="p-2 flex flex-col gap-2" ref={componentRef}>
         {Object.entries(bodyPart).length > 0 ? (
-          Object.entries(bodyPart).map(([part, exercises]) => (
-            <div key={part}>
+          Object.entries(bodyPart).map(([part, exercises], index) => (
+            <div key={part + index}>
               <h3 className="text-xl">{capitalizeFirstLetter(part)}</h3>
               {exercises.map((exercise) => (
                 <CustomerExerciseItem
                   key={exercise._id}
                   exercise={exercise}
-                  customerId={customerId}
+                  customerId={customer._id}
                   deleteMood={deleteMood}
                 />
               ))}

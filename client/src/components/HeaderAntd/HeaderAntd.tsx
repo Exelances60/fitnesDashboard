@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Tooltip } from "antd";
 import type { MenuProps } from "antd";
 import { useAppSelector } from "@/store/store";
 import { selectMenuKeys, selectUser } from "@/store/slices/userSlice";
@@ -34,19 +34,21 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
       onClick: handleChangeMenuKeys,
       icon: item.icon,
       label: (
-        <Link
-          href={
-            disable && item.role ? "#" : `http://localhost:3000/${item.path}`
-          }
-          passHref
+        <Tooltip
+          placement="bottomRight"
+          title={disable && item.role ? "You are not authorized" : ""}
         >
-          <div className="flex items-center gap-5">{item.name}</div>
-        </Link>
+          <Link
+            href={
+              disable && item.role ? "#" : `http://localhost:3000/${item.path}`
+            }
+            passHref
+          >
+            <div className="flex items-center gap-5">{item.name}</div>
+          </Link>
+        </Tooltip>
       ),
       disabled: item.role ? disable : false,
-      onTitleClick: () => {
-        console.log("Title clicked");
-      },
     };
   });
 

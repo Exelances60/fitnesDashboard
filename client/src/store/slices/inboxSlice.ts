@@ -4,6 +4,7 @@ import { RootState } from "../store";
 interface IInboxState {
   selectedChat: {
     _id: string;
+    employeeId: string;
     email: string;
     profilePicture: string;
     messages: any[];
@@ -19,15 +20,14 @@ const inboxSlice = createSlice({
   name: "inbox",
   initialState,
   reducers: {
-    selectChat(state, action) {
+    setChat(state, action) {
       state.selectedChat = action.payload;
     },
   },
 });
 
-export const { selectChat } = inboxSlice.actions;
+export const { setChat } = inboxSlice.actions;
 
-export const selectSelectedChat = (state: RootState) =>
-  state.inboxReducer.selectedChat;
+export const selectChat = (state: RootState) => state.inboxReducer.selectedChat;
 
 export const inboxReducer = inboxSlice.reducer;

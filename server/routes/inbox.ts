@@ -7,4 +7,6 @@ const router = Router();
 
 router.get("/get-inbox", isAuth, inboxController.getInbox);
 
+router.post("/create-chat", isAuth, inboxController.createChat);
+
 export { router as inboxRoutes };

@@ -47,7 +47,7 @@ const InboxUsersList = ({ employees }: InboxUsersListProps) => {
           <Image
             src={logginTokenPayload?.image || ""}
             alt="profile"
-            layout="fill"
+            fill
             priority
             className="drop-shadow-lg rounded-full"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

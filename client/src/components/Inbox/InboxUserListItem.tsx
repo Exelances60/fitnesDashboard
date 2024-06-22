@@ -1,7 +1,10 @@
 import React from "react";
 import Image from "next/image";
-import { useDispatch } from "react-redux";
-import { selectChat } from "@/store/slices/inboxSlice";
+import { selectChat, setChat } from "@/store/slices/inboxSlice";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import useGetTokenPayload from "@/hooks/useGetTokenPayload";
+import axiosClient from "@/utils/AxiosClient";
+import { message } from "antd";
 
 interface InboxUserListItemProps {
   employee: {
@@ -12,21 +15,51 @@ interface InboxUserListItemProps {
 }
 
 const InboxUserListItem = ({ employee }: InboxUserListItemProps) => {
-  const dispatch = useDispatch();
-  const handleUserClick = () => {
-    dispatch(selectChat(employee));
+  const dispatch = useAppDispatch();
+  const logginUserToken = useGetTokenPayload();
+  const selectedChat = useAppSelector(selectChat);
+
+  const handleUserClick = async () => {
+    try {
+      const bodyValue = {
+        senderId: logginUserToken?._id,
+        receiverId: employee._id,
+        role: logginUserToken?.role,
+      };
+      const response = await axiosClient.post("/inbox/create-chat", bodyValue);
+      console.log(response.data);
+      dispatch(
+        setChat({
+          _id: response.data._id,
+          email: employee.email,
+          employeeId: employee._id,
+          profilePicture: employee.profilePicture,
+          ...response.data.chat,
+        })
+      );
+    } catch (error) {
+      message.error({
+        content: "Failed to create chat",
+        duration: 2,
+      });
+    }
   };
   return (
     <div
       key={employee._id}
       onClick={handleUserClick}
-      className="flex items-center my-2 hover:bg-gray-200 p-2 rounded-lg ease-in-out transition-all duration-300 cursor-pointer w-[250px] text-ellipsis"
+      className={`flex items-center my-2 p-2 rounded-lg ease-in-out transition-all duration-300 cursor-pointer w-[250px] text-ellipsis
+      ${
+        selectedChat?._id === employee._id
+          ? "bg-gray-300 px-3 rounded-lg"
+          : "hover:bg-gray-200"
+      }`}
     >
       <div className="w-10 h-10 relative rounded-full">
         <Image
           src={employee.profilePicture || ""}
           alt="profile"
-          layout="fill"
+          fill
           className="drop-shadow-lg rounded-full"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           style={{ objectFit: "contain" }}

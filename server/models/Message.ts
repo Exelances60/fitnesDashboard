@@ -1,11 +1,14 @@
 import { Schema, Types, model } from "mongoose";
 
-export interface IMessage {
+export interface IMessage extends Document {
   _id: Types.ObjectId;
   chatId: Types.ObjectId;
   senderId: Types.ObjectId;
   receiverId: Types.ObjectId;
-  content: string;
+  content: {
+    iv: string;
+    content: string;
+  };
 }
 
 const messageSchema = new Schema<IMessage>({
@@ -25,8 +28,14 @@ const messageSchema = new Schema<IMessage>({
     ref: "User",
   },
   content: {
-    type: String,
-    required: true,
+    iv: {
+      type: String,
+      required: true,
+    },
+    content: {
+      type: String,
+      required: true,
+    },
   },
 });
 

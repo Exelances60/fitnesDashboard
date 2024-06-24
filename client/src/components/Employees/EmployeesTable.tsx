@@ -11,6 +11,9 @@ import EmployeesEditModal from "./EmployeesEditModal/EmployeesEditModal";
 import DrawerFooterButton from "../DrawerFooterButton";
 import axiosClient from "@/utils/AxiosClient";
 import useMessage from "@/hooks/useMessage";
+import useGetUserInfo from "@/hooks/useGetUserInfo";
+import { jwtDecode } from "jwt-decode";
+import { getCookie } from "cookies-next";
 
 interface EmployeesTableProps {
   employeeData: IEmployee[];
@@ -23,6 +26,7 @@ const EmployeesTable = ({
 }: EmployeesTableProps) => {
   const showMessage = useMessage();
   const dispatch = useAppDispatch();
+  const employeeInfo = jwtDecode(getCookie("token") as string) as jwtUserDecode;
   const { filterDropdown, filterIcon, searchById } =
     useTableFilterSearchDropDown("Search by name");
 
@@ -77,6 +81,10 @@ const EmployeesTable = ({
 
   const deleteEmployee = async (record: IEmployee) => {
     showMessage("Deleting Employees", "loading");
+    if (record._id === employeeInfo._id) {
+      showMessage("You can't delete yourself", "error");
+      return;
+    }
     try {
       const response = await axiosClient.delete(
         `/employees/delete-employee/${record._id}`

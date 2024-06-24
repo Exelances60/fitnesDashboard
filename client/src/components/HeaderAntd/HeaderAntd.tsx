@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import { Layout } from "antd";
-import { Menu } from "antd";
+import { Layout, Menu, Tooltip } from "antd";
+import type { MenuProps } from "antd";
 import { useAppSelector } from "@/store/store";
 import { selectMenuKeys, selectUser } from "@/store/slices/userSlice";
 import { navMenu } from "@/mock/navMenu";
@@ -11,6 +11,9 @@ import Link from "next/link";
 import Image from "next/image";
 import useGetUserInfo from "@/hooks/useGetUserInfo";
 import HeaderNavigation from "./HeaderNavigation";
+import useGetTokenPayload from "@/hooks/useGetTokenPayload";
+
+type MenuItem = Required<MenuProps>["items"][number];
 
 const { Content, Header } = Layout;
 
@@ -18,21 +21,36 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
   const { handleChangeMenuKeys } = useSetMenuKeys();
   const menuKeys = useAppSelector(selectMenuKeys);
   const userInfo = useAppSelector(selectUser);
+  const tokenPayload = useGetTokenPayload();
   useGetUserInfo();
 
-  const menuItems = navMenu.map((item) => {
+  const menuItems: MenuItem[] = navMenu.map((item) => {
+    const disable = tokenPayload?.role
+      ? !item.role?.includes(tokenPayload.role)
+      : true;
+
     return {
       key: item.key,
       onClick: handleChangeMenuKeys,
       icon: item.icon,
       label: (
-        <Link
-          href={`https://fitnes-dashboard-azba.vercel.app/${item.path}`}
-          passHref
+        <Tooltip
+          placement="bottomRight"
+          title={disable && item.role ? "You are not authorized" : ""}
         >
-          <div className="flex items-center gap-5">{item.name}</div>
-        </Link>
+          <Link
+            href={
+              disable && item.role
+                ? "#"
+                : `https://fitnes-dashboard-azba.vercel.app/${item.path}`
+            }
+            passHref
+          >
+            <div className="flex items-center gap-5">{item.name}</div>
+          </Link>
+        </Tooltip>
       ),
+      disabled: item.role ? disable : false,
     };
   });
 

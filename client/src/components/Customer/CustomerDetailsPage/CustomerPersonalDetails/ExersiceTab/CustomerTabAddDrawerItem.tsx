@@ -54,7 +54,11 @@ const CustomerTabAddDrawerItem = ({
           <PlusCircleOutlined
             className="bg-green-500 p-2 text-white rounded-full cursor-pointer"
             onClick={() => {
-              message.success("Exercise Added Check to cart");
+              message.success({
+                content: "Exercise Added",
+                duration: 2,
+                key: "exercise",
+              });
               dispatch(setAddedCart(exercise));
             }}
           />

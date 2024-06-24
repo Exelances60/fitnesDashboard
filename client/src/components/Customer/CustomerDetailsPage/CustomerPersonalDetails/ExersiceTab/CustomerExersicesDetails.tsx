@@ -80,7 +80,7 @@ const CustomerExersicesDetails = ({ customer }: { customer: CustomerType }) => {
       </div>
 
       <div className="flex flex-col w-full h-full">
-        <CustomerExerciseList bodyPart={bodyPart} customerId={customer._id} />
+        <CustomerExerciseList bodyPart={bodyPart} customer={customer} />
       </div>
     </div>
   );

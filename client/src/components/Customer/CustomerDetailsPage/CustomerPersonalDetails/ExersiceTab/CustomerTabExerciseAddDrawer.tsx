@@ -8,11 +8,11 @@ import CustomerTabAddDrawerItem from "./CustomerTabAddDrawerItem";
 import CustomerTabAddedCart from "./CustomerTabAddedCart";
 
 interface CustomerTabExerciseAddDrawerProps {
-  customerId: string;
+  customer: CustomerType;
 }
 
 const CustomerTabExerciseAddDrawer = ({
-  customerId,
+  customer,
 }: CustomerTabExerciseAddDrawerProps) => {
   const [page, setPage] = useState<number>(1);
   const [search, setSearch] = useState<string>("");
@@ -72,7 +72,7 @@ const CustomerTabExerciseAddDrawer = ({
         <CustomerTabAddedCart
           addedDrawer={addedDrawer}
           setAddedDrawer={setAddedDrawer}
-          customerId={customerId}
+          customer={customer}
         />
       </div>
     </>

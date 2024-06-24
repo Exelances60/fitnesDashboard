@@ -79,9 +79,9 @@ const CustomerExerciseTrainer = ({
           {data.length > 0 ? (
             data.map((trainer) => {
               if (
-                trainer.position === "Tranier" ||
-                trainer.position === "Trainer" ||
-                trainer.position === "PT"
+                trainer.position === "tranier" ||
+                trainer.position === "trainer" ||
+                trainer.position === "pt"
               ) {
                 return (
                   <div key={trainer._id} className="flex gap-2 items-center">
@@ -94,7 +94,7 @@ const CustomerExerciseTrainer = ({
                     />
                     <div>
                       <p>{capitalizeFirstLetter(trainer.name)}</p>
-                      <p className="text-sm text-gray-400">
+                      <p className="text-sm text-gray-400 capitalize">
                         {trainer.position}
                       </p>
                       <p className="text-sm text-gray-400">{trainer.phone}</p>

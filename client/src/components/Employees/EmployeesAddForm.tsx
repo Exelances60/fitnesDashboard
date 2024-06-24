@@ -111,8 +111,23 @@ const EmployeesAddForm = ({ editMode, employee }: EmployeesAddFormProps) => {
           <Input type="number" />
         </Form.Item>
       </div>
+      <Form.Item label="Password" name="password" required rules={justRequired}>
+        <Input.Password type="password" disabled={editMode} />
+      </Form.Item>
+
       <Form.Item label="Position" name="position" required rules={justRequired}>
-        <Input type="text" />
+        <Select
+          showSearch
+          placeholder="Select a position"
+          optionFilterProp="children"
+        >
+          <Select.Option value="trainer">Trainer</Select.Option>
+          <Select.Option value="hr">HR</Select.Option>
+          <Select.Option value="it">IT</Select.Option>
+          <Select.Option value="marketing">Marketing</Select.Option>
+          <Select.Option value="finance">Finance</Select.Option>
+          <Select.Option value="management">Management</Select.Option>
+        </Select>
       </Form.Item>
       <Form.Item label="Address" name="address" required rules={justRequired}>
         <Input.TextArea />

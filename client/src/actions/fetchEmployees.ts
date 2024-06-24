@@ -1,6 +1,12 @@
 "use server";
 import { cookies } from "next/headers";
 
+interface IEmployeeFetchResponse {
+  employees: IEmployee[];
+  totalSalaryIncrease: number;
+  totalEmployeesCountIncarese: number;
+}
+
 export const fetchEmplooyes = async () => {
   const cookiesStore = cookies();
   const token = cookiesStore.get("token")?.value;
@@ -24,7 +30,7 @@ export const fetchEmplooyes = async () => {
       throw new Error(data.errorMessage);
     }
     const { employees, totalSalaryIncrease, totalEmployeesCountIncarese } =
-      await response.json();
+      (await response.json()) as IEmployeeFetchResponse;
     return {
       employees,
       totalSalaryIncrease,

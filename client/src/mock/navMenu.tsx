@@ -1,4 +1,13 @@
 import * as Icons from "@ant-design/icons";
+
+export const productsRole = ["owner", "trainer"];
+export const inboxRole = ["owner", "trainer"];
+export const ordersRole = ["owner"];
+export const employeesRole = ["owner", "finance", "admin", "management"];
+export const customersRole = ["owner", "trainer"];
+export const invoiceRole = ["owner", "trainer"];
+export const eventsRole = ["owner", "trainer"];
+
 export const navMenu = [
   {
     name: "Dashboard",
@@ -23,6 +32,7 @@ export const navMenu = [
     ),
     path: "dashboard/product",
     key: "products",
+    role: productsRole,
   },
   {
     name: "Inbox",
@@ -33,8 +43,9 @@ export const navMenu = [
         }}
       />
     ),
-    path: "/inbox",
+    path: "dashboard/inbox",
     key: "inbox",
+    role: inboxRole,
   },
   {
     name: "Orders List",
@@ -47,6 +58,7 @@ export const navMenu = [
     ),
     path: "dashboard/order",
     key: "orders",
+    role: ordersRole,
   },
   {
     name: "Employees",
@@ -59,6 +71,7 @@ export const navMenu = [
     ),
     path: "dashboard/employees",
     key: "employees",
+    role: employeesRole,
   },
   {
     name: "Customers",
@@ -71,6 +84,7 @@ export const navMenu = [
     ),
     path: "dashboard/customer",
     key: "customers",
+    role: customersRole,
   },
   {
     name: "Invoice",
@@ -83,6 +97,7 @@ export const navMenu = [
     ),
     path: "dashboard/invoice",
     key: "invoice",
+    role: invoiceRole,
   },
   {
     name: "Events",
@@ -95,5 +110,6 @@ export const navMenu = [
     ),
     path: "dashboard/events",
     key: "events",
+    role: eventsRole,
   },
 ];

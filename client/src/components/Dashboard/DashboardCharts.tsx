@@ -1,10 +1,7 @@
 import React from "react";
 import { AreaChart, LineChart, BarChart } from "@tremor/react";
 import { useAppSelector } from "@/store/store";
-import {
-  selectChartsMode,
-  selectChartsType,
-} from "@/store/slices/dashboardSlice";
+import { selectChartsMode } from "@/store/slices/dashboardSlice";
 
 interface DashboardChartsProps {
   data: {

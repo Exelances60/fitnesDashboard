@@ -38,3 +38,22 @@ export const createChat = async (
     next(error);
   }
 };
+
+export const deleteMessage = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const data = await new InboxServices().deleteMessage(req);
+    res.status(200).json({
+      message: "Message deleted successfully",
+      data,
+    });
+  } catch (error: any) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};

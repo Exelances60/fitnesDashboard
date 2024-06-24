@@ -1,8 +1,8 @@
 import React from "react";
 import { SendOutlined } from "@ant-design/icons";
 import { Form, Input, message } from "antd";
-import { useAppSelector } from "@/store/store";
-import { selectChat } from "@/store/slices/inboxSlice";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { selectChat, setChat } from "@/store/slices/inboxSlice";
 import useGetTokenPayload from "@/hooks/useGetTokenPayload";
 import { socket } from "@/utils/socket";
 
@@ -26,8 +26,8 @@ const InboxChatInput = () => {
       socket.emit("joinRoom", () => {
         socket.emit("sendMessage", selectedChat._id);
       });
-
       socket.emit("sendMessage", bodyValue);
+
       form.setFieldsValue({ message: "" });
     } catch (error) {
       message.error({

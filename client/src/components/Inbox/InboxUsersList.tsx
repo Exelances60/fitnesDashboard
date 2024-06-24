@@ -40,7 +40,6 @@ const InboxUsersList = ({ employees, chat }: InboxUsersListProps) => {
       </div>
     </div>
   );
-
   return (
     <div className="lg:w-[20%] p-2 lg:h-full flex flex-row lg:flex-col w-full gap-2 h-[20%]">
       <div className="flex flex-col items-center gap-2 rounded-lg p-1 w-full">
@@ -85,8 +84,8 @@ const InboxUsersList = ({ employees, chat }: InboxUsersListProps) => {
                 <div className="lg:w-10 lg:h-12 relative rounded-full overflow-hidden drop-shadow-md hidden md:block">
                   <Image
                     src={
-                      participant.participantId.ownerImage ||
                       participant.participantId.profilePicture ||
+                      participant.participantId.ownerImage ||
                       "/defaultProfile.png"
                     }
                     alt="profile"

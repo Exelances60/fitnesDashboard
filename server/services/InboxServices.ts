@@ -1,7 +1,9 @@
 import { Request } from "express";
 import { ChatRepository } from "../repository/ChatRepositroy";
 import { MessageRepository } from "../repository/Message";
-import Chat from "../models/Chat";
+import Chat, { IChat } from "../models/Chat";
+import { IMessage } from "../models/Message";
+import { encrypt } from "../utils/crypto-utils";
 
 export class InboxServices {
   private chatRepository: ChatRepository;
@@ -14,8 +16,12 @@ export class InboxServices {
   async getInbox(req: Request) {
     try {
       const chats = await Chat.find({
-        "participants.participantId": req.userId,
-      }).populate("messages participants.participantId");
+        "participants.participantId": req.params.userId,
+      })
+        .slice("messages", -150)
+        .populate("messages participants.participantId")
+        .lean();
+      console.log(chats);
       return chats;
     } catch (error: any) {
       throw new Error(error);
@@ -33,7 +39,10 @@ export class InboxServices {
           { "participants.participantId": receiverId },
           { "participants.participantId": senderId },
         ],
-      }).populate("messages participants.participantId");
+      })
+        .slice("messages", -150)
+        .populate("messages participants.participantId")
+        .lean();
       if (alreadyChat.length > 0) {
         return alreadyChat[0];
       }
@@ -46,9 +55,9 @@ export class InboxServices {
           ],
           messages: [],
         });
-        const getChat = await Chat.findById(chat._id).populate(
-          "messages participants.participantId"
-        );
+        const getChat = await Chat.findById(chat._id)
+          .populate("messages participants.participantId")
+          .lean();
 
         return getChat;
       } else {
@@ -59,11 +68,29 @@ export class InboxServices {
           ],
           messages: [],
         });
-        const getChat = await Chat.findById(chat._id).populate(
-          "messages participants.participantId"
-        );
+        const getChat = await Chat.findById(chat._id)
+          .populate("messages participants.participantId")
+          .lean();
         return getChat;
       }
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }
+
+  async deleteMessage(req: Request) {
+    try {
+      const { messageId } = req.body;
+      const message = await this.messageRepository.findById<IMessage>(
+        messageId
+      );
+      if (!message) {
+        throw new Error("Message not found");
+      }
+      const deleteMessage = encrypt("This message has been deleted");
+      message.content = deleteMessage;
+      const newMessage = this.messageRepository.update(messageId, message);
+      return newMessage;
     } catch (error: any) {
       throw new Error(error);
     }

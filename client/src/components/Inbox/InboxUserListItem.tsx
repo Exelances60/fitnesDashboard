@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "@/store/store";
 import useGetTokenPayload from "@/hooks/useGetTokenPayload";
 import axiosClient from "@/utils/AxiosClient";
 import { message } from "antd";
+import { useRouter } from "next/navigation";
 
 interface InboxUserListItemProps {
   employee: {
@@ -18,6 +19,7 @@ const InboxUserListItem = ({ employee }: InboxUserListItemProps) => {
   const dispatch = useAppDispatch();
   const logginUserToken = useGetTokenPayload();
   const selectedChat = useAppSelector(selectChat);
+  const router = useRouter();
 
   const handleUserClick = async () => {
     try {
@@ -27,16 +29,9 @@ const InboxUserListItem = ({ employee }: InboxUserListItemProps) => {
         role: logginUserToken?.role,
       };
       const response = await axiosClient.post("/inbox/create-chat", bodyValue);
-      console.log(response.data);
-      dispatch(
-        setChat({
-          _id: response.data._id,
-          email: employee.email,
-          employeeId: employee._id,
-          profilePicture: employee.profilePicture,
-          ...response.data.chat,
-        })
-      );
+      console.log(response.data.chat);
+      dispatch(setChat(response.data.chat));
+      router.refresh();
     } catch (error) {
       message.error({
         content: "Failed to create chat",

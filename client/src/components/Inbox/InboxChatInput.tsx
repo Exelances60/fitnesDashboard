@@ -17,7 +17,9 @@ const InboxChatInput = () => {
       const bodyValue = {
         content: value.message,
         senderId: logginUserToken?._id,
-        receiverId: selectedChat.employeeId,
+        receiverId:
+          selectedChat.employeeId ||
+          selectedChat.participants[1].participantId._id,
         chatId: selectedChat._id,
       };
 

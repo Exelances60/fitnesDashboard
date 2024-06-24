@@ -13,7 +13,13 @@ export class InboxServices {
 
   async getInbox(req: Request) {
     try {
-    } catch (error) {}
+      const chats = await Chat.find({
+        "participants.participantId": req.userId,
+      }).populate("messages participants.participantId");
+      return chats;
+    } catch (error: any) {
+      throw new Error(error);
+    }
   }
 
   async createChat(req: Request) {
@@ -27,32 +33,39 @@ export class InboxServices {
           { "participants.participantId": receiverId },
           { "participants.participantId": senderId },
         ],
-      }).populate("messages");
+      }).populate("messages participants.participantId");
       if (alreadyChat.length > 0) {
         return alreadyChat[0];
       }
 
       if (role === "owner") {
-        const chat = await this.chatRepository.create({
+        const chat = await Chat.create({
           participants: [
             { participantId: senderId, participantType: "Owner" },
             { participantId: receiverId, participantType: "Employee" },
           ],
           messages: [],
         });
-        return chat;
+        const getChat = await Chat.findById(chat._id).populate(
+          "messages participants.participantId"
+        );
+
+        return getChat;
       } else {
-        const chat = await this.chatRepository.create({
+        const chat = await Chat.create({
           participants: [
             { participantId: senderId, participantType: "Employee" },
             { participantId: receiverId, participantType: "Owner" },
           ],
           messages: [],
         });
-        return chat;
+        const getChat = await Chat.findById(chat._id).populate(
+          "messages participants.participantId"
+        );
+        return getChat;
       }
     } catch (error: any) {
-      throw error;
+      throw new Error(error);
     }
   }
 }

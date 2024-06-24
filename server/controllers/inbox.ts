@@ -8,7 +8,10 @@ export const getInbox = async (
 ) => {
   try {
     const inbox = await new InboxServices().getInbox(req);
-    res.status(200).json(inbox);
+    res.status(200).json({
+      message: "Inbox fetched successfully",
+      inbox,
+    });
   } catch (error: any) {
     if (!error.statusCode) {
       error.statusCode = 500;

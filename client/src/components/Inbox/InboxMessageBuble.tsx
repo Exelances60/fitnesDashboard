@@ -1,4 +1,5 @@
 import { decrypt } from "@/utils/crypto";
+import { Popover } from "antd";
 import React from "react";
 
 interface InboxMessageBubleProps {
@@ -11,13 +12,18 @@ const InboxMessageBuble = ({
   isOwnMessage,
 }: InboxMessageBubleProps) => {
   return (
-    <span
-      className={`inline-block max-w-xs break-words ${
-        isOwnMessage ? "bg-blue-500 text-white" : "bg-gray-300 text-black"
-      } p-3 rounded-lg shadow`}
+    <Popover
+      content={new Date(message.createdAt).toLocaleString()}
+      placement="left"
     >
-      {decrypt(message.content)}
-    </span>
+      <span
+        className={`inline-block max-w-xs break-words ${
+          isOwnMessage ? "bg-blue-500 text-white" : "bg-gray-300 text-black"
+        } p-3 rounded-lg shadow`}
+      >
+        {decrypt(message.content)}
+      </span>
+    </Popover>
   );
 };
 

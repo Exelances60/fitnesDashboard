@@ -7,4 +7,11 @@ interface Message {
     iv: string;
     content: string;
   };
+  createdAt: string;
+}
+
+interface Chat {
+  _id: string;
+  messages: Message[];
+  participants: any[];
 }

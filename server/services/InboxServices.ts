@@ -18,7 +18,7 @@ export class InboxServices {
       const chats = await Chat.find({
         "participants.participantId": req.userId,
       })
-        .slice("messages", -50)
+        .slice("messages", -150)
         .populate("messages participants.participantId")
         .lean();
       return chats;
@@ -39,6 +39,7 @@ export class InboxServices {
           { "participants.participantId": senderId },
         ],
       })
+        .slice("messages", -150)
         .populate("messages participants.participantId")
         .lean();
       if (alreadyChat.length > 0) {

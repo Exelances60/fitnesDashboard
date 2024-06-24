@@ -3,6 +3,7 @@ import { useAppDispatch } from "@/store/store";
 import { logout } from "@/store/slices/userSlice";
 import { message } from "antd";
 import { motion } from "framer-motion";
+import { clearChat } from "@/store/slices/inboxSlice";
 
 const itemVariants = {
   open: {
@@ -50,6 +51,7 @@ const ProfileCardOption = ({
 
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(clearChat());
     message.success("Logout successfully");
     router.refresh();
     router.push("/");

@@ -1,7 +1,9 @@
 import { Request } from "express";
 import { ChatRepository } from "../repository/ChatRepositroy";
 import { MessageRepository } from "../repository/Message";
-import Chat from "../models/Chat";
+import Chat, { IChat } from "../models/Chat";
+import { IMessage } from "../models/Message";
+import { encrypt } from "../utils/crypto-utils";
 
 export class InboxServices {
   private chatRepository: ChatRepository;
@@ -15,7 +17,10 @@ export class InboxServices {
     try {
       const chats = await Chat.find({
         "participants.participantId": req.userId,
-      }).populate("messages participants.participantId");
+      })
+        .slice("messages", -50)
+        .populate("messages participants.participantId")
+        .lean();
       return chats;
     } catch (error: any) {
       throw new Error(error);
@@ -64,6 +69,27 @@ export class InboxServices {
         );
         return getChat;
       }
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }
+
+  async deleteMessage(req: Request) {
+    try {
+      const { messageId } = req.body;
+      const message = await this.messageRepository.findById<IMessage>(
+        messageId
+      );
+      if (!message) {
+        throw new Error("Message not found");
+      }
+      const deleteMessage = encrypt("This message has been deleted");
+      message.content = deleteMessage;
+      const newMessage = this.messageRepository.update(messageId, message);
+      const getChat = Chat.findById(message.chatId).populate(
+        "messages participants.participantId"
+      );
+      return newMessage;
     } catch (error: any) {
       throw new Error(error);
     }

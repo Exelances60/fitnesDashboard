@@ -12,7 +12,7 @@ const InboxProfileImage = ({ src, alt }: InboxProfileImageProps) => {
       <Image
         src={src || "/defaultProfile.png"}
         fill
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        sizes="(max-width: 768px) 50vw, (max-width: 1200px) 30vw, 20vw"
         style={{ objectFit: "cover" }}
         alt={alt}
       />

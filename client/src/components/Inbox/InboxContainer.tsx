@@ -6,9 +6,9 @@ import { fetchInbox } from "@/actions/fetchInbox";
 import ErrorPage from "../ErrorPage";
 
 const InboxContainer = async () => {
-  const [empData, inboxData] = await Promise.all([
-    fetchEmplooyes(),
+  const [inboxData, empData] = await Promise.all([
     fetchInbox(),
+    fetchEmplooyes(),
   ]);
   const { employees } = empData;
   if (inboxData?.error) {

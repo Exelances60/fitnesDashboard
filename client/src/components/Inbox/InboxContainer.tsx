@@ -20,7 +20,6 @@ const InboxContainer = async () => {
       />
     );
   }
-
   return (
     <div className="w-full h-full flex lg:flex-row flex-col">
       <InboxUsersList employees={employees} chat={inboxData?.data} />

@@ -29,7 +29,6 @@ const InboxUserListItem = ({ employee }: InboxUserListItemProps) => {
         role: logginUserToken?.role,
       };
       const response = await axiosClient.post("/inbox/create-chat", bodyValue);
-      console.log(response.data.chat);
       dispatch(setChat(response.data.chat));
       router.refresh();
     } catch (error) {

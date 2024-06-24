@@ -16,11 +16,12 @@ export class InboxServices {
   async getInbox(req: Request) {
     try {
       const chats = await Chat.find({
-        "participants.participantId": req.userId,
+        "participants.participantId": req.params.userId,
       })
         .slice("messages", -150)
         .populate("messages participants.participantId")
         .lean();
+      console.log(chats);
       return chats;
     } catch (error: any) {
       throw new Error(error);

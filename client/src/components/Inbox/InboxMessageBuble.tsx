@@ -29,7 +29,7 @@ const InboxMessageBuble = ({
       const newChat = selectedChat?.messages.map((msg) =>
         msg._id === newMessage._id ? newMessage : msg
       );
-      dispatch(setChat(newChat));
+      dispatch(setChat({ ...selectedChat, messages: newChat }));
       showMessage("Message deleted", "success");
     } catch (error) {
       showMessage("Failed to delete message", "error");
@@ -64,15 +64,6 @@ const InboxMessageBuble = ({
           {decrypt(message.content)}
         </span>
       </Popover>
-      {!isOwnMessage && !isMessageOlderThanOneHour(message.createdAt) ? (
-        <Popover content="Delete" placement="top">
-          <DeleteOutlined
-            onClick={deleteMessage}
-            className="text-lg cursor-pointer"
-            style={{ color: "#b63a3a" }}
-          />
-        </Popover>
-      ) : null}
     </div>
   );
 };

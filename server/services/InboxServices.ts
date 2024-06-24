@@ -38,7 +38,9 @@ export class InboxServices {
           { "participants.participantId": receiverId },
           { "participants.participantId": senderId },
         ],
-      }).populate("messages participants.participantId");
+      })
+        .populate("messages participants.participantId")
+        .lean();
       if (alreadyChat.length > 0) {
         return alreadyChat[0];
       }
@@ -51,9 +53,9 @@ export class InboxServices {
           ],
           messages: [],
         });
-        const getChat = await Chat.findById(chat._id).populate(
-          "messages participants.participantId"
-        );
+        const getChat = await Chat.findById(chat._id)
+          .populate("messages participants.participantId")
+          .lean();
 
         return getChat;
       } else {
@@ -64,9 +66,9 @@ export class InboxServices {
           ],
           messages: [],
         });
-        const getChat = await Chat.findById(chat._id).populate(
-          "messages participants.participantId"
-        );
+        const getChat = await Chat.findById(chat._id)
+          .populate("messages participants.participantId")
+          .lean();
         return getChat;
       }
     } catch (error: any) {
@@ -86,9 +88,6 @@ export class InboxServices {
       const deleteMessage = encrypt("This message has been deleted");
       message.content = deleteMessage;
       const newMessage = this.messageRepository.update(messageId, message);
-      const getChat = Chat.findById(message.chatId).populate(
-        "messages participants.participantId"
-      );
       return newMessage;
     } catch (error: any) {
       throw new Error(error);

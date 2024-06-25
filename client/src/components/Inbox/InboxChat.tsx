@@ -7,8 +7,9 @@ import InboxChatHeader from "./InboxChatHeader";
 import { socket } from "@/utils/socket";
 import useGetTokenPayload from "@/hooks/useGetTokenPayload";
 import InboxChatMessage from "./InboxChatMessage";
-
+import useSound from "use-sound";
 const InboxChat = () => {
+  const [play] = useSound("/sounds/message.mp3");
   const logginUserToken = useGetTokenPayload();
   const dispatch = useAppDispatch();
   const [messages, setMessages] = useState<Message[]>([]);
@@ -36,6 +37,9 @@ const InboxChat = () => {
   }, [messages, selectedChat]);
 
   const handleMessage = (message: Message) => {
+    if (message.receiverId === logginUserToken?._id) {
+      play();
+    }
     setMessages((prev) => [...prev, message]);
     if (selectedChat) {
       dispatch(
@@ -88,7 +92,6 @@ const InboxChat = () => {
         {selectedChat ? (
           <>
             {renderMessages(selectedChat.messages)}
-            {/*     {renderMessages(messages)} */}
             <div ref={messagesEndRef} />
           </>
         ) : (

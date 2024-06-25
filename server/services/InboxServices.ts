@@ -21,7 +21,6 @@ export class InboxServices {
         .slice("messages", -150)
         .populate("messages participants.participantId")
         .lean();
-      console.log(chats);
       return chats;
     } catch (error: any) {
       throw new Error(error);

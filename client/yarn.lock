@@ -4138,10 +4138,10 @@ uri-js@^4.2.2:
   dependencies:
     punycode "^2.1.0"
 
-use-sound@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.npmjs.org/use-sound/-/use-sound-4.0.1.tgz"
-  integrity sha512-hykJ86kNcu6y/FzlSHcQxhjSGMslZx2WlfLpZNoPbvueakv4OF3xPxEtGV2YmculrIaH0tPp9LtG4jgy17xMWg==
+use-sound@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/use-sound/-/use-sound-4.0.3.tgz#858effc102b987e0e1f9a6d396706c1362453543"
+  integrity sha512-L205pEUFIrLsGYsCUKHQVCt0ajs//YQOFbEQeNwaWaqQj3y3st4SuR+rvpMHLmv8hgTcfUFlvMQawZNI3OE18w==
   dependencies:
     howler "^2.1.3"
 

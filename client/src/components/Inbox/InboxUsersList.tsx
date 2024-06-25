@@ -5,9 +5,10 @@ import useGetTokenPayload from "@/hooks/useGetTokenPayload";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { selectUser } from "@/store/slices/userSlice";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import { Popover } from "antd";
+import { message, Popover } from "antd";
 import InboxUserListItem from "./InboxUserListItem";
 import { selectChat, setChat } from "@/store/slices/inboxSlice";
+import axiosClient from "@/utils/AxiosClient";
 
 interface InboxUsersListProps {
   employees: IEmployee[];
@@ -19,6 +20,18 @@ const InboxUsersList = ({ employees, chat }: InboxUsersListProps) => {
   const userInfo = useAppSelector(selectUser);
   const selectedChat = useAppSelector(selectChat);
   const dispatch = useAppDispatch();
+
+  const getChat = async (chatId: string) => {
+    try {
+      const response = await axiosClient.get(`/inbox/get-chat/${chatId}`);
+      dispatch(setChat(response.data.chat));
+    } catch (error: any) {
+      message.error({
+        content: error.response.data.errorMessage,
+        duration: 2,
+      });
+    }
+  };
 
   const usersContent = (
     <div className="h-[500px] overflow-auto">
@@ -46,7 +59,7 @@ const InboxUsersList = ({ employees, chat }: InboxUsersListProps) => {
         <Popover content={usersContent} title="Users" trigger="click">
           <PlusCircleOutlined className="relative right-20 top-2 text-xl cursor-pointer drop-shadow-md" />
         </Popover>
-        <div className="w-20 h-20  relative rounded-full">
+        <div className="md:w-20 md:h-20 relative rounded-full ">
           <Image
             src={logginTokenPayload?.image || ""}
             alt="profile"
@@ -69,9 +82,7 @@ const InboxUsersList = ({ employees, chat }: InboxUsersListProps) => {
             );
             return (
               <div
-                onClick={() => {
-                  dispatch(setChat(chat));
-                }}
+                onClick={() => getChat(chat._id)}
                 key={chat._id}
                 className={`w-full h-16 bg-gray-200 flex gap-4 items-center text-gray-800 rounded-lg p-4 cursor-pointer transition-all duration-300 hover:bg-gray-300 
                 ${

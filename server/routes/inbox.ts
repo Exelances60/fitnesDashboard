@@ -9,4 +9,6 @@ router.post("/create-chat", isAuth, inboxController.createChat);
 
 router.post("/delete-message", isAuth, inboxController.deleteMessage);
 
+router.get("/get-chat/:chatId", isAuth, inboxController.getChat);
+
 export { router as inboxRoutes };

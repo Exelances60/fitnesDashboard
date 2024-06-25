@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { selectUser } from "@/store/slices/userSlice";
 import { useAppSelector } from "@/store/store";
-import { Avatar } from "antd";
+import { Avatar, message } from "antd";
 import { UserOutlined, LoginOutlined } from "@ant-design/icons";
 import { motion } from "framer-motion";
 import ProfileCardOption from "./ProfileCardOption";
 import useGetTokenPayload from "@/hooks/useGetTokenPayload";
+import { socket } from "@/utils/socket";
+import useSound from "use-sound";
 
 const wrapperVariants = {
   open: {
@@ -25,9 +27,27 @@ const wrapperVariants = {
 };
 
 const ProfileCardNavi = () => {
+  const [play] = useSound("/sounds/message.mp3", { volume: 0.5 });
   const [open, setOpen] = useState(false);
   const userInfo = useAppSelector(selectUser);
   const tokenPayload = useGetTokenPayload();
+  useEffect(() => {
+    if (tokenPayload?._id) {
+      socket.on("notification", (data) => {
+        if (data.receiverId === tokenPayload?._id) {
+          play();
+          message.info({
+            content: "You have a new notification",
+            duration: 2,
+          });
+        }
+      });
+
+      return () => {
+        socket.off("notification");
+      };
+    }
+  }, [tokenPayload]);
 
   return (
     <>

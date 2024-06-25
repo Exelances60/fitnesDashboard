@@ -57,3 +57,22 @@ export const deleteMessage = async (
     next(error);
   }
 };
+
+export const getChat = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const chat = await new InboxServices().getChat(req);
+    res.status(200).json({
+      message: "Chat fetched successfully",
+      chat,
+    });
+  } catch (error: any) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};

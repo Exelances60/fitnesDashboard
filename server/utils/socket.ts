@@ -17,8 +17,13 @@ export const socket = (
 
   io.on("connection", async (socket) => {
     console.log("a user connected");
+
     socket.on("joinRoom", (chatId) => {
       socket.join(chatId);
+    });
+
+    socket.on("notification", (notification) => {
+      io.emit("notification", notification);
     });
 
     socket.on("disconnect", () => {
@@ -30,6 +35,7 @@ export const socket = (
     });
 
     socket.on("sendMessage", async (message) => {
+      io.emit("notification", message);
       const encryptedMessage = encrypt(message.content as string);
       const newMessage = await Message.create({
         chatId: message.chatId,
@@ -37,9 +43,11 @@ export const socket = (
         receiverId: message.receiverId,
         content: encryptedMessage,
       });
+
       const chat = await new ChatRepository().findById<IChat>(message.chatId);
       chat?.messages.push(newMessage._id);
       chat?.save();
+
       io.to(message.chatId).emit("message", newMessage);
     });
   });

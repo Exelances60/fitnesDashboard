@@ -3,9 +3,9 @@ import { Popover } from "antd";
 import React from "react";
 import { DeleteOutlined } from "@ant-design/icons";
 import axiosClient from "@/utils/AxiosClient";
-import { selectChat, setChat } from "@/store/slices/inboxSlice";
+import { deleteMessageAction } from "@/store/slices/inboxSlice";
 import useMessage from "@/hooks/useMessage";
-import { useAppDispatch, useAppSelector } from "@/store/store";
+import { useAppDispatch } from "@/store/store";
 
 interface InboxMessageBubleProps {
   message: Message;
@@ -16,7 +16,6 @@ const InboxMessageBuble = ({
   message,
   isOwnMessage,
 }: InboxMessageBubleProps) => {
-  const selectedChat = useAppSelector(selectChat);
   const dispatch = useAppDispatch();
   const showMessage = useMessage();
 
@@ -26,10 +25,7 @@ const InboxMessageBuble = ({
         messageId: message._id,
       });
       const newMessage = response.data.data;
-      const newChat = selectedChat?.messages.map((msg) =>
-        msg._id === newMessage._id ? newMessage : msg
-      );
-      dispatch(setChat({ ...selectedChat, messages: newChat }));
+      dispatch(deleteMessageAction(newMessage));
       showMessage("Message deleted", "success");
     } catch (error) {
       showMessage("Failed to delete message", "error");

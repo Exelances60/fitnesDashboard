@@ -9,7 +9,7 @@ export const fetchInbox = async () => {
     return { error: "Token not found", data: [] };
   }
   const decode = jwtDecode(token) as jwtUserDecode;
-  const bodyValue = decode.role === "owner" ? decode.ownerId : decode._id;
+  const bodyValue = decode._id;
   try {
     const response = await fetch(
       `${process.env.BACK_END_SERVICES}/inbox/get-inbox/${bodyValue}`,
@@ -18,7 +18,7 @@ export const fetchInbox = async () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        cache: "no-store",
+        cache: "no-cache",
       }
     );
     const data = await response.json();

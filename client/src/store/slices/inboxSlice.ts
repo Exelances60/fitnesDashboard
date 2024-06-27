@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
+import { act } from "react-dom/test-utils";
 
 interface IInboxState {
   selectedChat: {
@@ -36,24 +37,21 @@ const inboxSlice = createSlice({
     },
     deleteMessageAction(state, action) {
       if (state.selectedChat) {
-        const newMessages = state.selectedChat.messages.map((msg) =>
-          msg._id === action.payload
-            ? { ...msg, content: "This message has been deleted" }
-            : msg
+        const newChat = state.selectedChat?.messages.map((msg) =>
+          msg._id === action.payload._id ? action.payload : msg
         );
-        state.selectedChat.messages = newMessages;
-        state.loading.deletingMessage = false;
+        state.selectedChat = { ...state.selectedChat, messages: newChat };
       }
     },
     setMessagesAction(state, action) {
       if (state.selectedChat) {
-        state.selectedChat.messages.push(action.payload);
-        state.loading.sendingMessage = false;
+        state.selectedChat = {
+          ...state.selectedChat,
+          messages: [...state.selectedChat.messages, action.payload],
+        };
       }
     },
-    setLoading(state, action) {
-      state.loading = { ...state.loading, ...action.payload };
-    },
+
     clearChat(state) {
       state.selectedChat = null;
       state.loading = {
@@ -65,13 +63,8 @@ const inboxSlice = createSlice({
   },
 });
 
-export const {
-  setChat,
-  deleteMessageAction,
-  setMessagesAction,
-  clearChat,
-  setLoading,
-} = inboxSlice.actions;
+export const { setChat, deleteMessageAction, setMessagesAction, clearChat } =
+  inboxSlice.actions;
 
 export const selectChat = (state: RootState) => state.inboxReducer.selectedChat;
 export const selectLoading = (state: RootState) => state.inboxReducer.loading;

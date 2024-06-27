@@ -2,13 +2,14 @@
 import { Card } from "@tremor/react";
 import { Table, DatePicker } from "antd";
 import React, { useState } from "react";
-import useSelectUserInfo from "@/hooks/useSelectUserInfo";
 import axiosClient from "@/utils/AxiosClient";
 import useMessage from "@/hooks/useMessage";
 import OrderTableDetailsCol from "./OrderTableDetailsCol";
 import { statusFilter, statusRender } from "@/mock/orderStatusFilter";
 import useTableFilterSearchDropDown from "@/hooks/useTableFilterSearchDropDown";
 import useTableSearchOrderOwner from "@/hooks/useOrderTableOrderOwner";
+import { useAppSelector } from "@/store/store";
+import { selectProductCategory } from "@/store/slices/userSlice";
 
 const { RangePicker } = DatePicker;
 
@@ -21,16 +22,16 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
   const { filterDropdownOrderOwner, searchByOrderOwner } =
     useTableSearchOrderOwner("Search by order owner");
   const [rangePickerValue, setRangePickerValue] = useState([null, null]);
-  const userInfo = useSelectUserInfo();
+  const productCategory = useAppSelector(selectProductCategory);
   const showMessage = useMessage();
 
-  const categoryFilter = userInfo?.productCategory
+  const categoryFilter = productCategory
     ? [
         { text: "ProteinPowder", value: "ProteinPowder" },
         { text: "Vitamins", value: "Vitamins" },
         { text: "Supplements", value: "Supplements" },
         { text: "Others", value: "Others" },
-        ...userInfo.productCategory.map((category) => ({
+        ...productCategory.map((category) => ({
           text: category,
           value: category,
         })),

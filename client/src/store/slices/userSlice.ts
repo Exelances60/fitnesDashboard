@@ -25,7 +25,8 @@ export const userSlice = createSlice({
       state.menuKeys = action.payload;
     },
     logout: (state) => {
-      state = initialState;
+      state.user = null;
+      state.productCategory = [];
       deleteCookie("token");
       state.menuKeys = "dashboard";
     },

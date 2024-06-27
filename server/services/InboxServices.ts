@@ -21,7 +21,6 @@ export class InboxServices {
         .slice("messages", -150)
         .populate("messages participants.participantId")
         .lean();
-      console.log(chats);
       return chats;
     } catch (error: any) {
       throw new Error(error);
@@ -55,10 +54,7 @@ export class InboxServices {
           ],
           messages: [],
         });
-        const getChat = await Chat.findById(chat._id)
-          .populate("messages participants.participantId")
-          .lean();
-
+        const getChat = await Chat.findById(chat._id);
         return getChat;
       } else {
         const chat = await Chat.create({
@@ -68,9 +64,8 @@ export class InboxServices {
           ],
           messages: [],
         });
-        const getChat = await Chat.findById(chat._id)
-          .populate("messages participants.participantId")
-          .lean();
+        const getChat = await Chat.findById(chat._id);
+
         return getChat;
       }
     } catch (error: any) {
@@ -91,6 +86,17 @@ export class InboxServices {
       message.content = deleteMessage;
       const newMessage = this.messageRepository.update(messageId, message);
       return newMessage;
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }
+
+  async getChat(req: Request) {
+    try {
+      const chat = await Chat.findById(req.params.chatId)
+        .populate("participants.participantId messages")
+        .lean();
+      return chat;
     } catch (error: any) {
       throw new Error(error);
     }

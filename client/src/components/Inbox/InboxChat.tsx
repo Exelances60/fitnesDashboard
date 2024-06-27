@@ -1,13 +1,16 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { selectChat, setChat } from "@/store/slices/inboxSlice";
+import {
+  selectChat,
+  setChat,
+  setMessagesAction,
+} from "@/store/slices/inboxSlice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import InboxChatInput from "./InboxChatInput";
 import InboxChatHeader from "./InboxChatHeader";
 import { socket } from "@/utils/socket";
 import useGetTokenPayload from "@/hooks/useGetTokenPayload";
 import InboxChatMessage from "./InboxChatMessage";
-
 const InboxChat = () => {
   const logginUserToken = useGetTokenPayload();
   const dispatch = useAppDispatch();
@@ -38,12 +41,7 @@ const InboxChat = () => {
   const handleMessage = (message: Message) => {
     setMessages((prev) => [...prev, message]);
     if (selectedChat) {
-      dispatch(
-        setChat({
-          ...selectedChat,
-          messages: [...selectedChat.messages, message],
-        })
-      );
+      dispatch(setMessagesAction(message));
     }
   };
 
@@ -88,7 +86,6 @@ const InboxChat = () => {
         {selectedChat ? (
           <>
             {renderMessages(selectedChat.messages)}
-            {/*     {renderMessages(messages)} */}
             <div ref={messagesEndRef} />
           </>
         ) : (

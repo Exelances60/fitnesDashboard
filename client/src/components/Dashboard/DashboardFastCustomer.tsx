@@ -7,7 +7,7 @@ const DashboardFastCustomer = () => {
   const customer = useFetchCustomerDataForClient();
   return (
     <Spin spinning={customer.length === 0}>
-      <CustomerTable customers={customer} />;
+      <CustomerTable customers={customer} />
     </Spin>
   );
 };

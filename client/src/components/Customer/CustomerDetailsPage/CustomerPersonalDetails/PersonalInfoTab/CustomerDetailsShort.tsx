@@ -7,7 +7,7 @@ import { MobileOutlined } from "@ant-design/icons";
 const CustomerDetailsShort = ({ customer }: { customer: CustomerType }) => {
   return (
     <>
-      <div className="flex flex-col items-center  min-h-96 h-[800px] bg-white shadow rounded-md overflow-auto">
+      <div className="flex flex-col items-center  min-h-96 h-[850px] bg-white shadow rounded-md overflow-auto">
         <div className="w-full h-[200px] relative">
           <Image
             src="https://react-material.fusetheme.com/assets/images/cards/19-640x480.jpg"

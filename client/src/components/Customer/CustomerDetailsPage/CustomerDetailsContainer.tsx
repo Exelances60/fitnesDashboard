@@ -46,7 +46,7 @@ const CustomerDetailsContainer = ({ customer }: CustomerSlugContainerProps) => {
       className="gap-2 "
     >
       <CustomerDetailsShort customer={customer} />
-      <Card className="overflow-auto h-[800px]">
+      <Card className="overflow-auto h-[850px]">
         <Tabs items={items} defaultActiveKey="1" />
       </Card>
     </Grid>

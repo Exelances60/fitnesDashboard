@@ -9,8 +9,10 @@ import {
   LikeOutlined,
 } from "@ant-design/icons";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 const LoginRightSide = ({ register }: { register: boolean }) => {
+  const t = useTranslations("AuthPages");
   return (
     <div className="relative hidden lg:flex flex-auto items-center justify-center h-full overflow-hidden">
       <Image
@@ -43,7 +45,7 @@ const LoginRightSide = ({ register }: { register: boolean }) => {
             transition={{ delay: 0.2, duration: 0.5 }}
             className="text-2xl font-bold "
           >
-            Welcome Back the Dashboard
+            {t("welcomeBack")}
           </motion.h1>
           <motion.h1
             initial={{ y: 10, opacity: 0 }}

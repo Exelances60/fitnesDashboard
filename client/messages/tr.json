@@ -1,0 +1,39 @@
+{
+  "AuthPages": {
+    "login": "Giriş Yap",
+    "loginDescription": "Hesabınıza giriş yapmak için e-posta adresinizi aşağıya girin",
+    "wrong": "Bir hata oluştu. Lütfen tekrar deneyin.",
+    "email": "E-posta",
+    "password": "Şifre",
+    "register": "Kayıt Ol",
+    "registerDescription": "Tüm özelliklere erişmek için bir hesap oluşturun",
+    "allHaveAccount": "Zaten bir hesabınız var mı? Şimdi giriş yapın!",
+    "welcomeBack": "Tekrar Hoş Geldiniz"
+  },
+  "RegisterStepsPage": {
+    "thankYouForRegister": "Kaydınız için teşekkür ederiz",
+    "accountUnderReview": "Hesabınız incelenmektedir. 🔍",
+    "weWillContactYou": "En kısa sürede sizinle iletişime geçeceğiz. 📞",
+    "phone": "Telefon Numarası",
+    "address": "Adres",
+    "enterAddress": "Adres Girin",
+    "enterPhone": "Telefon Numarası Girin",
+    "enterCompanyName": "Şirket Adı Girin",
+    "companyName": "Şirket Adı",
+    "uploadCompanyLogo": "Şirket Logosu Yükle",
+    "email": "E-posta",
+    "password": "Şifre",
+    "confirmPassword": "Şifreyi Onayla",
+    "guide": "Rehber",
+    "account": "Hesap",
+    "profile": "Profil",
+    "finish": "Bitir",
+    "passwordNotMatch": "Şifreler eşleşmiyor",
+    "welcomeStep": "Hesap Kaydına Hoş Geldiniz",
+    "welcomeStepDescription": "Bu sekme hesap e-posta ve şifre bilgilerini içerir ve bir sonraki adıma geçer",
+    "profileStep": "Profil Bilgileri",
+    "profileStepDescription": "Bu sekme hesabınız için temel profil bilgilerini içerir ve bir sonraki adıma geçer",
+    "finishStep": "Kaydı Tamamla",
+    "finishStepDescription": "Bu sekme kayıt işlemini tamamlamak için son adımdır ve qr kodu görmeli ve qr kodu kullanarak kayıt işlemini takip etmelisiniz"
+  }
+}

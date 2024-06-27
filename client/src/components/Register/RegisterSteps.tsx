@@ -8,6 +8,7 @@ import { TourProps } from "antd/lib";
 import axiosClient from "@/utils/AxiosClient";
 import RegisterFinishSteps from "./RegisterFinishSteps";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 interface IFormValues {
   email: string;
@@ -20,6 +21,7 @@ interface IFormValues {
 }
 
 const RegisterSteps = () => {
+  const t = useTranslations("RegisterStepsPage");
   const accountRef = useRef(null);
   const profileRef = useRef(null);
   const finishRef = useRef(null);
@@ -32,22 +34,19 @@ const RegisterSteps = () => {
 
   const steps: TourProps["steps"] = [
     {
-      title: "Welcome to Account Registration",
+      title: t("welcomeStep"),
       target: () => accountRef.current,
-      description:
-        "This tab account email and password information and move to the next step",
+      description: t("welcomeStepDescription"),
     },
     {
-      title: "Profile Information",
+      title: t("profileStep"),
       target: () => profileRef.current,
-      description:
-        "This tab basic profile information for your account and move to the next step",
+      description: t("profileStepDescription"),
     },
     {
-      title: "Finish",
+      title: t("finishStep"),
       target: () => finishRef.current,
-      description:
-        "This tab is the final step to finish the registration process and you must see the qr code and using qr code your tracking the registration process",
+      description: t("finishStepDescription"),
     },
   ];
 
@@ -55,7 +54,7 @@ const RegisterSteps = () => {
     setLoading(true);
     if (values.password !== values.confirmPassword) {
       return message.error({
-        content: "Password does not match",
+        content: t("passwordNotMatch"),
         key: "register",
       });
     }
@@ -92,13 +91,13 @@ const RegisterSteps = () => {
         <Segmented
           size="large"
           value={current}
-          options={["Account", "Profile", "Finish"]}
+          options={[t("account"), t("profile"), t("finish")]}
           onChange={(value) => {
             setCurrent(value);
           }}
         />
 
-        <Tooltip title="Guide" placement="bottomRight">
+        <Tooltip title={t("guide")} placement="bottomRight">
           <QuestionOutlined
             className="text-2xl font-bold absolute top-0 p-2 left-0"
             onClick={() => {

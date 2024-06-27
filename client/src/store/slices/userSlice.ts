@@ -19,13 +19,14 @@ export const userSlice = createSlice({
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload;
-      state.productCategory = action.payload.productCategory;
+      state.productCategory = action.payload?.productCategory;
     },
     setMenuKeys: (state, action) => {
       state.menuKeys = action.payload;
     },
     logout: (state) => {
-      state = initialState;
+      state.user = null;
+      state.productCategory = [];
       deleteCookie("token");
       state.menuKeys = "dashboard";
     },

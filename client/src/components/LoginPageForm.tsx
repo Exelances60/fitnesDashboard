@@ -8,8 +8,10 @@ import { jwtDecode } from "jwt-decode";
 import { emailRules } from "@/utils/FormRules";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 const LoginPageForm = () => {
+  const t = useTranslations("AuthPages");
   const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState<string>("");
@@ -45,11 +47,9 @@ const LoginPageForm = () => {
       }
     } catch (error: any) {
       message.destroy("login");
-      message.error(
-        error.response?.data.errorMessage || "Something went wrong"
-      );
+      message.error(error.response?.data.errorMessage || t("wrong"));
 
-      setError(error.response?.data.errorMessage || "Something went wrong");
+      setError(error.response?.data.errorMessage || t("wrong"));
     } finally {
       setLoading(false);
     }
@@ -67,10 +67,10 @@ const LoginPageForm = () => {
           layout="vertical"
           onFinish={onFinish}
         >
-          <Form.Item name="email" rules={emailRules} label="Email">
+          <Form.Item name="email" rules={emailRules} label={t("email")}>
             <Input
               type="text"
-              placeholder="Email"
+              placeholder={t("email")}
               value={""}
               className="w-full h-[50px] px-[10px] bg-[#F0F2F5] rounded-[10px]"
             />
@@ -79,11 +79,11 @@ const LoginPageForm = () => {
           <Form.Item
             name="password"
             rules={[{ required: true, message: "Please Input your Password!" }]}
-            label="Password"
+            label={t("password")}
           >
             <Input.Password
               type="password"
-              placeholder="Password"
+              placeholder={t("password")}
               value={""}
               className="w-full h-[50px] px-[10px] bg-[#F0F2F5] rounded-[10px]"
             />
@@ -95,10 +95,10 @@ const LoginPageForm = () => {
             loading={loading}
             className="w-full h-[50px] bg-[#4880FF] rounded-[10px] text-white font-bold"
           >
-            Login
+            {t("login")}
           </Button>
           <Link href="/register" className="text-center text-[#4880FF]">
-            Register
+            {t("register")}
           </Link>
           {error ? <p className="text-red-500">{error}</p> : null}
         </Form>

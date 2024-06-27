@@ -1,0 +1,39 @@
+{
+  "AuthPages": {
+    "login": "Login",
+    "loginDescription": "Enter your email to login to your account",
+    "wrong": "An error occurred. Please try again.",
+    "email": "Email",
+    "password": "Password",
+    "register": "Register",
+    "registerDescription": "Create an account to access all features",
+    "allHaveAccount": "Already have an account? Login now!",
+    "welcomeBack": "Welcome Back"
+  },
+  "RegisterStepsPage": {
+    "thankYouForRegister": "Thank you for registering",
+    "accountUnderReview": "Your account is under review. 🔍",
+    "weWillContactYou": "We will contact you as soon as possible. 📞",
+    "phone": "Phone Number",
+    "address": "Address",
+    "enterAddress": "Enter Address",
+    "enterPhone": "Enter Phone Number",
+    "enterCompanyName": "Enter Company Name",
+    "companyName": "Company Name",
+    "uploadCompanyLogo": "Upload Company Logo",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "guide": "Guide",
+    "account": "Account",
+    "profile": "Profile",
+    "finish": "Finish",
+    "passwordNotMatch": "Passwords do not match",
+    "welcomeStep": "Welcome to Account Registration",
+    "welcomeStepDescription": "This tab account email and password information and move to the next step",
+    "profileStep": "Profile Information",
+    "profileStepDescription": "This tab basic profile information for your account and move to the next step",
+    "finishStep": "Finish Registration",
+    "finishStepDescription": "This tab is the final step to finish the registration process and you must see the qr code and using qr code your tracking the registration process"
+  }
+}

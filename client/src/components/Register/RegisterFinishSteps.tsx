@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Button } from "antd";
 import RegisterWaitPhoto from "@/../public/undraw_wait_in_line_o2aq.svg";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 interface IRegisterFinishStepsProps {
   current: string;
@@ -13,15 +14,17 @@ const RegisterFinishSteps = forwardRef<
   HTMLDivElement,
   IRegisterFinishStepsProps
 >(({ current }, ref) => {
+  const t = useTranslations("RegisterStepsPage");
+
   return (
     <>
-      {current === "Finish" && (
+      {(current === "Finish" || current === "Bitir") && (
         <div ref={ref}>
           <motion.div
             initial={{ opacity: 0, x: 100 }}
             animate={{
-              opacity: current === "Finish" ? 1 : 0,
-              x: current === "Finish" ? 0 : 100,
+              opacity: current === "Finish" || current === "Bitir" ? 1 : 0,
+              x: current === "Finish" || current === "Bitir" ? 0 : 100,
             }}
             className="flex flex-col items-center justify-center gap-2 w-full"
           >
@@ -32,9 +35,9 @@ const RegisterFinishSteps = forwardRef<
               height={300}
               className="my-2"
             />
-            <p> Thank you for registering </p>
-            <p>Your account is under review 🔍 </p>
-            <p> We will send you an email or SMS to in 2 days ⌚</p>
+            <p>{t("thankYouForRegister")} </p>
+            <p>{t("accountUnderReview")} </p>
+            <p>{t("weWillContactYou")}</p>
             <Button
               type="primary"
               htmlType="submit"

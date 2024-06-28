@@ -32,7 +32,7 @@ const productSchema = new ModelSchema({
         ref: "Owner",
         required: true,
     },
-});
+}, { timestamps: true });
 const Product = (0, mongoose_1.model)("Product", productSchema);
 exports.default = Product;
 //# sourceMappingURL=Product.js.map

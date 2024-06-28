@@ -9,11 +9,11 @@ const throwBadRequestError_1 = __importDefault(require("../utils/err/throwBadReq
 const throwNotFoundError_1 = __importDefault(require("../utils/err/throwNotFoundError"));
 const jwtServices_1 = __importDefault(require("../utils/jwtServices"));
 const FirebaseServices_1 = __importDefault(require("../utils/FirebaseServices"));
-const PeddingAccountRepository_1 = require("../repository/PeddingAccountRepository");
+const EmployeeRepository_1 = require("../repository/EmployeeRepository");
 class UserServices {
     constructor() {
         this.ownerRepository = new OwnerRepository_1.OwnerRepository();
-        this.peddingAccountRepository = new PeddingAccountRepository_1.PeddingAccountRepository();
+        this.employeeRepository = new EmployeeRepository_1.EmployeeRepository();
     }
     /**
      * Authenticates a user by their email and password.
@@ -25,17 +25,35 @@ class UserServices {
     async Login(email, password) {
         try {
             const user = await this.ownerRepository.findOne({ email });
-            if (!user)
-                return (0, throwNotFoundError_1.default)("A user with this email could not be found.");
-            const isPasswordMatch = await jwtServices_1.default.comparePassword(password, user.password);
-            if (!isPasswordMatch)
-                return (0, throwBadRequestError_1.default)("Password is incorrect. Please try again.");
-            const token = jwtServices_1.default.signToken({
-                email: user.email,
-                ownerId: user._id.toString(),
-                _id: user._id.toString(),
-            });
-            return token;
+            if (user) {
+                const isPasswordMatch = await jwtServices_1.default.comparePassword(password, user.password);
+                if (!isPasswordMatch)
+                    return (0, throwBadRequestError_1.default)("Password is incorrect. Please try again.");
+                const token = jwtServices_1.default.signToken({
+                    email: user.email,
+                    ownerId: user._id.toString(),
+                    _id: user._id.toString(),
+                    role: user.role,
+                    image: user.ownerImage,
+                });
+                return token;
+            }
+            else {
+                const employee = await this.employeeRepository.findOne({
+                    email,
+                });
+                const isPasswordMatch = await jwtServices_1.default.comparePassword(password, employee.password);
+                if (!isPasswordMatch)
+                    return (0, throwBadRequestError_1.default)("Password is incorrect. Please try again.");
+                const token = jwtServices_1.default.signToken({
+                    email: employee.email,
+                    role: employee.position,
+                    ownerId: employee.ownerId.toString(),
+                    _id: employee._id.toString(),
+                    image: employee.profilePicture,
+                });
+                return token;
+            }
         }
         catch (error) {
             throw new Error(error);
@@ -126,32 +144,18 @@ class UserServices {
         try {
             const bcryptPassword = await jwtServices_1.default.hashPassword(req.body.password);
             req.body.password = bcryptPassword;
-            if (req.body.ownerImage && req.file) {
-                const uploadImage = await FirebaseServices_1.default.uploadImageToStorage(req.file, "pendingOwner/");
+            if (req.file) {
+                const uploadImage = await FirebaseServices_1.default.uploadImageToStorage(req.file, "owner/");
                 req.body.ownerImage = uploadImage;
             }
-            const pendingOwner = await this.peddingAccountRepository.create(req.body);
-            return pendingOwner._id;
-        }
-        catch (error) {
-            throw new Error(error);
-        }
-    }
-    async getPeddingRegister(req) {
-        try {
-            const pedingOwner = await this.peddingAccountRepository.findById(req.params.registerId);
-            if (!pedingOwner)
-                throw (0, throwNotFoundError_1.default)("Pedding Owner not found!");
-            const returnOwnerPending = {
-                email: pedingOwner.email,
-                companyName: pedingOwner.companyName,
-                address: pedingOwner.address,
-                phone: pedingOwner.phone,
-                ownerImage: pedingOwner.ownerImage,
-                _id: pedingOwner._id,
-                status: pedingOwner.status,
-            };
-            return returnOwnerPending;
+            const newOwner = await this.ownerRepository.create({
+                ...req.body,
+                role: "owner",
+                ownerImage: req.body.ownerImage,
+            });
+            if (!newOwner)
+                return (0, throwBadRequestError_1.default)("Owner not created!");
+            return newOwner._id;
         }
         catch (error) {
             throw new Error(error);

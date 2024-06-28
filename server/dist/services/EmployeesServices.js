@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EmployeesServices = void 0;
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const EmployeeRepository_1 = require("../repository/EmployeeRepository");
 const throwValidationError_1 = __importDefault(require("../utils/err/throwValidationError"));
 const FirebaseServices_1 = __importDefault(require("../utils/FirebaseServices"));
@@ -39,8 +40,10 @@ class EmployeesServices {
                     return await FirebaseServices_1.default.uploadImageToStorage(file, "empDocument/");
                 }));
             }
+            const hashedPassword = await bcryptjs_1.default.hash(req.body.password, 10);
             const employee = await this.employeeRepository.create({
                 ...req.body,
+                password: hashedPassword,
                 profilePicture: downloadURLProfilePicture,
                 documents: dowlandsDocuments,
                 customers: [],

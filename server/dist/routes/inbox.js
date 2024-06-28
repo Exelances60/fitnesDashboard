@@ -23,18 +23,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.orderRoutes = void 0;
+exports.inboxRoutes = void 0;
 const express_1 = require("express");
-const orderController = __importStar(require("../controllers/order"));
+const inboxController = __importStar(require("../controllers/inbox"));
 const isAuth_1 = require("../middleware/isAuth");
-const node_schedule_1 = require("node-schedule");
-const scheduleJobs_1 = require("../controllers/scheduleJobs");
-const Order_1 = require("../Validator/Order");
 const router = (0, express_1.Router)();
-exports.orderRoutes = router;
-const sendInformantion = (0, node_schedule_1.scheduleJob)("0 0 * * *", scheduleJobs_1.scheduleJobs);
-router.post("/create-order", isAuth_1.isAuth, Order_1.createOrderValidator, orderController.createOrder);
-router.get("/get-orders", isAuth_1.isAuth, orderController.getOrders);
-router.put("/update-order", isAuth_1.isAuth, orderController.updateOrder);
-router.post("/ordercompleted", isAuth_1.isAuth, orderController.orderCompleted);
-//# sourceMappingURL=order.js.map
+exports.inboxRoutes = router;
+router.get("/get-inbox/:userId", isAuth_1.isAuth, inboxController.getInbox);
+router.post("/create-chat", isAuth_1.isAuth, inboxController.createChat);
+router.post("/delete-message", isAuth_1.isAuth, inboxController.deleteMessage);
+router.get("/get-chat/:chatId", isAuth_1.isAuth, inboxController.getChat);
+//# sourceMappingURL=inbox.js.map

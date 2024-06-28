@@ -15,6 +15,11 @@ const employeeSchema = new ModelSchema({
     },
     email: {
         type: String,
+        required: true,
+    },
+    password: {
+        type: String,
+        required: true,
     },
     age: {
         type: Number,
@@ -51,7 +56,7 @@ const employeeSchema = new ModelSchema({
             ref: "Customer",
         },
     ],
-});
+}, { timestamps: true });
 const Employee = (0, mongoose_1.model)("Employee", employeeSchema);
 exports.default = Employee;
 //# sourceMappingURL=Employees.js.map

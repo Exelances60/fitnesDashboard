@@ -87,7 +87,7 @@ class RepositoryBase {
             return result;
         }
         catch (error) {
-            throw new Error(error);
+            return false;
         }
     }
 }

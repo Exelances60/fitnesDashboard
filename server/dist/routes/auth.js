@@ -40,6 +40,5 @@ router.get("/ownerInfo", isAuth_1.isAuth, authController.getOwnerInfo);
 router.put("/update-owner", isAuth_1.isAuth, AuthValidate_1.updateOwnerValidator, authController.updateOwner);
 router.put("/uploadOwnerImage", isAuth_1.isAuth, (0, multer_1.default)({ storage: multer_1.default.memoryStorage(), fileFilter: MulterFileFilter_1.fileFilter }).single("ownerImage"), authController.uploadOwnerImage);
 router.post("/signup", (0, multer_1.default)({ storage: multer_1.default.memoryStorage(), fileFilter: MulterFileFilter_1.fileFilter }).single("ownerImage"), authController.signup);
-router.get("/getPeddingRegister/:registerId", authController.getPeddingRegister);
 router.post("/verify", authController.verifyToken);
 //# sourceMappingURL=auth.js.map

@@ -26,6 +26,7 @@ exports.default = async (app) => {
     app.use("/exercises", routes_1.exercisesRoutes);
     app.use("/calendarAct", routes_1.calendarActRoutes);
     app.use("/employees", routes_1.employeeRoutes);
+    app.use("/inbox", routes_1.inboxRoutes);
     return app;
 };
 //# sourceMappingURL=ExpressAppServices.js.map

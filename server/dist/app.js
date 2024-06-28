@@ -9,18 +9,10 @@ const DatabaseServices_1 = __importDefault(require("./services/DatabaseServices"
 const ExpressAppServices_1 = __importDefault(require("./services/ExpressAppServices"));
 const path_1 = __importDefault(require("path"));
 const config_1 = require("./config");
+const socket_1 = require("./utils/socket");
 const app = (0, express_1.default)();
 app.use("/images", express_1.default.static(path_1.default.join(__dirname, "images")));
 const StartServer = async () => {
-    /* app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader(
-      "Access-Control-Allow-Methods",
-      "OPTIONS, GET, POST, PUT, PATCH, DELETE"
-    );
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    next();
-  }); */
     await (0, DatabaseServices_1.default)();
     await (0, ExpressAppServices_1.default)(app);
     app.use((error, req, res, next) => {
@@ -35,9 +27,10 @@ const StartServer = async () => {
         }
         res.status(status).json({ errorMessage: message, data: data });
     });
-    app.listen(config_1.PORT, () => {
+    const server = app.listen(config_1.PORT, () => {
         console.log(`Server is running on port ${config_1.PORT}`);
     });
+    (0, socket_1.socket)(server);
 };
 StartServer();
 exports.default = app;

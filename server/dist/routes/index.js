@@ -22,4 +22,5 @@ __exportStar(require("./customer"), exports);
 __exportStar(require("./exercises"), exports);
 __exportStar(require("./calenderAct"), exports);
 __exportStar(require("./employees"), exports);
+__exportStar(require("./inbox"), exports);
 //# sourceMappingURL=index.js.map

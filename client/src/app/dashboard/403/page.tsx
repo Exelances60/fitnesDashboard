@@ -1,5 +1,4 @@
 import React from "react";
-import SECURITYIMAGE from "@/../public/undraw_Security_re_a2rk.svg";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -8,7 +7,6 @@ const NoPermission = () => {
     <div className="flex flex-col items-center justify-center h-[88vh] bg-gray-100">
       <div className="max-w-4xl p-8 bg-white shadow-lg rounded-lg">
         <div className="flex flex-col items-center gap-4">
-          <Image src={SECURITYIMAGE} alt="Security" />
           <h1 className="text-3xl font-semibold text-gray-900">
             No Permission
           </h1>

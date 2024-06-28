@@ -10,11 +10,12 @@ import {
   productDescriptionRules,
 } from "@/utils/FormRules";
 import SelectCategoryDropDown from "../SelectCategoryDropDown";
-
 import "react-quill/dist/quill.snow.css";
 import TextEditor from "../TextEditor";
+import { useTranslations } from "next-intl";
 
 const ProductModal = () => {
+  const t = useTranslations("Product.ProductModal");
   const showMessage = useMessage();
   const userInfo = useSelectUserInfo();
   const [file, setFile] = useState<any>();
@@ -31,7 +32,7 @@ const ProductModal = () => {
   const handleFinish = async (values: any) => {
     setLoading(true);
     if (userInfo === null) return;
-    showMessage("Product Creating", "loading");
+    showMessage(t("productCreating"), "success");
     const token = getCookie("token");
     const formData = new FormData();
     formData.append("productName", values.productName);
@@ -55,7 +56,7 @@ const ProductModal = () => {
       );
       if (response.ok) {
         setAddProductModal(false);
-        showMessage("Product Created", "success");
+        showMessage(t("productCreated"), "success");
       }
     } catch (error: any) {
       showMessage(error.response.data.errorMessage, "error");
@@ -66,19 +67,19 @@ const ProductModal = () => {
 
   return (
     <div className="text-2xl font-bold text-[#202224] flex w-full justify-between">
-      Product
+      {t("product")}
       <Button className="shadow p-5" onClick={openAddProductModal}>
-        Add Product
+        {t("addProduct")}
       </Button>
       <Modal
-        title="Add Product"
+        title={t("addProduct")}
         onCancel={() => {
           setAddProductModal(false);
         }}
         open={addProductModal}
         footer={[
           <Button key="cancel" onClick={() => setAddProductModal(false)}>
-            Cancel
+            {t("cancel")}
           </Button>,
           <Button
             key="submit"
@@ -86,7 +87,7 @@ const ProductModal = () => {
             form="addProductForm"
             htmlType="submit"
           >
-            Submit
+            {t("submit")}
           </Button>,
         ]}
       >
@@ -98,28 +99,32 @@ const ProductModal = () => {
             encType="multipart/form-data"
           >
             <Form.Item
-              label="Product Name"
+              label={t("productName")}
               name="productName"
               rules={[...justRequired, ...minFive]}
             >
-              <Input placeholder="Product Name" />
+              <Input placeholder={t("productName")} />
             </Form.Item>
             <Form.Item
-              label="Description"
+              label={t("description")}
               name="description"
               rules={productDescriptionRules}
             >
-              <TextEditor placeholder="Description" />
+              <TextEditor placeholder={t("description")} />
             </Form.Item>
-            <Form.Item label="Price" name="price" rules={justRequired}>
-              <Input placeholder="Price" type="number" />
+            <Form.Item label={t("price")} name="price" rules={justRequired}>
+              <Input placeholder={t("price")} type="number" />
             </Form.Item>
-            <Form.Item label="Amount" name="amount" rules={justRequired}>
-              <Input placeholder="Amount" type="number" />
+            <Form.Item label={t("amount")} name="amount" rules={justRequired}>
+              <Input placeholder={t("amount")} type="number" />
             </Form.Item>
-            <Form.Item label="Category" name="category" rules={justRequired}>
+            <Form.Item
+              label={t("category")}
+              name="category"
+              rules={justRequired}
+            >
               <Select
-                placeholder="Select a category"
+                placeholder={t("selectCategory")}
                 dropdownRender={(menu) => (
                   <SelectCategoryDropDown
                     menu={menu}
@@ -131,11 +136,13 @@ const ProductModal = () => {
                 )}
               >
                 <Select.Option value="ProteinPowder">
-                  Protein Powder
+                  {t("proteinPowder")}
                 </Select.Option>
-                <Select.Option value="Vitamins">Vitamins</Select.Option>
-                <Select.Option value="Supplements">Supplements</Select.Option>
-                <Select.Option value="Others">Others</Select.Option>
+                <Select.Option value="Vitamins">{t("vitamins")}</Select.Option>
+                <Select.Option value="Supplements">
+                  {t("supplements")}
+                </Select.Option>
+                <Select.Option value="Others">{t("others")}</Select.Option>
                 {categoryList.map((item) => (
                   <Select.Option key={item} value={item}>
                     {item}
@@ -144,7 +151,7 @@ const ProductModal = () => {
               </Select>
             </Form.Item>
 
-            <Form.Item label="Image" name="image" rules={justRequired}>
+            <Form.Item label={t("image")} name="image" rules={justRequired}>
               <Upload
                 listType="picture"
                 maxCount={1}
@@ -153,7 +160,7 @@ const ProductModal = () => {
                   setFile(info.file.originFileObj);
                 }}
               >
-                <Button>Upload Image</Button>
+                <Button>{t("uploadImage")}</Button>
               </Upload>
             </Form.Item>
           </Form>

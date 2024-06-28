@@ -15,8 +15,10 @@ import {
   productsRole,
 } from "@/mock/navMenu";
 import NoPermission from "@/app/dashboard/403/page";
+import { useTranslations } from "next-intl";
 
 const DashboardFastTable = () => {
+  const t = useTranslations("Dashboard");
   const fastTable = useAppSelector(selectFastTable);
   const userInfo = useGetTokenPayload();
 
@@ -66,7 +68,9 @@ const DashboardFastTable = () => {
 
   return (
     <Card>
-      <h1 className="text-lg mb-2 text-gray-900">Fast Table</h1>
+      <h1 className="text-lg mb-2 font-semibold text-gray-900">
+        {t("fastTable")}
+      </h1>
       {renderContent()}
     </Card>
   );

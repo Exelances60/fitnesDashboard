@@ -10,8 +10,10 @@ import {
 } from "@/store/slices/productPageSlice";
 import { justRequired, maxPrice, minFive } from "@/utils/FormRules";
 import TextEditor from "../TextEditor";
+import { useTranslations } from "next-intl";
 
 const ProductEditModal = () => {
+  const t = useTranslations("Product.ProductEditModal");
   const product = useAppSelector(selectProduct);
   const router = useRouter();
   const [form] = Form.useForm();
@@ -32,7 +34,7 @@ const ProductEditModal = () => {
   };
 
   const handleFinish = async (values: any) => {
-    message.loading({ content: "Loading...", key: "loading" });
+    message.loading({ content: t("loading"), key: "loading" });
     const formData = new FormData();
     formData.append("name", values.name);
     formData.append("description", values.description);
@@ -52,7 +54,7 @@ const ProductEditModal = () => {
         }
       );
       if (response.status === 200) {
-        message.success({ content: "Product Updated", key: "loading" });
+        message.success({ content: t("productUpdated"), key: "loading" });
         closeModal();
         router.refresh();
       }
@@ -63,12 +65,12 @@ const ProductEditModal = () => {
 
   return (
     <Modal
-      title="Edit Product"
+      title={t("editProduct")}
       open={editModalVisible}
       onCancel={closeModal}
       footer={[
         <Button key="cancel" onClick={closeModal}>
-          Cancel
+          {t("cancel")}
         </Button>,
         <Button
           key="submit"
@@ -76,7 +78,7 @@ const ProductEditModal = () => {
           form="editProductForm"
           htmlType="submit"
         >
-          Submit
+          {t("submit")}
         </Button>,
       ]}
     >
@@ -86,27 +88,27 @@ const ProductEditModal = () => {
         id="editProductForm"
         encType="multipart/form-data"
       >
-        <Form.Item label="Name" name="name" rules={justRequired}>
+        <Form.Item label={t("productName")} name="name" rules={justRequired}>
           <Input placeholder="Product Name" />
         </Form.Item>
         <Form.Item
-          label="Description"
+          label={t("description")}
           name="description"
           rules={[...justRequired, ...minFive]}
         >
-          <TextEditor placeholder="Description" />
+          <TextEditor placeholder={t("description")} />
         </Form.Item>
         <Form.Item
-          label="Price"
+          label={t("price")}
           name="price"
           rules={[...justRequired, ...maxPrice]}
         >
-          <Input placeholder="Price" type="number" />
+          <Input placeholder={t("price")} type="number" />
         </Form.Item>
-        <Form.Item label="Amount" name="amount" rules={justRequired}>
-          <Input placeholder="Amount" type="number" />
+        <Form.Item label={t("amount")} name="amount" rules={justRequired}>
+          <Input placeholder={t("amount")} type="number" />
         </Form.Item>
-        <Form.Item label="Image" name="image">
+        <Form.Item label={t("image")} name="image">
           <Upload
             listType="picture"
             maxCount={1}
@@ -115,7 +117,7 @@ const ProductEditModal = () => {
               setFile(info.file.originFileObj);
             }}
           >
-            <Button>Upload Image</Button>
+            <Button>{t("uploadImage")}</Button>
           </Upload>
         </Form.Item>
       </Form>

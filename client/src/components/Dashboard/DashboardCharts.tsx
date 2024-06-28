@@ -2,6 +2,7 @@ import React from "react";
 import { AreaChart, LineChart, BarChart } from "@tremor/react";
 import { useAppSelector } from "@/store/store";
 import { selectChartsMode } from "@/store/slices/dashboardSlice";
+import useCurrencyFormatter from "@/hooks/useCurrencyFormatter";
 
 interface DashboardChartsProps {
   data: {
@@ -12,6 +13,7 @@ interface DashboardChartsProps {
 
 const DashboardCharts = ({ data }: DashboardChartsProps) => {
   const selectedView = useAppSelector(selectChartsMode);
+  const { renderCurrency } = useCurrencyFormatter();
   return (
     <>
       {selectedView === "area" && (
@@ -23,6 +25,9 @@ const DashboardCharts = ({ data }: DashboardChartsProps) => {
           yAxisWidth={60}
           categories={["value"]}
           title="Dashboard Charts"
+          valueFormatter={(value) => {
+            return renderCurrency(value);
+          }}
         ></AreaChart>
       )}
       {selectedView === "line" && (
@@ -34,6 +39,9 @@ const DashboardCharts = ({ data }: DashboardChartsProps) => {
           yAxisWidth={60}
           categories={["value"]}
           title="Dashboard Charts"
+          valueFormatter={(value) => {
+            return renderCurrency(value);
+          }}
         ></LineChart>
       )}
       {selectedView === "bar" && (
@@ -45,6 +53,9 @@ const DashboardCharts = ({ data }: DashboardChartsProps) => {
           yAxisWidth={60}
           categories={["value"]}
           title="Dashboard Charts"
+          valueFormatter={(value) => {
+            return renderCurrency(value);
+          }}
         ></BarChart>
       )}
     </>

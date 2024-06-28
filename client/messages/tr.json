@@ -8,7 +8,9 @@
     "register": "Kayıt Ol",
     "registerDescription": "Tüm özelliklere erişmek için bir hesap oluşturun",
     "allHaveAccount": "Zaten bir hesabınız var mı? Şimdi giriş yapın!",
-    "welcomeBack": "Tekrar Hoş Geldiniz"
+    "welcomeBack": "Tekrar Hoş Geldiniz",
+    "loginSuccess": "Giriş Başarılı",
+    "loading": "Yükleniyor..."
   },
   "RegisterStepsPage": {
     "thankYouForRegister": "Kaydınız için teşekkür ederiz",
@@ -35,5 +37,111 @@
     "profileStepDescription": "Bu sekme hesabınız için temel profil bilgilerini içerir ve bir sonraki adıma geçer",
     "finishStep": "Kaydı Tamamla",
     "finishStepDescription": "Bu sekme kayıt işlemini tamamlamak için son adımdır ve qr kodu görmeli ve qr kodu kullanarak kayıt işlemini takip etmelisiniz"
+  },
+  "NavMenu": {
+    "dashboard": "Panel",
+    "products": "Ürünler",
+    "inbox": "Gelen Kutusu",
+    "orders": "Sipariş Listesi",
+    "customers": "Müşteriler",
+    "employees": "Çalışanlar",
+    "invoices": "Faturalar",
+    "events": "Etkinlikler"
+  },
+  "Dashboard": {
+    "fastTable": "Hızlı Tablo",
+    "DashboardCard": {
+      "totalProducts": "Toplam Ürünler",
+      "totalOrders": "Toplam Siparişler",
+      "totalSales": "Toplam Satışlar",
+      "totalEmployees": "Toplam Çalışanlar",
+      "noData": "Veri Yok"
+    },
+    "DashboardChartsContent": {
+      "pleaseSelect": "Lütfen bir seçim yapın",
+      "order": "Sipariş",
+      "orderAmount": "Sipariş Miktarı",
+      "orderCompleted": "Tamamlanan Siparişler",
+      "orderSales": "Sipariş Satışları",
+      "employees": "Çalışanlar",
+      "employeesAmount": "Çalışanlar Miktarı",
+      "employeesSalary": "Çalışanlar Maaşı",
+      "customer": "Müşteri",
+      "customerAmount": "Müşteri Miktarı",
+      "customerSales": "Müşteri Gelirleri",
+      "product": "Ürün",
+      "productAmount": "Ürün Miktarı",
+      "productStock": "Ürün Stok"
+    }
+  },
+  "Product": {
+    "ProductModal": {
+      "uploadImage": "Resim Yükle",
+      "image": "Resim",
+      "proteinPowder": "Protein Tozu",
+      "vitamins": "Vitaminler",
+      "supplements": "Takviyeler",
+      "others": "Diğerleri",
+      "addCategory": "Kategori Ekle",
+      "categoryName": "Kategori Adı",
+      "categoryNameError": "Ürün Kategorisini Girin",
+      "selectCategory": "Kategori Seçin",
+      "category": "Kategori",
+      "amount": "Miktar",
+      "price": "Fiyat",
+      "description": "Açıklama",
+      "productName": "Ürün Adı",
+      "submit": "Gönder",
+      "cancel": "İptal",
+      "addProduct": "Ürün Ekle",
+      "product": "Ürün",
+      "productCreating": "Ürün Oluşturuluyor",
+      "productCreated": "Ürün Oluşturuldu"
+    },
+    "ProductPreview": {
+      "productImage": "Ürün Resmi",
+      "productName": "Ürün Adı",
+      "price": "Fiyat",
+      "amount": "Miktar",
+      "category": "Kategori",
+      "createdAt": "Oluşturulma Tarihi",
+      "actions": "İşlemler",
+      "searchProduct": "Ürün Ara",
+      "loading": "Yükleniyor...",
+      "productDeletedSuccessfully": "Ürün başarıyla silindi",
+      "edit": "Düzenle",
+      "delete": "Sil",
+      "orderNow": "Şimdi Sipariş Ver"
+    },
+    "ProductEditModal": {
+      "productName": "Ürün Adı",
+      "description": "Açıklama",
+      "price": "Fiyat",
+      "amount": "Miktar",
+      "image": "Ürün Resmi",
+      "uploadImage": "Resim Yükle",
+      "editProduct": "Ürün Düzenle",
+      "cancel": "İptal",
+      "submit": "Gönder",
+      "loading": "Yükleniyor...",
+      "productUpdated": "Ürün Güncellendi"
+    },
+    "ProductOrderModal": {
+      "address": "Adres",
+      "email": "E-posta",
+      "orderOwner": "Sipariş Sahibi",
+      "phoneNumber": "Telefon Numarası",
+      "addressRequired": "Adres Gerekli",
+      "productName": "Ürün Adı",
+      "amountFormMessage": "Lütfen sipariş miktarını girin",
+      "price": "Fiyat",
+      "amount": "Adet",
+      "cancel": "İptal",
+      "orderButton": "Sipariş Ver",
+      "orderProduct": "Ürün Siparişi",
+      "someError": "Bir hata oluştu. Lütfen tekrar deneyin.",
+      "loading": "Yükleniyor...",
+      "orderCreated": "Sipariş Oluşturuldu"
+    }
   }
 }

@@ -1,6 +1,6 @@
 "use client";
 import { Card } from "@tremor/react";
-import React, { Suspense, useState } from "react";
+import React, { useState } from "react";
 import DashboardChartsSelect from "./DashboardChartsSelect";
 import DashboardCharts from "./DashboardCharts";
 import { Spin } from "antd";

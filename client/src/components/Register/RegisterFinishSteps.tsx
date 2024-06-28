@@ -44,7 +44,7 @@ const RegisterFinishSteps = forwardRef<
               className="w-full"
               form="register"
             >
-              Finish
+              {t("finish")}
             </Button>
           </motion.div>
         </div>

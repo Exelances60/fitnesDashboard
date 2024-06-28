@@ -4,7 +4,6 @@ import { Layout, Menu, Tooltip } from "antd";
 import type { MenuProps } from "antd";
 import { useAppSelector } from "@/store/store";
 import { selectMenuKeys, selectUser } from "@/store/slices/userSlice";
-import { navMenu } from "@/mock/navMenu";
 import useSetMenuKeys from "@/hooks/useSetMenuKeys";
 import Loading from "@/app/loading";
 import Link from "next/link";
@@ -12,6 +11,7 @@ import Image from "next/image";
 import useGetUserInfo from "@/hooks/useGetUserInfo";
 import HeaderNavigation from "./HeaderNavigation";
 import useGetTokenPayload from "@/hooks/useGetTokenPayload";
+import useNavMenu from "@/hooks/useNavMenu";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -22,6 +22,7 @@ const HeaderAntd = ({ children }: { children: React.ReactNode }) => {
   const menuKeys = useAppSelector(selectMenuKeys);
   const userInfo = useAppSelector(selectUser);
   const tokenPayload = useGetTokenPayload();
+  const navMenu = useNavMenu();
   useGetUserInfo();
 
   const menuItems: MenuItem[] = navMenu.map((item) => {

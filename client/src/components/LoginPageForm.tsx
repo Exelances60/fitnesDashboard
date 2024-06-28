@@ -32,13 +32,13 @@ const LoginPageForm = () => {
     });
     setError("");
     message.destroy("login");
-    message.success("Login Success");
+    message.success(t("loginSuccess"));
     const nextUrl = searchParams.get("next");
     router.push(nextUrl ? nextUrl : "/dashboard");
   };
 
   const onFinish = async (values: { email: string; password: string }) => {
-    message.loading({ content: "Loading...", key: "login" });
+    message.loading({ content: t("loading"), key: "login" });
     setLoading(true);
     try {
       const { data, status } = await axiosClient.post("/auth/login", values);

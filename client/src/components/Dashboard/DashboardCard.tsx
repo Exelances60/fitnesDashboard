@@ -6,9 +6,14 @@ import orderIcon from "@/../public/dashboard/order.svg";
 import salesIcon from "@/../public/dashboard/sales.svg";
 import employeeIcon from "@/../public/dashboard/employees.svg";
 import fetchDashboard from "@/actions/fetchDashboard";
+import { getTranslations } from "next-intl/server";
 
 const DashboardCard = async () => {
-  const { data } = await fetchDashboard();
+  const [dataDashboard, t] = await Promise.all([
+    fetchDashboard(),
+    getTranslations("Dashboard.DashboardCard"),
+  ]);
+  const { data } = dataDashboard;
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -16,19 +21,19 @@ const DashboardCard = async () => {
         <Card>
           <div className="w-full flex justify-between">
             <p className="text-lg font-semibold text-[#606060]">
-              Total Products
+              {t("totalProducts")}
             </p>
             <div>
               <Image src={userIcon} width={50} height={50} alt="total user" />
             </div>
           </div>
-          <Metric>
-            {data?.products ? data.products : "No data available"}
-          </Metric>
+          <Metric>{data?.products ? data.products : t("noData")}</Metric>
         </Card>
         <Card>
           <div className="w-full flex justify-between">
-            <p className="text-lg font-semibold text-[#606060]">Total Orders</p>
+            <p className="text-lg font-semibold text-[#606060]">
+              {t("totalOrders")}
+            </p>
             <div>
               <Image
                 src={orderIcon}
@@ -39,13 +44,13 @@ const DashboardCard = async () => {
               />
             </div>
           </div>
-          <Metric>
-            {data?.totalOrders ? data.totalOrders : "No data available"}
-          </Metric>
+          <Metric>{data?.totalOrders ? data.totalOrders : t("noData")}</Metric>
         </Card>
         <Card>
           <div className="w-full flex justify-between">
-            <p className="text-lg font-semibold text-[#606060]">Total Sales</p>
+            <p className="text-lg font-semibold text-[#606060]">
+              {t("totalSales")}
+            </p>
             <div>
               <Image
                 src={salesIcon}
@@ -59,13 +64,13 @@ const DashboardCard = async () => {
           <Metric>
             {data?.totalCompletedOrders
               ? data.totalCompletedOrders
-              : "No data available"}
+              : t("noData")}
           </Metric>
         </Card>
         <Card>
           <div className="w-full flex justify-between">
             <p className="text-lg font-semibold text-[#606060]">
-              Total Employees
+              {t("totalEmployees")}
             </p>
             <div>
               <Image
@@ -77,9 +82,7 @@ const DashboardCard = async () => {
               />
             </div>
           </div>
-          <Metric>
-            {data?.employees ? data.employees : "No data available"}
-          </Metric>
+          <Metric>{data?.employees ? data.employees : t("noData")}</Metric>
         </Card>
       </Grid>
     </Suspense>

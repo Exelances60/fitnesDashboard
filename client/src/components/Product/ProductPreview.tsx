@@ -8,12 +8,14 @@ import ProductTable from "./ProductTable";
 import ProductSeacrh from "./ProductSearch";
 import ProductEditModal from "./ProductEditModal";
 import ProductOrderModal from "./ProductOrderModal";
+import { useTranslations } from "next-intl";
 
 type ProductPreviewProps = {
   products: productsType[];
 };
 
 const ProductPreview = ({ products }: ProductPreviewProps) => {
+  const t = useTranslations("Product.ProductPreview");
   const router = useRouter();
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -35,14 +37,14 @@ const ProductPreview = ({ products }: ProductPreviewProps) => {
   };
 
   const handleDeleteProduct = async (value: string) => {
-    message.loading({ content: "Loading...", key: "deleteProduct" });
+    message.loading({ content: t("loading"), key: "deleteProduct" });
     try {
       const response = await axiosClient.delete(
         `/products/delete-product/${value}`
       );
       if (response.status === 200) {
         message.success({
-          content: "Product deleted successfully",
+          content: t("productDeletedSuccessfully"),
           key: "deleteProduct",
           duration: 2,
         });

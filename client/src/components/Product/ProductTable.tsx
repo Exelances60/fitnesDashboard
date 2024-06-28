@@ -7,6 +7,7 @@ import {
   TableBody,
 } from "@tremor/react";
 import ProductRow from "./ProductRow";
+import { useTranslations } from "next-intl";
 
 type ProductTableProps = {
   currentProducts: productsType[];
@@ -17,18 +18,19 @@ const ProductTable = ({
   currentProducts,
   handleDeleteProduct,
 }: ProductTableProps) => {
+  const t = useTranslations("Product.ProductPreview");
   return (
     <div className="flex flex-col gap-2 p-5">
       <Table>
         <TableHead>
           <TableRow className="rounded-md bg-[#F1F4F9]">
-            <TableHeaderCell>Image</TableHeaderCell>
-            <TableHeaderCell>Product Name</TableHeaderCell>
-            <TableHeaderCell>Price</TableHeaderCell>
-            <TableHeaderCell>Amount</TableHeaderCell>
-            <TableHeaderCell>Category</TableHeaderCell>
-            <TableHeaderCell>Created At</TableHeaderCell>
-            <TableHeaderCell>Action</TableHeaderCell>
+            <TableHeaderCell>{t("productImage")}</TableHeaderCell>
+            <TableHeaderCell>{t("productName")}</TableHeaderCell>
+            <TableHeaderCell>{t("price")}</TableHeaderCell>
+            <TableHeaderCell>{t("amount")}</TableHeaderCell>
+            <TableHeaderCell>{t("category")}</TableHeaderCell>
+            <TableHeaderCell>{t("createdAt")}</TableHeaderCell>
+            <TableHeaderCell>{t("actions")}</TableHeaderCell>
           </TableRow>
         </TableHead>
         <TableBody>

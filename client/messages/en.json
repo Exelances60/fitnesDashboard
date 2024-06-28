@@ -8,7 +8,9 @@
     "register": "Register",
     "registerDescription": "Create an account to access all features",
     "allHaveAccount": "Already have an account? Login now!",
-    "welcomeBack": "Welcome Back"
+    "welcomeBack": "Welcome Back",
+    "loginSuccess": "Login Success",
+    "loading": "Loading..."
   },
   "RegisterStepsPage": {
     "thankYouForRegister": "Thank you for registering",
@@ -35,5 +37,111 @@
     "profileStepDescription": "This tab basic profile information for your account and move to the next step",
     "finishStep": "Finish Registration",
     "finishStepDescription": "This tab is the final step to finish the registration process and you must see the qr code and using qr code your tracking the registration process"
+  },
+  "NavMenu": {
+    "dashboard": "Dashboard",
+    "products": "Products",
+    "inbox": "Inbox",
+    "orders": "Orders List",
+    "customers": "Customers",
+    "employees": "Employees",
+    "invoices": "Invoices",
+    "events": "Events"
+  },
+  "Dashboard": {
+    "fastTable": "Fast Table",
+    "DashboardCard": {
+      "totalProducts": "Total Products",
+      "totalOrders": "Total Orders",
+      "totalSales": "Total Sales",
+      "totalEmployees": "Total Employees",
+      "noData": "No Data"
+    },
+    "DashboardChartsContent": {
+      "pleaseSelect": "Please select",
+      "order": "Order",
+      "orderAmount": "Order Amount",
+      "orderCompleted": "Order Completed",
+      "orderSales": "Order Sales",
+      "employees": "Employees",
+      "employeesAmount": "Employees Amount",
+      "employeesSalary": "Employees Salary",
+      "customer": "Customer",
+      "customerAmount": "Customer Amount",
+      "customerSales": "Customer Sales",
+      "product": "Product",
+      "productAmount": "Product Amount",
+      "productStock": "Product Stock"
+    }
+  },
+  "Product": {
+    "ProductModal": {
+      "uploadImage": "Upload Image",
+      "image": "Image",
+      "proteinPowder": "Protein Powder",
+      "vitamins": "Vitamins",
+      "supplements": "Supplements",
+      "others": "Others",
+      "addCategory": "Add Category",
+      "categoryName": "Category Name",
+      "categoryNameError": "Category name is required",
+      "selectCategory": "Select Category",
+      "category": "Category",
+      "amount": "Amount",
+      "price": "Price",
+      "description": "Description",
+      "productName": "Product Name",
+      "submit": "Submit",
+      "cancel": "Cancel",
+      "addProduct": "Add Product",
+      "product": "Product",
+      "productCreating": "Product Creating",
+      "productCreated": "Product Created"
+    },
+    "ProductPreview": {
+      "productImage": "Product Image",
+      "productName": "Product Name",
+      "price": "Price",
+      "amount": "Amount",
+      "category": "Category",
+      "createdAt": "Created At",
+      "actions": "Actions",
+      "searchProduct": "Search Product",
+      "loading": "Loading...",
+      "productDeletedSuccessfully": "Product deleted successfully",
+      "edit": "Edit",
+      "delete": "Delete",
+      "orderNow": "Order Now"
+    },
+    "ProductEditModal": {
+      "productName": "Product Name",
+      "description": "Description",
+      "price": "Price",
+      "amount": "Amount",
+      "image": "Image",
+      "uploadImage": "Upload Image",
+      "editProduct": "Edit Product",
+      "cancel": "Cancel",
+      "submit": "Submit",
+      "loading": "Loading...",
+      "productUpdated": "Product Updated"
+    },
+    "ProductOrderModal": {
+      "address": "Address",
+      "email": "Email",
+      "orderOwner": "Order Owner",
+      "phoneNumber": "Phone Number",
+      "addressRequired": "Address is required",
+      "productName": "Product Name",
+      "amountFormMessage": "Please enter the amount of the product you want to order",
+      "price": "Price",
+      "amount": "Amount",
+      "cancel": "Cancel",
+      "orderButton": "Order Product",
+      "orderProduct": "Order Product",
+      "someError": "Some error occurred. Please try again.",
+      "loading": "Loading...",
+      "orderCreated": "Order Created"
+    }
   }
 }

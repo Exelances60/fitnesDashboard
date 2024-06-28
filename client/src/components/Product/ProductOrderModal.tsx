@@ -15,6 +15,7 @@ import {
   minFive,
   phoneRules,
 } from "@/utils/FormRules";
+import { useTranslations } from "next-intl";
 
 type formValuesType = {
   productName: string;
@@ -27,6 +28,7 @@ type formValuesType = {
 };
 
 const ProductOrderModal = () => {
+  const t = useTranslations("Product.ProductOrderModal");
   const product = useAppSelector(selectProduct);
   const showMessage = useMessage();
   const dispatch = useAppDispatch();
@@ -41,7 +43,7 @@ const ProductOrderModal = () => {
   }, [product, form]);
 
   const formOnFinish = async (values: formValuesType) => {
-    showMessage("Loading..", "loading");
+    showMessage(t("loading"), "loading");
     try {
       const response = await axiosClient.post("/orders/create-order", {
         ...values,
@@ -52,18 +54,18 @@ const ProductOrderModal = () => {
         creator: product.ownerId,
       });
       if (response.status === 201) {
-        showMessage("Order is created!", "success");
+        showMessage(t("orderCreated"), "success");
         form.resetFields();
         dispatch(setOrderModalVisible(false));
       }
-    } catch (error) {
-      showMessage("An error occurred!", "error");
+    } catch (error: any) {
+      showMessage(error.response.data.errorMessage, "error");
     }
   };
 
   return (
     <Modal
-      title="Order Product"
+      title={t("orderProduct")}
       open={orderModalVisible}
       onCancel={() => dispatch(setOrderModalVisible(false))}
       footer={[
@@ -71,7 +73,7 @@ const ProductOrderModal = () => {
           key="cancel"
           onClick={() => dispatch(setOrderModalVisible(false))}
         >
-          Cancel
+          {t("cancel")}
         </Button>,
         <Button
           key="submit"
@@ -79,7 +81,7 @@ const ProductOrderModal = () => {
           form="orderProduct"
           htmlType="submit"
         >
-          Order
+          {t("orderButton")}
         </Button>,
       ]}
     >
@@ -90,7 +92,7 @@ const ProductOrderModal = () => {
         initialValues={{ productName: product.name, price: product.price }}
         onFinish={formOnFinish}
       >
-        <Form.Item label="Product Name" name="productName">
+        <Form.Item label={t("productName")} name="productName">
           <div className="flex items-center gap-2">
             <Image
               src={`${product.imageUrl}`}
@@ -102,16 +104,16 @@ const ProductOrderModal = () => {
             <span>{product.name}</span>
           </div>
         </Form.Item>
-        <Form.Item label="Price" name="price">
+        <Form.Item label={t("price")} name="price">
           <Input type="number" />
         </Form.Item>
         <Form.Item
-          label="Amount"
+          label={t("amount")}
           name="amount"
           rules={[
             {
               required: true,
-              message: "Please input the amount of product!",
+              message: t("amountFormMessage"),
               min: 1,
               max: product.amount,
             },
@@ -120,26 +122,30 @@ const ProductOrderModal = () => {
           <Input type="number" max={product.amount} min={1} />
         </Form.Item>
         <Form.Item
-          label="Address"
+          label={t("address")}
           name="address"
           rules={[
             {
               required: true,
-              message: "Please input your address!",
+              message: t("addressRequired"),
               min: 10,
             },
           ]}
         >
           <Input.TextArea />
         </Form.Item>
-        <Form.Item label="Phone Number" name="phone" rules={[...phoneRules]}>
+        <Form.Item
+          label={t("phoneNumber")}
+          name="phone"
+          rules={[...phoneRules]}
+        >
           <Input type="tel" addonBefore="+90" />
         </Form.Item>
-        <Form.Item label="Email" name="email" rules={emailRules}>
+        <Form.Item label={t("email")} name="email" rules={emailRules}>
           <Input type="email" />
         </Form.Item>
         <Form.Item
-          label="Order Owner"
+          label={t("orderOwner")}
           name="orderOwner"
           rules={[...minFive, ...justRequired]}
         >

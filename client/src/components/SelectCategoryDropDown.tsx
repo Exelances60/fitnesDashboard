@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Input, Divider, Space, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { useTranslations } from "next-intl";
 
 interface SelectCategoryDropDownProps {
   menu: JSX.Element | string;
@@ -15,6 +16,7 @@ const SelectCategoryDropDown = ({
   categoryList,
   editable,
 }: SelectCategoryDropDownProps) => {
+  const t = useTranslations("Product.ProductModal");
   const [categoryName, setCategoryName] = React.useState<string>("");
 
   const onCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,7 +25,7 @@ const SelectCategoryDropDown = ({
 
   const addItem = () => {
     if (categoryName.length < 1) {
-      message.error("Please enter item");
+      message.error(t("categoryNameError"));
       return;
     }
     setCategoryList([...categoryList, categoryName]);
@@ -38,13 +40,13 @@ const SelectCategoryDropDown = ({
           <Divider style={{ margin: "8px 0" }} />
           <Space style={{ padding: "0 8px 4px" }}>
             <Input
-              placeholder="Please enter item"
+              placeholder={t("categoryName")}
               onKeyDown={(e) => e.stopPropagation()}
               value={categoryName}
               onChange={onCategoryChange}
             />
             <Button type="text" icon={<PlusOutlined />} onClick={addItem}>
-              Add item
+              {t("addCategory")}
             </Button>
           </Space>
         </>

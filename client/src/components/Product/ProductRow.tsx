@@ -14,12 +14,14 @@ import {
 } from "@/store/slices/productPageSlice";
 import Image from "next/image";
 import useCurrencyFormatter from "@/hooks/useCurrencyFormatter";
+import { useTranslations } from "next-intl";
 
 type productsRowType = {
   product: productsType;
   handleDeleteProduct: (productId: string) => void;
 };
 const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
+  const t = useTranslations("Product.ProductPreview");
   const dispatch = useAppDispatch();
   const { renderCurrency } = useCurrencyFormatter();
   const handleClickEditButton = () => {
@@ -74,7 +76,7 @@ const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
             </motion.div>
           }
         >
-          Edit
+          {t("edit")}
         </Button>
         <Button
           className="ml-2"
@@ -83,7 +85,7 @@ const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
           icon={<ShoppingCartOutlined />}
           onClick={handleClickOrderButton}
         >
-          Order Now
+          {t("orderNow")}
         </Button>
         <Popconfirm
           title="Are you sure to delete this product?"
@@ -107,7 +109,7 @@ const ProductRow = ({ product, handleDeleteProduct }: productsRowType) => {
               </motion.div>
             }
           >
-            Delete
+            {t("delete")}
           </Button>
         </Popconfirm>
       </TableCell>

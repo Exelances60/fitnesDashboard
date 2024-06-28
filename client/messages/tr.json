@@ -143,5 +143,65 @@
       "loading": "Yükleniyor...",
       "orderCreated": "Sipariş Oluşturuldu"
     }
+  },
+  "Inbox": {
+    "noChatsAvailable": "No chats available",
+    "InboxChat": {
+      "noChatsAvailable": "No chats available"
+    }
+  },
+  "Order": {
+    "OrderCards": {
+      "estimedTotalSales": "Estimed Total Sales",
+      "totalOrders": "Total Orders",
+      "totalComplateSales": "Total Complate Sales"
+    },
+    "OrderContainer": {
+      "amount": "Miktar",
+      "cancel": "İptal",
+      "updateOrder": "Siparişi Güncelle",
+      "pending": "Gönderimde",
+      "completed": "Tamamlandı",
+      "canceled": "İptal Edildi",
+      "preparing": "Hazırlanıyor",
+      "orderStatus": "Sipariş Durumu",
+      "orderOwnerEmail": "Sipariş Sahibi E-posta",
+      "orderUpdated": "Sipariş Güncellendi",
+      "amountMoreThanStock": "Stoktan fazla miktarda sipariş veremezsiniz",
+      "email": "E-posta",
+      "price": "Fiyat",
+      "description": "Açıklama",
+      "orderDetails": "Sipariş Detayları",
+      "orderUpdate": "Sipariş Güncelle",
+      "complete": "Siparişi Tamamla",
+      "update": "Güncelle",
+      "details": "Detaylar",
+      "updatedAt": "Güncellenme Tarihi",
+      "createdAt": "Oluşturulma Tarihi",
+      "category": "Kategori",
+      "phone": "Telefon Numarası",
+      "status": "Durum",
+      "totalPrice": "Toplam Fiyat",
+      "address": "Adres",
+      "orderOwner": "Sipariş Sahibi",
+      "orderId": "Sipariş Numarası",
+      "loading": "Yükleniyor...",
+      "orderCompleted": "Sipariş Tamamlandı",
+      "proteinPowder": "Protein Tozu",
+      "vitamins": "Vitaminler",
+      "supplements": "Takviyeler",
+      "others": "Diğerleri",
+      "searchByOrderId": "Sipariş numarasına göre ara",
+      "searchByOrderOwner": "Sipariş sahibine göre ara"
+    },
+    "OrderCharts": {
+      "category": "Kategori",
+      "amount": "Miktar",
+      "totalPriceByCategory": "Kategoriye Göre Toplam Fiyat",
+      "share": "Pay",
+      "price": "Fiyat",
+      "productName": "Ürün Adı",
+      "totalPriceByOrder": "Siparişe Göre Toplam Fiyat"
+    }
   }
 }

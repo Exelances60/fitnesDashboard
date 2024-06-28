@@ -11,7 +11,9 @@ import InboxChatHeader from "./InboxChatHeader";
 import { socket } from "@/utils/socket";
 import useGetTokenPayload from "@/hooks/useGetTokenPayload";
 import InboxChatMessage from "./InboxChatMessage";
+import { useTranslations } from "next-intl";
 const InboxChat = () => {
+  const t = useTranslations("Inbox.InboxChat");
   const logginUserToken = useGetTokenPayload();
   const dispatch = useAppDispatch();
   const [messages, setMessages] = useState<Message[]>([]);
@@ -90,7 +92,7 @@ const InboxChat = () => {
           </>
         ) : (
           <div className="text-center w-full h-full font-semibold flex items-center justify-center text-gray-500">
-            Select a chat
+            {t("noChatsAvailable")}
           </div>
         )}
       </div>

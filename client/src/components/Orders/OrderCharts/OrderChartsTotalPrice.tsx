@@ -5,6 +5,7 @@ import OrderChartsSelectedDetails from "./OrderChartsSelectedDetails";
 import OrderChartsList from "./OrderChartsList";
 import useCurrencyFormatter from "@/hooks/useCurrencyFormatter";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 type OrderChartsTotalPriceProps = {
   chartsDonutData: orderDonutChartType[];
@@ -19,6 +20,7 @@ type CustomTooltipTypeDonut = {
 const OrderChartsTotalPrice = ({
   chartsDonutData,
 }: OrderChartsTotalPriceProps) => {
+  const t = useTranslations("Order.OrderCharts");
   const [selected, setSelected] = useState<orderDonutChartType | null>(null);
   chartsDonutData.sort((a, b) => b.totalPrice - a.totalPrice);
   const topTenItems = chartsDonutData.slice(0, 10);
@@ -61,7 +63,7 @@ const OrderChartsTotalPrice = ({
   return (
     <Card title="Order Chats" className="order-chats">
       <h3 className="text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
-        Total price by order
+        {t("totalPriceByOrder")}
       </h3>
       <div className="flex">
         <DonutChart
@@ -77,8 +79,10 @@ const OrderChartsTotalPrice = ({
       </div>
       <OrderChartsSelectedDetails selected={selected} />
       <p className="mt-8 flex items-center justify-between text-tremor-label text-tremor-content dark:text-dark-tremor-content">
-        <span>Product Name</span>
-        <span>Price / Share</span>
+        <span>{t("productName")}</span>
+        <span>
+          {t("price")} / {t("share")}
+        </span>
       </p>
       <List className="mt-2">
         {topTenItems.map((item, index) => (

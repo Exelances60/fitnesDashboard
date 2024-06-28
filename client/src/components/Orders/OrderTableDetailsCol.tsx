@@ -7,6 +7,7 @@ import OrderUpdateDrawer from "./OrderModals/OrderUpdateDrawer";
 import OrderUpdateDrawerFooter from "./OrderModals/OrderUpdateDrawerFooter";
 import OrderDetailModal from "./OrderModals/OrderDetailModal";
 import { CheckOutlined } from "@ant-design/icons";
+import { useTranslations } from "next-intl";
 
 type OrderTableDetailsColProps = {
   record: OrdersType;
@@ -17,6 +18,7 @@ const OrderTableDetailsCol = ({
   record,
   handleCompleteOrder,
 }: OrderTableDetailsColProps) => {
+  const t = useTranslations("Order.OrderContainer");
   const dispatch = useAppDispatch();
 
   const openDetailModal = (selectedOrderFuc: OrdersType) => {
@@ -24,7 +26,7 @@ const OrderTableDetailsCol = ({
       dispatch(
         showModal({
           children: <OrderDetailModal selectedOrder={selectedOrderFuc} />,
-          title: "Order Details",
+          title: t("orderDetails"),
         })
       );
     }
@@ -35,7 +37,7 @@ const OrderTableDetailsCol = ({
       dispatch(
         setShowDrawer({
           children: <OrderUpdateDrawer selectedOrder={selectedOrderFuc} />,
-          title: "Update Order",
+          title: t("updateOrder"),
           footer: <OrderUpdateDrawerFooter />,
         })
       );
@@ -49,7 +51,7 @@ const OrderTableDetailsCol = ({
           openDetailModal(record);
         }}
       >
-        Details
+        {t("details")}
       </Button>
       <Button
         type="primary"
@@ -58,7 +60,7 @@ const OrderTableDetailsCol = ({
           openUpdateDrawer(record);
         }}
       >
-        Update
+        {t("update")}
       </Button>
       <Button
         type="primary"
@@ -73,7 +75,7 @@ const OrderTableDetailsCol = ({
           handleCompleteOrder(record._id);
         }}
       >
-        Complete
+        {t("complete")}
       </Button>
     </div>
   );

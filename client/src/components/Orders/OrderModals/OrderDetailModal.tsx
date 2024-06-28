@@ -1,12 +1,14 @@
 import React from "react";
 import Image from "next/image";
 import Map from "@/components/Map";
+import { useTranslations } from "next-intl";
 
 type OrderDetailModalProps = {
   selectedOrder: OrdersType;
 };
 
 const OrderDetailModal = ({ selectedOrder }: OrderDetailModalProps) => {
+  const t = useTranslations("Order.OrderContainer");
   return (
     <>
       <div className="w-full ">
@@ -27,16 +29,18 @@ const OrderDetailModal = ({ selectedOrder }: OrderDetailModalProps) => {
                     {selectedOrder.amount}
                   </p>
                   <p>
-                    <span className="font-bold">Price:</span> {product.price} TL
+                    <span className="font-bold">{t("price")}:</span>{" "}
+                    {product.price} TL
                   </p>
                   <p>
                     {product.description.length > 50 ? (
                       <span className="font-bold">
-                        Description: {product.description.slice(0, 200)}...
+                        {t("description")}: {product.description.slice(0, 200)}
+                        ...
                       </span>
                     ) : (
                       <span className="font-bold">
-                        Description: {product.description}
+                        {t("description")}: {product.description}
                       </span>
                     )}
                   </p>
@@ -53,35 +57,38 @@ const OrderDetailModal = ({ selectedOrder }: OrderDetailModalProps) => {
           )}
 
           <p>
-            <span className="font-bold">Order Id:</span> {selectedOrder?._id}
+            <span className="font-bold">{t("orderId")}:</span>{" "}
+            {selectedOrder?._id}
           </p>
           <p>
-            <span className="font-bold">Order Owner:</span>{" "}
+            <span className="font-bold">{t("orderOwner")}:</span>{" "}
             {selectedOrder?.orderOwner}
           </p>
           <p>
-            <span className="font-bold">Address:</span> {selectedOrder?.adress}
+            <span className="font-bold">{t("address")}:</span>{" "}
+            {selectedOrder?.adress}
           </p>
           <p>
-            <span className="font-bold">Total Price:</span>{" "}
+            <span className="font-bold">{t("totalPrice")}:</span>{" "}
             {selectedOrder?.totalPrice} TL {selectedOrder?.amount}
           </p>
           <p>
-            <span className="font-bold">Status:</span> {selectedOrder?.status}
+            <span className="font-bold">{t("status")}:</span>{" "}
+            {selectedOrder?.status}
           </p>
           <p>
-            <span className="font-bold">Phone Number:</span>{" "}
+            <span className="font-bold">{t("phone")}:</span>{" "}
             {selectedOrder?.phone}
           </p>
           <p>
             <span className="font-bold">
-              Category: {selectedOrder.orderOwnerEmail}
+              {t("email")}: {selectedOrder.orderOwnerEmail}
             </span>{" "}
           </p>
           <p>
             {selectedOrder?.products.map((product, index) => (
               <span className="font-bold" key={index}>
-                Category: {product.category}{" "}
+                {t("category")}: {product.category}{" "}
               </span>
             ))}
           </p>

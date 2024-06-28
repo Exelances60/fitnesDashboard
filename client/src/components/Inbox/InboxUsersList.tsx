@@ -9,6 +9,7 @@ import { message, Popover } from "antd";
 import InboxUserListItem from "./InboxUserListItem";
 import { selectChat, setChat } from "@/store/slices/inboxSlice";
 import axiosClient from "@/utils/AxiosClient";
+import { useTranslations } from "next-intl";
 
 interface InboxUsersListProps {
   employees: IEmployee[];
@@ -16,6 +17,7 @@ interface InboxUsersListProps {
 }
 
 const InboxUsersList = ({ employees, chat }: InboxUsersListProps) => {
+  const t = useTranslations("Inbox");
   const logginTokenPayload = useGetTokenPayload();
   const userInfo = useAppSelector(selectUser);
   const selectedChat = useAppSelector(selectChat);
@@ -114,7 +116,7 @@ const InboxUsersList = ({ employees, chat }: InboxUsersListProps) => {
           })
         ) : (
           <div className="w-full h-full flex justify-center items-center">
-            <h1 className="text-lg text-gray-500">No chats available</h1>
+            <h1 className="text-lg text-gray-500">{t("noChatsAvailable")}</h1>
           </div>
         )}
       </div>

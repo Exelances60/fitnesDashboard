@@ -1,6 +1,7 @@
 "use client";
 import useCurrencyFormatter from "@/hooks/useCurrencyFormatter";
 import { Badge, Card, Grid } from "@tremor/react";
+import { useTranslations } from "next-intl";
 import React from "react";
 
 interface OrdersCardsProps {
@@ -8,13 +9,14 @@ interface OrdersCardsProps {
 }
 
 const OrdersCards = ({ cardData }: OrdersCardsProps) => {
+  const t = useTranslations("Order.OrderCards");
   const { renderCurrency } = useCurrencyFormatter();
   return (
     <Grid numItems={1} numItemsSm={1} numItemsLg={3} className="gap-2 ">
       <Card>
         <div className="flex items-center justify-between">
           <p className="text-tremor-default font-medium text-tremor-content dark:text-dark-tremor-content">
-            Total Orders
+            {t("totalOrders")}
           </p>
           <Badge
             size="lg"
@@ -33,7 +35,7 @@ const OrdersCards = ({ cardData }: OrdersCardsProps) => {
       <Card>
         <div className="flex items-center justify-between">
           <p className="text-tremor-default font-medium text-tremor-content dark:text-dark-tremor-content">
-            Estimend Total Sales
+            {t("estimedTotalSales")}
           </p>
           <Badge
             size="lg"
@@ -52,7 +54,7 @@ const OrdersCards = ({ cardData }: OrdersCardsProps) => {
       <Card>
         <div className="flex items-center justify-between">
           <p className="text-tremor-default font-medium text-tremor-content dark:text-dark-tremor-content">
-            Total Complate Sales
+            {t("totalComplateSales")}
           </p>
           <Badge
             size="lg"

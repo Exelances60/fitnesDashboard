@@ -2,8 +2,10 @@ import React from "react";
 import { Button } from "antd";
 import { useAppDispatch } from "@/store/store";
 import { setHideDrawer } from "@/store/slices/drawerSlice";
+import { useTranslations } from "next-intl";
 
 const OrderUpdateDrawerFooter = () => {
+  const t = useTranslations("Order.OrderContainer");
   const dispatch = useAppDispatch();
   return (
     <div className="flex justify-end gap-4">
@@ -14,7 +16,7 @@ const OrderUpdateDrawerFooter = () => {
         size="middle"
         form="updateOrderForm"
       >
-        Update Order
+        {t("updateOrder")}
       </Button>
       <Button
         type="default"
@@ -22,7 +24,7 @@ const OrderUpdateDrawerFooter = () => {
         size="middle"
         onClick={() => dispatch(setHideDrawer())}
       >
-        Cancel
+        {t("cancel")}
       </Button>
     </div>
   );

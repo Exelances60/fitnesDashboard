@@ -2,12 +2,15 @@
 import React from "react";
 import { Card, DonutChart, List, ListItem } from "@tremor/react";
 import useCurrencyFormatter from "@/hooks/useCurrencyFormatter";
+import { useTranslations } from "next-intl";
 
 type OrderChartsCategoryProps = {
   chartsDonutData: orderDonutChartType[];
 };
 
 const OrderChartsCategory = ({ chartsDonutData }: OrderChartsCategoryProps) => {
+  const t = useTranslations("Order.OrderCharts");
+
   const filteredByCategory = chartsDonutData.reduce((acc, curr) => {
     if (!acc[curr.category]) {
       acc[curr.category] = 0;
@@ -25,7 +28,7 @@ const OrderChartsCategory = ({ chartsDonutData }: OrderChartsCategoryProps) => {
   return (
     <Card title="Order Chats" className="order-chats">
       <h3 className="text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
-        Total price by category
+        {t("totalPriceByCategory")}
       </h3>
       <DonutChart
         className="mt-8"
@@ -36,8 +39,10 @@ const OrderChartsCategory = ({ chartsDonutData }: OrderChartsCategoryProps) => {
         colors={["cyan", "blue", "indigo", "violet", "fuchsia"]}
       />
       <p className="mt-8 flex items-center justify-between text-tremor-label text-tremor-content dark:text-dark-tremor-content">
-        <span>Category</span>
-        <span>Amount / Share</span>
+        <span>{t("category")}</span>
+        <span>
+          {t("amount")} / {t("share")}
+        </span>
       </p>
       <List className="mt-2">
         {data.map((item, index) => (

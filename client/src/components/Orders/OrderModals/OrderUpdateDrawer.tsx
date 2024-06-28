@@ -9,6 +9,7 @@ import useMessage from "@/hooks/useMessage";
 import { useAppDispatch } from "@/store/store";
 import { setHideDrawer } from "@/store/slices/drawerSlice";
 import { justRequired, minAmount } from "@/utils/FormRules";
+import { useTranslations } from "next-intl";
 
 type OrderUpdateDrawerProps = {
   selectedOrder: OrdersType;
@@ -24,17 +25,18 @@ type updateFormType = {
 };
 
 const OrderUpdateDrawer = ({ selectedOrder }: OrderUpdateDrawerProps) => {
+  const t = useTranslations("Order.OrderContainer");
   const showMessage = useMessage();
   const dispath = useAppDispatch();
   const [form] = Form.useForm();
   const optionRender = (item: any) => {
     return (
       <div className="flex gap-2 items-center">
-        {item.label === "Preparing" ? (
+        {item.label === "Preparing" || item.label === "Hazırlanıyor" ? (
           <Image src={preparingImage} alt="preparing" width={25} height={25} />
-        ) : item.label === "Pending" ? (
+        ) : item.label === "Pending" || item.label === "Gönderimde" ? (
           <Image src={delivaryImage} alt="delivary" width={25} height={25} />
-        ) : item.label === "Completed" ? (
+        ) : item.label === "Completed" || item.label === "Tamamlandı" ? (
           <CheckOutlined className="text-xl" />
         ) : (
           <CloseOutlined className="text-xl" />
@@ -44,16 +46,13 @@ const OrderUpdateDrawer = ({ selectedOrder }: OrderUpdateDrawerProps) => {
     );
   };
   const onFinish = async (values: updateFormType) => {
-    showMessage("Loading.. With Hooks", "loading", 0.3);
+    showMessage(t("loading"), "loading", 0.3);
 
     if (
       ((values.amount > selectedOrder?.products[0]?.amount) as any) ||
       !selectedOrder?.products
     ) {
-      showMessage(
-        "The amount you entered is more than the amount of the product",
-        "error"
-      );
+      showMessage(t("amountMoreThanStock"), "error");
       return;
     }
 
@@ -72,7 +71,7 @@ const OrderUpdateDrawer = ({ selectedOrder }: OrderUpdateDrawerProps) => {
         data: updatedOrder,
       });
       if (response.status === 200) {
-        showMessage("Order updated successfully", "success", 2);
+        showMessage(t("orderUpdated"), "success", 2);
         dispath(setHideDrawer());
       }
     } catch (error: any) {
@@ -90,18 +89,23 @@ const OrderUpdateDrawer = ({ selectedOrder }: OrderUpdateDrawerProps) => {
         id="updateOrderForm"
       >
         <Form.Item
-          label="Order Owner"
+          label={t("orderOwner")}
           name="orderOwner"
           rules={justRequired}
           required
         >
           <Input />
         </Form.Item>
-        <Form.Item label="Address" name="adress" rules={justRequired} required>
+        <Form.Item
+          label={t("address")}
+          name="adress"
+          rules={justRequired}
+          required
+        >
           <Input />
         </Form.Item>
         <Form.Item
-          label="Order Owner Email"
+          label={t("orderOwnerEmail")}
           name="orderOwnerEmail"
           rules={justRequired}
           required
@@ -110,7 +114,7 @@ const OrderUpdateDrawer = ({ selectedOrder }: OrderUpdateDrawerProps) => {
         </Form.Item>
         <div className="flex justify-evenly">
           <Form.Item
-            label="Order Status"
+            label={t("orderStatus")}
             name="status"
             rules={justRequired}
             required
@@ -119,10 +123,10 @@ const OrderUpdateDrawer = ({ selectedOrder }: OrderUpdateDrawerProps) => {
               style={{ width: 250 }}
               placement="bottomRight"
               options={[
-                { label: "Pending", value: "Pending" },
-                { label: "Completed", value: "Completed" },
-                { label: "Cancelled", value: "Cancelled" },
-                { label: "Preparing", value: "Preparing" },
+                { label: t("pending"), value: "Pending" },
+                { label: t("completed"), value: "Completed" },
+                { label: t("canceled"), value: "Cancelled" },
+                { label: t("preparing"), value: "Preparing" },
               ]}
               optionRender={optionRender}
               tagRender={(props) => (
@@ -131,7 +135,7 @@ const OrderUpdateDrawer = ({ selectedOrder }: OrderUpdateDrawerProps) => {
             />
           </Form.Item>
           <Form.Item
-            label="Amount"
+            label={t("amount")}
             name="amount"
             rules={[...justRequired, ...minAmount]}
           >
@@ -145,7 +149,11 @@ const OrderUpdateDrawer = ({ selectedOrder }: OrderUpdateDrawerProps) => {
             />
           </Form.Item>
         </div>
-        <Form.Item label="Total Price" name="totalPrice" rules={justRequired}>
+        <Form.Item
+          label={t("totalPrice")}
+          name="totalPrice"
+          rules={justRequired}
+        >
           <Input />
         </Form.Item>
       </Form>

@@ -10,6 +10,7 @@ import useTableFilterSearchDropDown from "@/hooks/useTableFilterSearchDropDown";
 import useTableSearchOrderOwner from "@/hooks/useOrderTableOrderOwner";
 import { useAppSelector } from "@/store/store";
 import { selectProductCategory } from "@/store/slices/userSlice";
+import { useTranslations } from "next-intl";
 
 const { RangePicker } = DatePicker;
 
@@ -17,20 +18,21 @@ type OrderContainerProps = {
   orders: OrdersType[] | [];
 };
 const OrderContainer = ({ orders }: OrderContainerProps) => {
+  const t = useTranslations("Order.OrderContainer");
   const { filterDropdown, filterIcon, searchById } =
-    useTableFilterSearchDropDown("Search by order id");
+    useTableFilterSearchDropDown(t("searchByOrderId"));
   const { filterDropdownOrderOwner, searchByOrderOwner } =
-    useTableSearchOrderOwner("Search by order owner");
+    useTableSearchOrderOwner(t("searchByOrderOwner"));
   const [rangePickerValue, setRangePickerValue] = useState([null, null]);
   const productCategory = useAppSelector(selectProductCategory);
   const showMessage = useMessage();
 
   const categoryFilter = productCategory
     ? [
-        { text: "ProteinPowder", value: "ProteinPowder" },
-        { text: "Vitamins", value: "Vitamins" },
-        { text: "Supplements", value: "Supplements" },
-        { text: "Others", value: "Others" },
+        { text: t("proteinPowder"), value: "ProteinPowder" },
+        { text: t("vitamins"), value: "Vitamins" },
+        { text: t("supplements"), value: "Supplements" },
+        { text: t("others"), value: "Others" },
         ...productCategory.map((category) => ({
           text: category,
           value: category,
@@ -58,12 +60,13 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
   });
 
   const handleCompleteOrder = async (orderId: string) => {
-    showMessage("Loading", "loading", 0.2);
+    showMessage(t("loading"), "loading", 0.2);
     try {
       const response = await axiosClient.post("/orders/ordercompleted", {
         orderId,
       });
-      if (response.status === 200) showMessage("Order Completed", "success", 1);
+      if (response.status === 200)
+        showMessage(t("orderCompleted"), "success", 1);
     } catch (error: any) {
       showMessage(error.response.data.errorMessage, "error", 2);
     }
@@ -87,7 +90,7 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
         className="overflow-x-auto"
       >
         <Table.Column
-          title="Order Id"
+          title={t("orderId")}
           dataIndex="_id"
           key="_id"
           render={(text) => <p className="text-blue-500">{text}</p>}
@@ -96,7 +99,7 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
         />
 
         <Table.Column
-          title="Order Owner"
+          title={t("orderOwner")}
           dataIndex="orderOwner"
           key="orderOwner"
           filterDropdown={filterDropdownOrderOwner}
@@ -106,16 +109,16 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
             record.orderOwner.indexOf(value) === 0
           }
         />
-        <Table.Column title="Address" dataIndex="adress" key="adress" />
+        <Table.Column title={t("address")} dataIndex="adress" key="adress" />
         <Table.Column
-          title="Total Price"
+          title={t("totalPrice")}
           dataIndex="totalPrice"
           key="totalPrice"
           sorter={(a: OrdersType, b: OrdersType) => a.totalPrice - b.totalPrice}
           render={(text) => <p className="text-green-500">{text} TL</p>}
         />
         <Table.Column
-          title="Status"
+          title={t("status")}
           dataIndex="status"
           key="status"
           render={statusRender}
@@ -123,13 +126,13 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
           onFilter={(value, record: any) => record.status.indexOf(value) === 0}
         />
         <Table.Column
-          title="Phone"
+          title={t("phone")}
           dataIndex="phone"
           key="phone"
           render={(text) => <p className="text-blue-500 underline">+{text}</p>}
         />
         <Table.Column
-          title="Category"
+          title={t("category")}
           dataIndex="orderCategory"
           key="category"
           render={(text, record: any) => {
@@ -148,7 +151,7 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
           }}
         />
         <Table.Column
-          title="Created At"
+          title={t("createdAt")}
           dataIndex="createdAt"
           key="createdAt"
           render={(text) => new Date(text).toLocaleString()}
@@ -157,13 +160,13 @@ const OrderContainer = ({ orders }: OrderContainerProps) => {
           }
         />
         <Table.Column
-          title="Updated At"
+          title={t("updatedAt")}
           dataIndex="updatedAt"
           key="updatedAt"
           render={(text) => new Date(text).toLocaleString()}
         />
         <Table.Column
-          title="Details"
+          title={t("details")}
           key="details"
           render={(record: OrdersType) => (
             <OrderTableDetailsCol

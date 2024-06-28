@@ -143,5 +143,65 @@
       "loading": "Loading...",
       "orderCreated": "Order Created"
     }
+  },
+  "Inbox": {
+    "noChatsAvailable": "No chats available",
+    "InboxChat": {
+      "noChatsAvailable": "No chats available"
+    }
+  },
+  "Order": {
+    "OrderCards": {
+      "estimedTotalSales": "Estimed Total Sales",
+      "totalOrders": "Total Orders",
+      "totalComplateSales": "Total Complate Sales"
+    },
+    "OrderContainer": {
+      "amount": "Amount",
+      "cancel": "Cancel",
+      "updateOrder": "Update Order",
+      "pending": "Pending",
+      "completed": "Completed",
+      "canceled": "Canceled",
+      "preparing": "Preparing",
+      "orderStatus": "Order Status",
+      "orderOwnerEmail": "Order Owner Email",
+      "orderUpdated": "Order Updated",
+      "amountMoreThanStock": "The amount you entered is more than the stock amount",
+      "email": "Email",
+      "price": "Price",
+      "description": "Description",
+      "orderDetails": "Order Details",
+      "orderUpdate": "Order Update",
+      "complete": "Complete",
+      "update": "Update",
+      "details": "Details",
+      "updatedAt": "Updated At",
+      "createdAt": "Created At",
+      "category": "Category",
+      "phone": "Phone Number",
+      "status": "Status",
+      "totalPrice": "Total Price",
+      "address": "Address",
+      "orderOwner": "Order Owner",
+      "orderId": "Order Id",
+      "loading": "Loading...",
+      "orderCompleted": "Order Completed",
+      "proteinPowder": "Protein Powder",
+      "vitamins": "Vitamins",
+      "supplements": "Supplements",
+      "others": "Others",
+      "searchByOrderId": "Search by Order Id",
+      "searchByOrderOwner": "Search by Order Owner"
+    },
+    "OrderCharts": {
+      "category": "Category",
+      "amount": "Amount",
+      "totalPriceByCategory": "Total Price By Category",
+      "share": "Share",
+      "price": "Price",
+      "productName": "Product Name",
+      "totalPriceByOrder": "Total Price By Order"
+    }
   }
 }
